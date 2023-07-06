@@ -45,15 +45,15 @@ write_table <- function(x, filename, ...) {
 
 pick_serbia_resps <- function(df) {
     users <- df %>%
-        filter(shortcode == 'bebborsendeng') %>%
-        filter(thankyou_you_qualify == 'OK') %>%
+        filter(shortcode == "bebborsendeng") %>%
+        filter(thankyou_you_qualify == "OK") %>%
         filter(version > 4) %>%
         distinct(userid) %>%
         pull(userid)
 
 
     df %>%
-        filter(shortcode != 'bebborsintermediatebail') %>%
+        filter(shortcode != "bebborsintermediatebail") %>%
         filter(userid %in% users)
 }
 
@@ -88,7 +88,7 @@ binary_confs <- c(binary_confs, knowledge_confs, past_24_confs)
 # Read Data
 #############################################################
 
-serbia <- read_csv("data/raw/serbia/responses_2023-07-01.csv") %>%
+serbia <- read_csv("data/raw/serbia/responses.csv") %>%
     pick_serbia_resps() %>%
     mutate(seed_2 = seed %% 2 + 1) %>%
     mutate(
