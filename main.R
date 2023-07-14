@@ -58,30 +58,41 @@ pick_serbia_resps <- function(df) {
 }
 
 
+pick_bulgaria_resps <- function(df) {
+    users <- df %>%
+        filter(shortcode == "bebbobgendeng") %>%
+        filter(thankyou_you_qualify == "OK") %>%
+        ## filter(version > 4) %>% # TODO: get bulgaria version
+        distinct(userid) %>%
+        pull(userid)
+
+    df %>%
+        filter(userid %in% users)
+}
+
+
+
 #############################################################
 # Variable creation
 #############################################################
+key <- read_csv("data/raw/Bebbo Evaluation Survey - Serbia - English Analysis notes - Baseline.csv")
 
-
-all_vars <- read_csv("data/raw/Bebbo Evaluation Survey - Pilot decisions - Updated baseline.csv") %>%
+all_vars <- key %>%
     filter(!is.na(Domain)) %>%
     pull(variable)
 
 binary_confs <- list(
-    bin_conf("breastfed", "Yes"),
     bin_conf("download_confirm_treatment", "Yes"),
     bin_conf("using_bebbo", "Yes")
 )
 
-knowledge_vars <- Filter(function(x) grepl("know", x), all_vars)
-knowledge_confs <- knowledge_vars %>% lapply(function(x) bin_conf(x, "True"))
+binarized_vars <- key %>%
+    filter(!is.na(construct_variable)) %>%
+    rowwise() %>%
+    mutate(foo = list(bin_conf(variable, Correct))) %>%
+    pull(foo)
 
-past_24_vars <- Filter(function(x) grepl("past_24h", x), all_vars)
-past_24_confs <- past_24_vars %>% lapply(function(x) bin_conf(x, "Yes"))
-
-outcomes <- c(knowledge_vars, past_24_vars, c("breastfed"))
-
-binary_confs <- c(binary_confs, knowledge_confs, past_24_confs)
+binary_confs <- c(binary_confs, binarized_vars)
 
 
 #############################################################
@@ -100,17 +111,32 @@ serbia <- read_csv("data/raw/serbia/responses.csv") %>%
     mutate(gender = first(parent_gender, order_by = endline, na_rm = TRUE)) %>%
     ungroup()
 
+
+s <- key %>%
+    filter(!is.na(construct_variable)) %>%
+    pull(construct_variable) %>%
+    unique()
+
+ss <- sapply(s, function(x) {
+    key %>%
+        filter(construct_variable == x) %>%
+        pull(variable)
+})
+
+for (x in names(ss)) {
+    serbia <- serbia %>%
+        rowwise() %>%
+        mutate("{x}" := mean(c_across(all_of(ss[[x]]))))
+}
+
+
+## bulgaria <- read_csv("data/raw/bulgaria/responses.csv") %>%
+##     mutate(country = "bulgaria")
+
 dat <- serbia
 baseline <- dat %>% filter(endline == 0)
 endline <- dat %>% filter(endline == 1)
 
-## baseline %>%
-##     group_by(treatment) %>%
-##     summarize(across(all_of(outcomes), ~ mean(.x, na.rm = TRUE))) %>%
-##     ungroup()
-
-## bb <- baseline %>%
-##     filter(!is.na(breastfed)) %>%
 
 bb <- baseline
 
@@ -128,7 +154,11 @@ write_table(balance$Observations, "balance-observations", summary = F)
 
 
 models <- list(
-    `Breastfed` = lm(breastfed ~ treatment * endline, dat),
-    `Read` = lm(past_24h_read ~ treatment * endline, dat)
+    `Child Development Knowledge Recognition` = lm(dev_knw_recog ~ treatment * endline, dat),
+    `Child Development Knowledge Concern 0-2` = lm(dev_knw_concern_0_2 ~ treatment * endline, dat),
+    `Health Knowledge` = lm(health_knw ~ treatment * endline, dat),
+    `Practice Past 24 Hours` = lm(practices_24 ~ treatment * endline, dat),
+    `Breastfed` = lm(was_breastfed ~ treatment * endline, dat)
 )
-write_table(models, "regression", keep.stat = c("n"))
+
+write_table(models, "regression", keep.stat = c("n"), float.env = "sidewaystable")
