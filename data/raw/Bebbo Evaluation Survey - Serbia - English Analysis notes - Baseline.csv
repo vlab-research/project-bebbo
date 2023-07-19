@@ -25,11 +25,22 @@ number_children,number,How many children are there in your family?,,,,,,1+ only,
 child_0-6,multiple_choice,Are there any children in your family aged 0 to 6?,,,,"-A. No
 -B. Yes, 1
 -C. Yes, more than 1",,Only show if previous is >0; exclude if A,,,,
-parent_gender,multiple_choice,What is your gender?,,,,#NAME?,,,,,,
-location,multiple_choice,Where do you live?,,,,#NAME?,,,both,both,,
-education,multiple_choice,What is your highest level of education?,,,,#NAME?,,,both,both,,
+parent_gender,multiple_choice,What is your gender?,,,,"-A. Man
+-B. Woman
+-C. Prefer not to answer",,,,,,
+location,multiple_choice,Where do you live?,,,,"-A. Capital
+-B. Large regional centers
+-C. Smaller cities
+-D. Village",,,both,both,,
+education,multiple_choice,What is your highest level of education?,,,,"-A. Incomplete basic
+-B. Basic
+-C. Secondary
+-D. University",,,both,both,,
 thankyou_early,thankyou_screen,"I'm sorry, but you are not eligible for this survey. We'll let you know if you qualify for any other surveys in the future. Thank you for your interest!",,,,,,If <18 OR no child in the family OR no child in the family aged 0-6 y/o,both,both,,
-language,multiple_choice,What is the language most commonly used in your family?,,,,#NAME?,,,both,both,,
+language,multiple_choice,What is the language most commonly used in your family?,,,,"-A. Serbian
+-B. Hungarian
+-C. Roma
+-D. Other",,,both,both,,
 statement_1,statement,"Because you have more than 1 child, please pick 1 child aged 0 to 6 as your focal child and answer all of the following questions for that child.",,,,,,If more than 1 in child_0-6,both,both,,
 child_name,short_text,What is your child's (first) name?,,,,,,,both,both,,
 child_age,multiple_choice,How old is {{field:child_name}}?,,,,"-A. 0 to 6 months
@@ -37,34 +48,55 @@ child_age,multiple_choice,How old is {{field:child_name}}?,,,,"-A. 0 to 6 months
 -C. 12 to 24 months
 -D. 2 to 4 years
 -E. 4 to 6 years",,,both,both,,
-relationship_to_child,multiple_choice,What is your relationship to {{field:child_name}}?,,,,#NAME?,,,both,both,,
+relationship_to_child,multiple_choice,What is your relationship to {{field:child_name}}?,,,,"-A. Mother
+-B. Father
+-C. Grandparent
+-D. Other",,,both,both,,
 statement_2,statement,"Now, we'd like to ask you a few questions about your knowledge of your child's health, nutrition, and development.",,,,,,,both,both,,
 know_which_vaccine,multiple_choice,I know which vaccine {{field:child_name}} needs to take next.,Health knowledge,health_knw,28&29 go together,"-A. True
 -B. False
--C. Not sure",TRUE,,0 to 2,both,Knowledge and awareness,
+-C. Not sure",True,,0 to 2,both,Knowledge and awareness,
 know_when_vaccine,multiple_choice,"I know when {{field:child_name}} needs to take her/his next vaccine.
 ",Health knowledge,health_knw,,"-A. True
 -B. False
--C. Not sure",TRUE,,0 to 2,both,Knowledge and awareness,
+-C. Not sure",True,,0 to 2,both,Knowledge and awareness,
 know_social_emotional_dev,multiple_choice,"I would be able to recognize if {{field:child_name}}  lags behind in social-emotional development (expressing & recognizing feelings and emotions, engaging in interactions, etc.).",Child development knowledge,dev_knw_recog,"30, 31, 32, 33 go together, check for internal consistency","-A. True
 -B. False
--C. Not sure",TRUE,,both,both,Knowledge and awareness,
+-C. Not sure",True,,both,both,Knowledge and awareness,
 know_cog_dev,multiple_choice,"I would be able to recognize if {{field:child_name}} lags behind in cognitive development (mental development, intellectual development).",Child development knowledge,dev_knw_recog,,"-A. True
 -B. False
--C. Not sure",TRUE,,both,both,Knowledge and awareness,
+-C. Not sure",True,,both,both,Knowledge and awareness,
 know_phys_dev,multiple_choice,I would be able to recognize if {{field:child_name}} lags behind in physical development.,Child development knowledge,dev_knw_recog,,"-A. True
 -B. False
--C. Not sure",TRUE,,both,both,Knowledge and awareness,
+-C. Not sure",True,,both,both,Knowledge and awareness,
 know_lang_dev,multiple_choice,I would be able to recognize if {{field:child_name}} lags behind in language development.,Child development knowledge,dev_knw_recog,,"-A. True
 -B. False
--C. Not sure",TRUE,,both,both,Knowledge and awareness,
-confidence_deal_emotions,multiple_choice,How confident do you feel in your ability to deal with {{field:child_name}}’s emotions?,Parenting knowledge,,34 and 35 go together,#NAME?,"A, B",,both,both,Knowledge and awareness,
-confidence_respond_misbehave,multiple_choice,How confident do you feel in your ability to respond properly when {{field:child_name}} misbehaves?,Parenting knowledge,,,#NAME?,"A, B",,both,both,Knowledge and awareness,
-physical_punishment,multiple_choice,"Do you agree that in order to bring up, raise, or educate a child properly, the child needs to be physically punished?",Attitude,,Stand alone item,#NAME?,"C, D",,both,both,Attitudes,
-parenting_stress_1,multiple_choice,How often do you feel the stress of parenting? ,Caregiver well-being,caregiver_well_being,"37, 38 and 39 go together, check for internal consistency",#NAME?,"C, D",,both,both,,Caregiver well-being
-parenting_stress_2,multiple_choice,How often can you handle stressful parenting situations successfully?,Caregiver well-being,caregiver_well_being,,#NAME?,"A, B","Only show if answered A, B, or C above",both,both,,Caregiver well-being
+-C. Not sure",True,,both,both,Knowledge and awareness,
+confidence_deal_emotions,multiple_choice,How confident do you feel in your ability to deal with {{field:child_name}}’s emotions?,Parenting knowledge,,34 and 35 go together,"-A. Very confident
+-B. Confident
+-C. Not confident
+-D. Not confident at all","A, B",,both,both,Knowledge and awareness,
+confidence_respond_misbehave,multiple_choice,How confident do you feel in your ability to respond properly when {{field:child_name}} misbehaves?,Parenting knowledge,,,"-A. Very confident
+-B. Confident
+-C. Not confident
+-D. Not confident at all","A, B",,both,both,Knowledge and awareness,
+physical_punishment,multiple_choice,"Do you agree that in order to bring up, raise, or educate a child properly, the child needs to be physically punished?",Attitude,,Stand alone item,"-A. Strongly agree
+-B. Agree
+-C. Do not agree
+-D. Do not agree at all","C, D",,both,both,Attitudes,
+parenting_stress_1,multiple_choice,How often do you feel the stress of parenting? ,Caregiver well-being,caregiver_well_being,"37, 38 and 39 go together, check for internal consistency","-A. Almost always
+-B. Most of the times
+-C. Rarely
+-D. Almost never","C, D",,both,both,,Caregiver well-being
+parenting_stress_2,multiple_choice,How often can you handle stressful parenting situations successfully?,Caregiver well-being,caregiver_well_being,,"-A. Almost always
+-B. Most of the times
+-C. Rarely
+-D. Almost never","A, B","Only show if answered A, B, or C above",both,both,,Caregiver well-being
 personal_needs,multiple_choice,"How often do you manage to attend to your own personal needs?
-",Caregiver well-being,caregiver_well_being,,#NAME?,"A, B",,both,both,,Caregiver well-being
+",Caregiver well-being,caregiver_well_being,,"-A. Almost always
+-B. Most of the times
+-C. Rarely
+-D. Almost never","A, B",,both,both,,Caregiver well-being
 concern_12mo,multiple_choice,Which of these is a sign of concern for the development of a 12-months-old child?,Child development knowledge,dev_knw_concern_0_2,,"-A. If the 12-months-old cannot sit up on her own
 -B. If the 12-months-old cannot always understand instructions or orders
 -C. If the 12-months-old show signs of being upset when separated from parents
@@ -88,29 +120,29 @@ sit_support,multiple_choice,Most 4-months old children can sit with some support
 meaning_of_no,multiple_choice,Most children will understand the meaning of the word 'No' by the time they are three months old.,Child development knowledge,dev_knw_concern_0_2,,"-A. True
 -B. Wrong",Wrong,,0 to 2,both,Knowledge and awareness,Child development knowledge
 movement,multiple_choice,Most 9-month olds try to stand up.,Child development knowledge,dev_knw_concern_0_2,,"-A. True
--B. Wrong",TRUE,,0 to 2,both,Knowledge and awareness,Child development knowledge
+-B. Wrong",True,,0 to 2,both,Knowledge and awareness,Child development knowledge
 scribble,multiple_choice,"Most 12-month-olds can stand, move and walk independently.",Child development knowledge,dev_knw_concern_0_2,,"-A. True
 -B. Wrong",Wrong,,0 to 2,both,Knowledge and awareness,Child development knowledge
 cry_separated,multiple_choice,Most 12-month-olds cry when separated from parents.,Child development knowledge,dev_knw_concern_0_2,,"-A. True
--B. Wrong",TRUE,,0 to 2,both,Knowledge and awareness,Child development knowledge
+-B. Wrong",True,,0 to 2,both,Knowledge and awareness,Child development knowledge
 express_feelings,multiple_choice,Most 2-year-olds can express their feelings.,Child development knowledge,dev_knw_concern_0_2,,"-A. True
--B. Wrong",TRUE,,0 to 2,both,Knowledge and awareness,Child development knowledge
+-B. Wrong",True,,0 to 2,both,Knowledge and awareness,Child development knowledge
 say_name_age,multiple_choice,Most 2-year-olds can climb up and down the stairs on their own.,Child development knowledge,dev_knw_concern_0_2,,"-A. True
 -B. Wrong",Wrong,,0 to 2,both,Knowledge and awareness,Child development knowledge
 sort_pair,multiple_choice,Most 2-year-olds start to sort and pair things.,Child development knowledge,dev_knw_concern_0_2,,"-A. True
--B. Wrong",TRUE,,0 to 2,both,Knowledge and awareness,Child development knowledge
+-B. Wrong",True,,0 to 2,both,Knowledge and awareness,Child development knowledge
 simple_songs,multiple_choice,Most 3-year-olds can sing parts of simple songs and nursery rhymes.,Child development knowledge,,"41, 42, 52-58 go together, check for ICR","-A. True
--B. Wrong",TRUE,,3 to 6,both,Knowledge and awareness,Child development knowledge
+-B. Wrong",True,,3 to 6,both,Knowledge and awareness,Child development knowledge
 count_to_ten,multiple_choice,Most 3-year-olds can count to ten and name ten objects without mistakes.,Child development knowledge,,,"-A. True
--B. Wrong",TRUE,,3 to 6,both,Knowledge and awareness,Child development knowledge
+-B. Wrong",True,,3 to 6,both,Knowledge and awareness,Child development knowledge
 name_colors,multiple_choice,Most 5-year-olds can name at least four colors correctly.,Child development knowledge,,,"-A. True
--B. Wrong",TRUE,,3 to 6,both,Knowledge and awareness,Child development knowledge
+-B. Wrong",True,,3 to 6,both,Knowledge and awareness,Child development knowledge
 alphabet,multiple_choice,Most 5-year-olds recognize the letters of the alphabet and have some reading skills.,Child development knowledge,,,"-A. True
 -B. Wrong",Wrong,,3 to 6,both,Knowledge and awareness,Child development knowledge
 tell_story,multiple_choice,Most 5-year-olds can tell a story or retell part of a story.,Child development knowledge,,,"-A. True
--B. Wrong",TRUE,,3 to 6,both,Knowledge and awareness,Child development knowledge
+-B. Wrong",True,,3 to 6,both,Knowledge and awareness,Child development knowledge
 know_name_age,multiple_choice,"Most 6-year-olds know their own name and surname, age and home address.",Child development knowledge,,,"-A. True
--B. Wrong",TRUE,,3 to 6,both,Knowledge and awareness,Child development knowledge
+-B. Wrong",True,,3 to 6,both,Knowledge and awareness,Child development knowledge
 multiplication,multiple_choice,Most 6-year-olds know multiplication tables.,Child development knowledge,,,"-A. True
 -B. Wrong",Wrong,,3 to 6,both,Knowledge and awareness,Child development knowledge
 statement_4,statement,"Now, we'd like to ask you about your parenting practices.",,,,,,,both,both,,
@@ -144,19 +176,43 @@ No",Yes,,both,both,Practices,ECD engagement
 past_24h_outside,multiple_choice,"In the past 24 hours, did you take {{field:child_name}} outside the home?",,practices_24,,"Yes
 No",Yes,,both,both,Practices,ECD engagement
 past_24h_play,multiple_choice,"In the past 24 hours, did you play with {{field:child_name}}?",,practices_24,,"Yes
-No",Yes,,both,both,Practices,ECD engagement
+No",yes,,both,both,Practices,ECD engagement
 past_24h_draw,multiple_choice,"In the past 24 hours, did you name, count or draw things with or for {{field:child_name}}?",,practices_24,,"Yes
 No",Yes,,both,both,Practices,ECD engagement
 statement_0,statement,Adults use certain ways to teach children the right behavior or to address a behavior problem.,,,,,,,both,both,Practices,
 statement_6,statement,Do you agree or disagree with the following statements?,,,,,,,both,both,Practices,
-laugh_together,multiple_choice,"When {{field:child_name}} and I play together, we laugh a lot.",,,,#NAME?,"C, D",,both,both,Practices,Responsive parenting PA
-joke_with_child,multiple_choice,I joke around with {{field:child_name}}.,,,,#NAME?,"C, D",,both,both,Practices,Responsive parenting PA
-smile_around_child,multiple_choice,I often smile when I'm around {{field:child_name}}.,,,,#NAME?,"C, D",,both,both,Practices,Responsive parenting PA
-play_on_floor,multiple_choice,{{field:child_name}} and I play together on the floor.,,,,#NAME?,"C, D",,both,both,Practices,Responsive parenting PA
-snap_at_child,multiple_choice,I snap at {{field:child_name}} when he/she gets on my nerves.,,,,#NAME?,"A, B",,both,both,Practices,Responsive parenting Hostility
-lose_patience_punish,multiple_choice,"When {{field:child_name}} upsets me, I lose my patience and punish him/her more severely than I really mean to.",,,,#NAME?,"A, B",,both,both,Practices,Responsive parenting Hostility
-threaten,multiple_choice,"When {{field:child_name}} does something wrong, I sometimes threaten him/her.",,,,#NAME?,"A, B",,both,both,Practices,Responsive parenting Hostility
-make_fun_of,multiple_choice,I sometimes make fun of {{field:child_name}}.,,,,#NAME?,"A, B",,both,both,Practices,Responsive parenting Hostility
+laugh_together,multiple_choice,"When {{field:child_name}} and I play together, we laugh a lot.",,,,"-A. Strongly disagree
+-B. Disagree
+-C. Agree
+-D. Strongly agree","C, D",,both,both,Practices,Responsive parenting PA
+joke_with_child,multiple_choice,I joke around with {{field:child_name}}.,,,,"-A. Strongly disagree
+-B. Disagree
+-C. Agree
+-D. Strongly agree","C, D",,both,both,Practices,Responsive parenting PA
+smile_around_child,multiple_choice,I often smile when I'm around {{field:child_name}}.,,,,"-A. Strongly disagree
+-B. Disagree
+-C. Agree
+-D. Strongly agree","C, D",,both,both,Practices,Responsive parenting PA
+play_on_floor,multiple_choice,{{field:child_name}} and I play together on the floor.,,,,"-A. Strongly disagree
+-B. Disagree
+-C. Agree
+-D. Strongly agree","C, D",,both,both,Practices,Responsive parenting PA
+snap_at_child,multiple_choice,I snap at {{field:child_name}} when he/she gets on my nerves.,,,,"-A. Strongly disagree
+-B. Disagree
+-C. Agree
+-D. Strongly agree","A, B",,both,both,Practices,Responsive parenting Hostility
+lose_patience_punish,multiple_choice,"When {{field:child_name}} upsets me, I lose my patience and punish him/her more severely than I really mean to.",,,,"-A. Strongly disagree
+-B. Disagree
+-C. Agree
+-D. Strongly agree","A, B",,both,both,Practices,Responsive parenting Hostility
+threaten,multiple_choice,"When {{field:child_name}} does something wrong, I sometimes threaten him/her.",,,,"-A. Strongly disagree
+-B. Disagree
+-C. Agree
+-D. Strongly agree","A, B",,both,both,Practices,Responsive parenting Hostility
+make_fun_of,multiple_choice,I sometimes make fun of {{field:child_name}}.,,,,"-A. Strongly disagree
+-B. Disagree
+-C. Agree
+-D. Strongly agree","A, B",,both,both,Practices,Responsive parenting Hostility
 download_bebbo_treatment,statement,"Thank you! That's all the questions we have for now. 
 
 There is just one more step to qualify for the Visa gift card of 430 RSD. 
