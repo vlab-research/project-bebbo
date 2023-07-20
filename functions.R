@@ -79,3 +79,41 @@ ind_treatment_control <- function(df) {
 ind_endline <- function(df) {
   df %>% mutate(endline = recode(shortcode, bebborsendeng = 1, bebborsbaseserb = 0))#create end line variable based on short code
 }
+
+#function to parse columns with multiple target values
+parse_multi_choice<-function(df){
+  
+  parse_mult_choice<-function(x) {
+    temp<-match(unlist(strsplit(x,split=', ')),c('A','B','C','D','E'))
+    c('A','B','C','D','E')[temp]
+  }
+  
+  a_pattern="-A. ([A-Za-z ]+)\n"
+  b_pattern="-B. ([A-Za-z ]+)\n"
+  c_pattern="-C. ([A-Za-z ]+)\n"
+  d_pattern="-D. ([A-Za-z ]+)"
+  e_pattern="-E. ([A-Za-z ]+)"
+  
+  df<-df%>%
+    rowwise()%>%
+    mutate(Correct2=parse_mult_choice(Correct)[1],
+           Correct3=parse_mult_choice(Correct)[2])%>%
+    mutate(Correct2=recode(Correct2,
+                           "A" = str_extract(answers,pattern = a_pattern,group=1),
+                           "B" = str_extract(answers,pattern = b_pattern,group=1),
+                           "C" = str_extract(answers,pattern = c_pattern,group=1),
+                           "D" = str_extract(answers,pattern = d_pattern,group=1),
+                           "E" = str_extract(answers,pattern = e_pattern,group=1)),
+           Correct3=recode(Correct3,
+                           "A" = str_extract(answers,pattern = a_pattern,group=1),
+                           "B" = str_extract(answers,pattern = b_pattern,group=1),
+                           "C" = str_extract(answers,pattern = c_pattern,group=1),
+                           "D" = str_extract(answers,pattern = d_pattern,group=1),
+                           "E" = str_extract(answers,pattern = e_pattern,group=1)))
+}
+#   %>%
+#     mutate(Correct2=ifelse(!is.na(Correct3),list(Correct2,Correct3),Correct2))%>%
+#     mutate(Correct=ifelse(is.na(Correct2),Correct,Correct2))%>%
+#     mutate(Correct2=NULL,Correct3=NULL)
+# }
+
