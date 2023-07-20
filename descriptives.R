@@ -1,11 +1,12 @@
 library(readr)
+library(dplyr)
 library(tidyr)
 library(cobalt)
 library(glue)
 library(stargazer)
+setwd("~/v-lab/project-bebbo/")
 source("functions.R")
 source("variable creation.R") #requires functions in functions.R
-setwd("~/v-lab/project-bebbo/")
 
 #############################################################
 # Read Data
@@ -31,6 +32,19 @@ for (x in names(ss)) {
 # Descriptives
 #############################################################
 
+select_cols<-unname(unlist(ss))
 
+descrip<-serbia%>%
+  filter(endline==0)%>%
+  select(all_of(select_cols))%>%
+  ungroup()%>%
+  pivot_longer(cols=select_cols)%>%
+  group_by(name)%>%
+  summarise(mean=mean(value,na.rm=TRUE),
+            median=median(value,na.rm=TRUE),
+            min=min(value,na.rm=TRUE),
+            max=max(value,na.rm=TRUE),
+            sd=sd(value,na.rm=TRUE))
 
+View(descrip%>%arrange(desc(mean)))
 
