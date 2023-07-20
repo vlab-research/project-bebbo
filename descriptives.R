@@ -4,6 +4,7 @@ library(tidyr)
 library(cobalt)
 library(glue)
 library(stargazer)
+library(psych)
 setwd("~/v-lab/project-bebbo/")
 source("functions.R")
 source("variable creation.R") #requires functions in functions.R
@@ -16,6 +17,7 @@ serbia <- read_csv("data/raw/serbia/responses.csv") %>% #read Serbia responses f
   pick_serbia_resps() %>% #filter dataframe for Serbia respondents
   ind_treatment_control() %>% #create variables to indicate treatment, control
   ind_endline() %>% #create variables to indicate endline
+  # likert(likert_confs)
   binarize(binary_confs) %>% #binarize construct variables using map created above
   group_by(userid) %>%
   mutate(gender = first(parent_gender, order_by = endline, na_rm = TRUE)) %>%
@@ -48,3 +50,19 @@ descrip<-serbia%>%
 
 View(descrip%>%arrange(desc(mean)))
 
+#############################################################
+# Reliability Analysis
+#############################################################
+
+#lower correlations
+serbia%>%
+  filter(endline==0)%>%
+  select(all_of(select_cols))%>%
+  lowerCor()
+
+serbia%>%
+  filter(endline==0)%>%
+  select(all_of(select_cols))%>%alpha()
+
+dat<-serbia%>%filter(endline==0)%>%select(all_of(select_cols))
+pca <- pca(dat, nfactors = 3)

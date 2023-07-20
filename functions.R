@@ -20,8 +20,13 @@ binarize_col <- function(df, col, targ, new_col = NULL) {
   dplyr::mutate(df, "{new_col}" := s)
 }
 
+
 bin_conf <- function(col, target, new_col = NULL) {
   list(col = col, target = target, new_col = new_col)
+}
+
+likert_conf <- function(col, target, answers) {
+  list(col = col, target = target, answers = answers)
 }
 
 binarize <- function(df, cols) {
@@ -80,13 +85,15 @@ ind_endline <- function(df) {
   df %>% mutate(endline = recode(shortcode, bebborsendeng = 1, bebborsbaseserb = 0))#create end line variable based on short code
 }
 
-#function to parse columns with multiple target values
-parse_multi_choice<-function(df){
+
+parse_mult_choice<-function(x) {
+  temp<-match(unlist(strsplit(x,split=', ')),c('A','B','C','D','E'))
+  c('A','B','C','D','E')[temp]
+}
+
+likert_col <- function(df, col, targ, ans) {
   
-  parse_mult_choice<-function(x) {
-    temp<-match(unlist(strsplit(x,split=', ')),c('A','B','C','D','E'))
-    c('A','B','C','D','E')[temp]
-  }
+  new_col <- paste0(col,'_likert')
   
   a_pattern="-A. ([A-Za-z ]+)\n"
   b_pattern="-B. ([A-Za-z ]+)\n"
@@ -94,26 +101,34 @@ parse_multi_choice<-function(df){
   d_pattern="-D. ([A-Za-z ]+)"
   e_pattern="-E. ([A-Za-z ]+)"
   
-  df<-df%>%
-    rowwise()%>%
-    mutate(Correct2=parse_mult_choice(Correct)[1],
-           Correct3=parse_mult_choice(Correct)[2])%>%
-    mutate(Correct2=recode(Correct2,
-                           "A" = str_extract(answers,pattern = a_pattern,group=1),
-                           "B" = str_extract(answers,pattern = b_pattern,group=1),
-                           "C" = str_extract(answers,pattern = c_pattern,group=1),
-                           "D" = str_extract(answers,pattern = d_pattern,group=1),
-                           "E" = str_extract(answers,pattern = e_pattern,group=1)),
-           Correct3=recode(Correct3,
-                           "A" = str_extract(answers,pattern = a_pattern,group=1),
-                           "B" = str_extract(answers,pattern = b_pattern,group=1),
-                           "C" = str_extract(answers,pattern = c_pattern,group=1),
-                           "D" = str_extract(answers,pattern = d_pattern,group=1),
-                           "E" = str_extract(answers,pattern = e_pattern,group=1)))
+  a_matched=str_extract(ans,pattern = a_pattern,group=1)
+  b_matched=str_extract(ans,pattern = b_pattern,group=1)
+  c_matched=str_extract(ans,pattern = c_pattern,group=1)
+  d_matched=str_extract(ans,pattern = d_pattern,group=1)
+  e_matched=str_extract(ans,pattern = e_pattern,group=1)
+  
+  targ<-parse_mult_choice(targ)[1]
+  
+  df<-mutate(df, "{new_col}":=case_when(targ %in% c('C','D','E') ~ recode(col,
+                                                                     a_matched="1",
+                                                                     b_matched="2",
+                                                                     c_matched="3",
+                                                                     d_matched="4",
+                                                                     e_matched="5"),
+                                    targ %in% c('A','B') ~ recode(col,
+                                                                  a_matched="5",
+                                                                  b_matched="4",
+                                                                  c_matched="3",
+                                                                  d_matched="2",
+                                                                  e_matched="1")))
 }
-#   %>%
-#     mutate(Correct2=ifelse(!is.na(Correct3),list(Correct2,Correct3),Correct2))%>%
-#     mutate(Correct=ifelse(is.na(Correct2),Correct,Correct2))%>%
-#     mutate(Correct2=NULL,Correct3=NULL)
-# }
 
+likert <- function(df, cols) {
+  likert_cols<-c('parenting_stress_1','parenting_stress_2')
+  for (c in cols) {
+    if (c$col %in% likert_cols) {
+      df <- likert_col(df, c$col, c$target, c$answers)
+    }
+  }
+  df
+}

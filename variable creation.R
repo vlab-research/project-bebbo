@@ -6,7 +6,7 @@ key <- read_csv("data/raw/Bebbo Evaluation Survey - Serbia - English Analysis no
 
 key[which(key$variable=='past_24h_play'),'Correct']<-'Yes'
 
-key <- parse_multi_choice(key)
+# key <- parse_multi_choice(key)
 
 all_vars <- key %>%
   filter(!is.na(Domain)) %>%
@@ -22,7 +22,13 @@ binary_confs <- list(
 binarized_vars <- key %>%
   filter(!is.na(construct_variable)) %>%
   rowwise() %>%
-  mutate(foo = list(bin_conf(variable, c(Correct,Correct2,Correct3)))) %>% #if response contains values from any of the target columns
+  mutate(foo = list(bin_conf(variable, Correct))) %>% #if response contains values from any of the target columns
+  pull(foo)
+
+likert_confs <- key %>%
+  filter(!is.na(construct_variable)) %>%
+  rowwise() %>%
+  mutate(foo = list(likert_conf(variable, Correct, answers))) %>% #if response contains values from any of the target columns
   pull(foo)
 
 #final map
