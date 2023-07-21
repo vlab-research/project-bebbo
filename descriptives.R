@@ -5,7 +5,7 @@ library(cobalt)
 library(glue)
 library(stargazer)
 library(psych)
-setwd("~/v-lab/project-bebbo/")
+library(stringr)
 source("functions.R")
 source("variable creation.R")
 
