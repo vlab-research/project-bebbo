@@ -109,24 +109,15 @@ likert_col <- function(df, col, targ, ans) {
   
   targ<-parse_mult_choice(targ)[1]
   
-  df<-mutate(df, "{new_col}":=case_when(targ %in% c('C','D','E') ~ recode(col,
-                                                                     a_matched="1",
-                                                                     b_matched="2",
-                                                                     c_matched="3",
-                                                                     d_matched="4",
-                                                                     e_matched="5"),
-                                    targ %in% c('A','B') ~ recode(col,
-                                                                  a_matched="5",
-                                                                  b_matched="4",
-                                                                  c_matched="3",
-                                                                  d_matched="2",
-                                                                  e_matched="1")))
+  likert_asc<-recode(df[[col]],"{a_matched}":=1,"{b_matched}":=2,"{c_matched}":=3,"{d_matched}":=4,"{e_matched}":=5)
+  likert_desc<-recode(df[[col]],"{a_matched}":=5,"{b_matched}":=4,"{c_matched}":=3,"{d_matched}":=2,"{e_matched}":=1)
+  
+  df%>%mutate("{new_col}":=case_when(targ %in% c('C','D','E') ~ likert_asc, targ %in% c('A','B') ~ likert_desc))
 }
 
 likert <- function(df, cols) {
-  likert_cols<-c('parenting_stress_1','parenting_stress_2')
   for (c in cols) {
-    if (c$col %in% likert_cols) {
+    if (c$col %in% colnames(df)) {
       df <- likert_col(df, c$col, c$target, c$answers)
     }
   }

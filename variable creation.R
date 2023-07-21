@@ -22,13 +22,22 @@ binary_confs <- list(
 binarized_vars <- key %>%
   filter(!is.na(construct_variable)) %>%
   rowwise() %>%
-  mutate(foo = list(bin_conf(variable, Correct))) %>% #if response contains values from any of the target columns
+  mutate(foo = list(bin_conf(variable, Correct))) %>%
   pull(foo)
 
+likert_cols<-key%>%
+  select(c('variable','Correct'))%>%
+  rowwise()%>%
+  mutate(check=length(parse_mult_choice(Correct)))%>%
+  ungroup()%>%
+  filter(check>1)%>%
+  pull(variable)
+
 likert_confs <- key %>%
+  filter(variable %in% likert_cols) %>%
   filter(!is.na(construct_variable)) %>%
   rowwise() %>%
-  mutate(foo = list(likert_conf(variable, Correct, answers))) %>% #if response contains values from any of the target columns
+  mutate(foo = list(likert_conf(variable, Correct, answers))) %>%
   pull(foo)
 
 #final map
@@ -168,3 +177,6 @@ other_cols<- c("consent",
                "dev_knw_recog",
                "caregiver_well_being",
                "dev_knw_concern_0_2")
+
+
+

@@ -7,7 +7,8 @@ library(stargazer)
 library(psych)
 setwd("~/v-lab/project-bebbo/")
 source("functions.R")
-source("variable creation.R") #requires functions in functions.R
+source("variable creation.R")
+
 
 #############################################################
 # Read Data
@@ -17,8 +18,8 @@ serbia <- read_csv("data/raw/serbia/responses.csv") %>% #read Serbia responses f
   pick_serbia_resps() %>% #filter dataframe for Serbia respondents
   ind_treatment_control() %>% #create variables to indicate treatment, control
   ind_endline() %>% #create variables to indicate endline
-  # likert(likert_confs)
-  binarize(binary_confs) %>% #binarize construct variables using map created above
+  likert(likert_confs) %>% #convert likert construct variables to likert scale
+  binarize(binary_confs) %>% #binarize construct variables
   group_by(userid) %>%
   mutate(gender = first(parent_gender, order_by = endline, na_rm = TRUE)) %>%
   ungroup()
@@ -34,7 +35,8 @@ for (x in names(ss)) {
 # Descriptives
 #############################################################
 
-select_cols<-unname(unlist(ss))
+# select_cols<-unname(unlist(ss))
+select_cols<-names(ss)
 
 descrip<-serbia%>%
   filter(endline==0)%>%
@@ -48,17 +50,26 @@ descrip<-serbia%>%
             max=max(value,na.rm=TRUE),
             sd=sd(value,na.rm=TRUE))
 
-View(descrip%>%arrange(desc(mean)))
+descrip<-descrip%>%
+  merge(key[,c('construct_variable','Subdomain','Domain','Grouping of constructs')],by.x = 'name',by.y='construct_variable',all.x = TRUE)%>%
+  distinct()
+
+descrip<-descrip%>%
+  mutate(Subdomain=case_when(is.na(Subdomain) ~ `Grouping of constructs`, TRUE ~ Subdomain))%>%
+  select(c('Subdomain','mean','median','min','max','sd'))
+
+write_table(descrip,'descriptives1')
+
+#correlations
+lower_cor<-serbia%>%
+  filter(endline==0)%>%
+  select(all_of(select_cols))%>%
+  select(-caregiver_well_being)%>%
+  lowerCor()
 
 #############################################################
 # Reliability Analysis
 #############################################################
-
-#lower correlations
-serbia%>%
-  filter(endline==0)%>%
-  select(all_of(select_cols))%>%
-  lowerCor()
 
 serbia%>%
   filter(endline==0)%>%
