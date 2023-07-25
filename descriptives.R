@@ -6,6 +6,12 @@ library(glue)
 library(stargazer)
 library(psych)
 library(stringr)
+library(corrplot)
+library(psych)
+library (lattice)
+library (nFactors)
+library (lavaan)
+library(moments)
 source("functions.R")
 source("variable creation.R")
 
@@ -27,53 +33,58 @@ serbia <- read_csv("data/raw/serbia/responses.csv") %>% #read Serbia responses f
 for (x in names(ss)) {
   serbia <- serbia %>%
     rowwise() %>%
-    mutate("{x}" := mean(c_across(all_of(ss[[x]])))) #add columns summarizing constructs
+    mutate("{x}" := mean(c_across(all_of(ss[[x]])),na.rm=TRUE)) #add columns summarizing constructs #how should we treat this if any one variable in the construct is NA?
 }
-
 
 #############################################################
 # Descriptives
 #############################################################
 
-# select_cols<-unname(unlist(ss))
-select_cols<-names(ss)
+variable_cols<-unname(unlist(ss)) #all variables
+construct_cols<-s #all constructs
 
-descrip<-serbia%>%
+#summarizing all variables
+descrip_variable<-serbia%>%
   filter(endline==0)%>%
-  select(all_of(select_cols))%>%
+  select(all_of(variable_cols))%>%
   ungroup()%>%
-  pivot_longer(cols=select_cols)%>%
+  pivot_longer(cols=variable_cols)%>%
   group_by(name)%>%
-  summarise(mean=mean(value,na.rm=TRUE),
-            median=median(value,na.rm=TRUE),
-            min=min(value,na.rm=TRUE),
-            max=max(value,na.rm=TRUE),
-            sd=sd(value,na.rm=TRUE))
+  descriptives_prop()%>%
+  arrange(desc(mean))%>%
+  mutate_if(is.numeric, round, 2)
 
-descrip<-descrip%>%
-  merge(key[,c('construct_variable','Subdomain','Domain','Grouping of constructs')],by.x = 'name',by.y='construct_variable',all.x = TRUE)%>%
-  distinct()
+write_table(descrip_variable,'descriptives_variables',align=TRUE)
 
-descrip<-descrip%>%
-  mutate(Subdomain=case_when(is.na(Subdomain) ~ `Grouping of constructs`, TRUE ~ Subdomain))%>%
-  select(c('Subdomain','mean','median','min','max','sd'))
+#summarizing construct variables
+descrip_construct<-serbia%>%
+  filter(endline==0)%>%
+  select(all_of(construct_cols))%>%
+  ungroup()%>%
+  pivot_longer(cols=construct_cols)%>%
+  group_by(name)%>%
+  descriptives_summary()%>%
+  arrange(desc(mean))%>%
+  mutate_if(is.numeric, round, 2)
 
-write_table(descrip,'descriptives1')
+write_table(descrip_construct,'descriptives_constructs',align=TRUE)
+
+constructs<-key[,c('Domain','Subdomain','construct_variable','variable','Grouping of constructs')]%>%
+  mutate(Subdomain=case_when(is.na(Subdomain)~`Grouping of constructs`,TRUE~Subdomain),
+         `Grouping of constructs`=NULL)%>%
+  drop_na(construct_variable)%>%
+  arrange(Domain,Subdomain,construct_variable,variable)
+
+write_table(constructs,'constructs',align=TRUE)
 
 #correlations
-lower_cor<-serbia%>%
+construct_cor<-serbia%>%
   filter(endline==0)%>%
-  select(all_of(select_cols))%>%
-  select(-caregiver_well_being)%>%
-  lowerCor()
+  select(all_of(construct_cols))%>%
+  lowerCor()%>%round(2)
 
-#############################################################
-# Reliability Analysis
-#############################################################
+construct_cor%>%corrplot(method='color')
 
-serbia%>%
-  filter(endline==0)%>%
-  select(all_of(select_cols))%>%alpha()
+# construct_cor[!lower.tri(construct_cor,diag=FALSE)]<-" "
+# write_table(construct_cor,'construct_cor')  
 
-dat<-serbia%>%filter(endline==0)%>%select(all_of(select_cols))
-pca <- pca(dat, nfactors = 3)
