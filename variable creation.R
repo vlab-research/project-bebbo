@@ -19,12 +19,6 @@ binary_confs <- list(
 )
 
 #create a map of correct responses for each construct variable
-binarized_vars <- key %>%
-  filter(!is.na(construct_variable)) %>%
-  rowwise() %>%
-  mutate(foo = list(bin_conf(variable, Correct))) %>%
-  pull(foo)
-
 likert_cols<-key%>%
   select(c('variable','Correct'))%>%
   rowwise()%>%
@@ -32,6 +26,13 @@ likert_cols<-key%>%
   ungroup()%>%
   filter(check>1)%>%
   pull(variable)
+
+binarized_vars <- key %>%
+  filter(!variable %in% likert_cols) %>%
+  filter(!is.na(construct_variable)) %>%
+  rowwise() %>%
+  mutate(foo = list(bin_conf(variable, Correct))) %>%
+  pull(foo)
 
 likert_confs <- key %>%
   filter(variable %in% likert_cols) %>%
