@@ -40,7 +40,7 @@ binarize <- function(df, cols) {
 
 write_table <- function(x, filename, ...) {
   stargazer(
-    x,
+    as.matrix(x),
     out = glue("tables/{filename}.tex"),
     digits = 2,
     label = glue("tbl:{filename}"),
@@ -93,7 +93,8 @@ parse_mult_choice<-function(x) {
 
 likert_col <- function(df, col, targ, ans) {
   
-  new_col <- paste0(col,'_likert')
+  # new_col <- paste0(col,'_likert')
+  new_col <- col
   
   a_pattern="-A. ([A-Za-z ]+)\n"
   b_pattern="-B. ([A-Za-z ]+)\n"
@@ -112,7 +113,7 @@ likert_col <- function(df, col, targ, ans) {
   likert_asc<-recode(df[[col]],"{a_matched}":=1,"{b_matched}":=2,"{c_matched}":=3,"{d_matched}":=4,"{e_matched}":=5)
   likert_desc<-recode(df[[col]],"{a_matched}":=5,"{b_matched}":=4,"{c_matched}":=3,"{d_matched}":=2,"{e_matched}":=1)
   
-  df%>%mutate("{new_col}":=case_when(targ %in% c('C','D','E') ~ likert_asc, targ %in% c('A','B') ~ likert_desc))
+  df%>%mutate("{new_col}" := case_when(targ %in% c('C','D','E') ~ likert_asc, targ %in% c('A','B') ~ likert_desc))
 }
 
 likert <- function(df, cols) {
@@ -122,4 +123,29 @@ likert <- function(df, cols) {
     }
   }
   df
+}
+
+descriptives_prop<-function(df,cols) {
+  df %>% summarise(prop_0=sum(case_when(value==0~1,value==1~0,TRUE~NA),na.rm = TRUE)/length(value),
+                   prop_1=sum(case_when(value==1~1,is.na(value)~NA, TRUE~0),na.rm = TRUE)/length(value),
+                   prop_2=sum(case_when(value==2~1,value==0~NA, is.na(value)~NA, TRUE~0),na.rm = TRUE)/length(value),
+                   prop_3=sum(case_when(value==3~1,value==0~NA, is.na(value)~NA, TRUE~0),na.rm = TRUE)/length(value),
+                   prop_4=sum(case_when(value==4~1,value==0~NA, is.na(value)~NA, TRUE~0),na.rm = TRUE)/length(value),
+                   prop_5=sum(case_when(value==5~1,value==0~NA, is.na(value)~NA, TRUE~0),na.rm = TRUE)/length(value),
+                   mean=mean(value,na.rm=TRUE),
+                   sd=sd(value,na.rm=TRUE),
+                   prop_na=mean(is.na(value))
+                )
+  
+}
+
+descriptives_summary<-function(df,cols) {
+  df %>% summarise(mean=mean(value,na.rm=TRUE),
+                   median=median(value,na.rm=TRUE),
+                   min=min(value,na.rm=TRUE),
+                   max=max(value,na.rm=TRUE),
+                   sd=sd(value,na.rm=TRUE),
+                   prop_na=mean(is.na(value))
+  )
+  
 }
