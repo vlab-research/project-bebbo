@@ -40,34 +40,11 @@ for (x in names(ss)) {
 # Descriptives
 #############################################################
 
+
+endline_flag=1
+
 variable_cols<-unname(unlist(ss)) #all variables
 construct_cols<-s #all constructs
-
-#summarizing all variables
-descrip_variable<-serbia%>%
-  filter(endline==0)%>%
-  select(all_of(variable_cols))%>%
-  ungroup()%>%
-  pivot_longer(cols=variable_cols)%>%
-  group_by(name)%>%
-  descriptives_prop()%>%
-  arrange(desc(mean))%>%
-  mutate_if(is.numeric, round, 2)
-
-write_table(descrip_variable,'descriptives_variables',align=TRUE)
-
-#summarizing construct variables
-descrip_construct<-serbia%>%
-  filter(endline==0)%>%
-  select(all_of(construct_cols))%>%
-  ungroup()%>%
-  pivot_longer(cols=construct_cols)%>%
-  group_by(name)%>%
-  descriptives_summary()%>%
-  arrange(desc(mean))%>%
-  mutate_if(is.numeric, round, 2)
-
-write_table(descrip_construct,'descriptives_constructs',align=TRUE)
 
 constructs<-key[,c('Domain','Subdomain','construct_variable','variable','Grouping of constructs')]%>%
   mutate(Subdomain=case_when(is.na(Subdomain)~`Grouping of constructs`,TRUE~Subdomain),
@@ -75,16 +52,99 @@ constructs<-key[,c('Domain','Subdomain','construct_variable','variable','Groupin
   drop_na(construct_variable)%>%
   arrange(Domain,Subdomain,construct_variable,variable)
 
-write_table(constructs,'constructs',align=TRUE)
+#summarizing all likert variables
+descrip_variable_likert<-serbia%>%
+  filter(endline==endline_flag)%>%
+  select(all_of(likert_cols))%>%
+  descriptives(type='likert')%>%
+  merge(constructs[,c('variable','Subdomain')],by.x = 'name',by.y = 'variable',all.x=TRUE)%>%
+  relocate(Subdomain,.before='name')%>%
+  arrange(Subdomain)
+
+#summarizing all binary variables
+descrip_variable_binary<-serbia%>%
+  filter(endline==endline_flag)%>%
+  select(all_of(variable_cols))%>%
+  select(!likert_cols)%>%
+  descriptives(type='binary')%>%
+  merge(constructs[,c('variable','Subdomain')],by.x = 'name',by.y = 'variable',all.x=TRUE)%>%
+  relocate(Subdomain,.before='name')%>%
+  arrange(Subdomain)
+
+#summarizing construct variables
+descrip_construct<-serbia%>%
+  filter(endline==endline_flag)%>%
+  select(all_of(construct_cols))%>%
+  descriptives(type='summary')%>%
+  merge(constructs[,c('construct_variable','Subdomain')],by.x = 'name',by.y = 'construct_variable',all.x=TRUE)%>%
+  distinct()%>%
+  relocate(Subdomain,.before='name')%>%
+  arrange(Subdomain)
 
 #correlations
 construct_cor<-serbia%>%
-  filter(endline==0)%>%
+  filter(endline==endline_flag)%>%
   select(all_of(construct_cols))%>%
   lowerCor()%>%round(2)
 
 construct_cor%>%corrplot(method='color')
+construct_cor[!lower.tri(construct_cor,diag=TRUE)]<-" "
 
-# construct_cor[!lower.tri(construct_cor,diag=FALSE)]<-" "
-# write_table(construct_cor,'construct_cor')  
+
+suffix<-ifelse(endline_flag==0,"_baseline","_endline")
+write_table(constructs,paste0('constructs',suffix),align=TRUE)
+write_table(descrip_variable_likert,paste0('descriptives_likert_variables',suffix),align=TRUE)
+write_table(descrip_variable_binary,paste0('descriptives_binary_variables',suffix),align=TRUE)
+write_table(descrip_construct,paste0('descriptives_constructs',suffix),align=TRUE)
+write_table(construct_cor,paste0('construct_cor',suffix),align=TRUE)
+
+#############################################################
+# Descriptives
+#############################################################
+
+respondents_endline<-serbia%>%
+  mutate(age_flag=case_when(child_age=="0 to 6 months"~"0-2",
+                            child_age=="6 to 12 months"~"0-2",
+                            child_age=="12 to 24 months"~"0-2",
+                            child_age=="2 to 4 years"~"2-6",
+                            child_age=="4 to 6 years"~"2-6"))%>%
+  group_by(endline,age_flag)%>%
+  summarise(count=table(age_flag))%>%
+  mutate(endline=recode(endline,`0`="Baseline",`1`="Endline"))%>%
+  pivot_wider(id_cols = endline,id_expand = FALSE,names_from=age_flag,names_expand=TRUE,values_from = count)
+
+write_table(respondents_endline,'respondents_endline')
+
+
+respondents<-serbia%>%
+  mutate(age_flag=case_when(child_age=="0 to 6 months"~"0-2",
+                            child_age=="6 to 12 months"~"0-2",
+                            child_age=="12 to 24 months"~"0-2",
+                            child_age=="2 to 4 years"~"2-6",
+                            child_age=="4 to 6 years"~"2-6"))%>%
+  ungroup()%>%
+  select(all_of(variable_cols))%>%
+  pivot_longer(everything())%>%
+  group_by(name)%>%
+  summarise(respondents=sum(!is.na(value)),value=NULL)
+
+write_table(respondents,'respondents')
+
+respondents_byage<-serbia%>%
+  mutate(age_flag=case_when(child_age=="0 to 6 months"~"0-2",
+                            child_age=="6 to 12 months"~"0-2",
+                            child_age=="12 to 24 months"~"0-2",
+                            child_age=="2 to 4 years"~"2-6",
+                            child_age=="4 to 6 years"~"2-6"))%>%
+  ungroup()%>%
+  select(all_of(c(variable_cols,'age_flag','endline')))%>%
+  pivot_longer(cols=variable_cols)%>%
+  group_by(name,age_flag)%>%
+  summarise(respondents=sum(!is.na(value)),value=NULL)%>%
+  pivot_wider(id_cols = name ,id_expand = FALSE,names_from=age_flag,names_expand=TRUE,values_from = respondents)%>%
+  mutate(total=`0-2`+`2-6`,
+         `NA`=NULL)
+
+write_table(respondents_byage,'respondents_childage')
+  
 
