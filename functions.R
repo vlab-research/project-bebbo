@@ -48,26 +48,37 @@ write_table <- function(x, filename, ...) {
   )
 }
 
-pick_serbia_resps <- function(df) {
+pick_serbia_resps <- function(df,stage="base") {
+  
+  if(stage=="base"){code<-"bebborsbaseserb" #filter for users who reach baseline
+  }else if(stage=="end"){code<-"bebborsendeng" #filter for users who reach endline
+  }else if(stage=="follow"){code<-"bebborsfueng" #filter for users who reach followup
+  }
+  
   users <- df %>%
-    filter(shortcode == "bebborsendeng") %>%
+    filter(shortcode == code) %>%
     filter(thankyou_you_qualify == "OK") %>%
     filter(version > 4) %>%
     distinct(userid) %>%
     pull(userid)
   
-  
   df %>%
-    filter(shortcode != "bebborsintermediatebail") %>%
+    # filter(shortcode != "bebborsintermediatebail") %>%
     filter(userid %in% users)
 }
 
 
-pick_bulgaria_resps <- function(df) {
+pick_bulgaria_resps <- function(df,stage="base") {
+  
+  if(stage=="base"){code<-"bebbobg2basebul" #filter for users who reach baseline
+  }else if(stage=="end"){code<-"bebbobgendeng" #filter for users who reach endline
+  }else if(stage=="follow"){code<-"bebbobgfueng" #filter for users who reach followup
+  }
+  
   users <- df %>%
-    filter(shortcode == "bebbobgendeng") %>%
+    filter(shortcode == code) %>% #
     filter(thankyou_you_qualify == "OK") %>%
-    ## filter(version > 4) %>% # TODO: get bulgaria version
+    filter(version >= 12) %>%
     distinct(userid) %>%
     pull(userid)
   
@@ -81,10 +92,12 @@ ind_treatment_control <- function(df) {
     mutate(treatment = recode(seed_2, `1` = "treated", `2` = "control")) #create treatment variable based on seed_2
 }
 
-ind_endline <- function(df) {
-  df %>% mutate(endline = recode(shortcode, bebborsendeng = 1, bebborsbaseserb = 0))#create end line variable based on short code
+ind_endline <- function(df,country) {
+  if(country=='serbia')
+    {df %>% mutate(endline = recode(shortcode, bebborsendeng = 1, bebborsbaseserb = 0))}
+  else if(country=='bulgaria')
+      {df %>% mutate(endline = recode(shortcode, bebbobgendeng = 1, bebbobg2basebul = 0))}
 }
-
 
 parse_mult_choice<-function(x) {
   temp<-match(unlist(strsplit(x,split=', ')),c('A','B','C','D','E'))
@@ -167,4 +180,8 @@ descriptives<-function(df,cols,type='binary') {
       mutate_if(is.numeric, round, 2)
     }
   
+}
+
+parse_bq_date <- function(i) {
+  as.POSIXct(i / 1000 / 1000)
 }
