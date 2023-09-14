@@ -41,7 +41,7 @@ binarize <- function(df, cols) {
 write_table <- function(x, filename, ...) {
   stargazer(
     as.matrix(x),
-    out = glue("tables/{filename}.tex"),
+    out = glue("../tables/{filename}.tex"),
     digits = 2,
     label = glue("tbl:{filename}"),
     ...
@@ -63,7 +63,7 @@ pick_serbia_resps <- function(df,stage="base") {
     pull(userid)
   
   df %>%
-    # filter(shortcode != "bebborsintermediatebail") %>%
+    filter(shortcode != "bebborsintermediatebail") %>%
     filter(userid %in% users)
 }
 
@@ -94,9 +94,9 @@ ind_treatment_control <- function(df) {
 
 ind_endline <- function(df,country) {
   if(country=='serbia')
-    {df %>% mutate(endline = recode(shortcode, bebborsendeng = 1, bebborsbaseserb = 0))}
+    {df %>% mutate(endline = recode(shortcode, bebborsendeng = 1, bebborsbaseserb = 0, bebborsfueng = 2))}
   else if(country=='bulgaria')
-      {df %>% mutate(endline = recode(shortcode, bebbobgendeng = 1, bebbobg2basebul = 0))}
+      {df %>% mutate(endline = recode(shortcode, bebbobgendeng = 1, bebbobg2basebul = 0, bebbobgfueng = 2))}
 }
 
 parse_mult_choice<-function(x) {

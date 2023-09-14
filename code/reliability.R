@@ -12,6 +12,7 @@ library (lattice)
 library (nFactors)
 library (lavaan)
 library(moments)
+library(psych)
 source("functions.R")
 source("variable creation.R")
 
@@ -20,10 +21,10 @@ source("variable creation.R")
 # Read Data
 #############################################################
 
-serbia <- read_csv("data/raw/serbia/responses.csv") %>% #read Serbia responses file
-  pick_serbia_resps() %>% #filter dataframe for Serbia respondents
+serbia <- read_csv("../data/raw/serbia/responses.csv") %>% #read Serbia responses file
+  pick_serbia_resps(stage="end") %>% #filter dataframe for Serbia respondents
   ind_treatment_control() %>% #create variables to indicate treatment, control
-  ind_endline() %>% #create variables to indicate endline
+  ind_endline(country='serbia') %>% #create variables to indicate endline
   likert(likert_confs) %>% #convert likert construct variables to likert scale
   binarize(binary_confs) %>% #binarize construct variables
   group_by(userid) %>%
@@ -36,16 +37,22 @@ for (x in names(ss)) {
     mutate("{x}" := mean(c_across(all_of(ss[[x]])),na.rm=TRUE)) #add columns summarizing constructs #how should we treat this if any one variable in the construct is NA?
 }
 
+serbia<-serbia%>%mutate("merged_construct_1" := mean(c_across(all_of(c(ss[['parent_knw']],ss[['caregiver_well_being']]))),na.rm=TRUE))
+
 #############################################################
 # Reliability Analysis
 #############################################################
-
+serbia$merged_construct_1
 alpha_matrix<-matrix(ncol=4,nrow = length(names(ss)))
 alpha_drop_df<-data.frame()
-for(att in names(ss)){
+
+serbia%>%filter(endline==0)%>%select(c(ss[['personal_nee']],ss[['parent_knw']],ss[['self_care']]))%>%psych::alpha()
+serbia%>%filter(endline==0)%>%select(c('personal_needs','decrease_stress'))%>%psych::alpha()
+
+for(att in c(names(ss),'merged_construct_1')){
   
   var_count<-length(ss[[att]])
-  
+
   if (var_count>1){temp<-serbia%>%
     filter(endline==0)%>%
     select(all_of(ss[[att]]))%>%
@@ -72,10 +79,21 @@ for(att in names(ss)){
 
 colnames(alpha_matrix)<-c("construct","variable count","raw.alpha","std.alpha")
 write_table(alpha_matrix,'constructs_alpha_matrix',align=TRUE)
+alpha_matrix<-as.data.frame(alpha_matrix)
 
 alpha_drop_df$variable.dropped<-rownames(alpha_drop_df)
 rownames(alpha_drop_df)<-NULL
-write_table(alpha_drop_df[,c('construct','variable.dropped','raw_alpha','std.alpha')],'alpha_drop',align=TRUE)
+
+alpha_drop_df<-alpha_drop_df%>%
+  merge(alpha_matrix[,c('construct','raw.alpha')],by.x='construct',by.y='construct')%>%
+  mutate(raw.alpha=as.numeric(raw.alpha))%>%
+  mutate(increment=raw_alpha-raw.alpha)%>%
+  mutate(raw.alpha=NULL)%>%
+  relocate(c(variable.dropped,increment),.after=construct)
+
+write_table(alpha_drop_df,'alpha_drop',align=TRUE)
+
+
 
 dat <- serbia%>%filter(endline==0)%>%select(all_of(unname(unlist(ss))))%>%select_if(~ !any(is.na(.)))
 pca_dat <- prcomp(dat,scale = TRUE,center = TRUE)

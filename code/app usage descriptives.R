@@ -31,7 +31,7 @@ source("variable creation.R")
 
 # 1. Serbia Survey Respondents
 
-serbia <- read_csv("data/raw/serbia/responses.csv") %>% #read Serbia responses file
+serbia <- read_csv("../data/raw/serbia/responses.csv") %>% #read Serbia responses file
   ind_endline(country='serbia')%>%
   likert(likert_confs) %>% #convert likert construct variables to likert scale
   binarize(binary_confs) %>% #binarize construct variables
@@ -42,7 +42,7 @@ serbia <- read_csv("data/raw/serbia/responses.csv") %>% #read Serbia responses f
 
 # 2. Bulgaria Survey Responses
 
-bulgaria <- read_csv("data/raw/bulgaria/responses.csv") %>% #read Bulgaria responses file
+bulgaria <- read_csv("../data/raw/bulgaria/responses.csv") %>% #read Bulgaria responses file
   ind_endline(country='bulgaria')%>% #create variables to indicate endline
   likert(likert_confs) %>% #convert likert construct variables to likert scale
   binarize(binary_confs) %>% #binarize construct variables
@@ -73,6 +73,7 @@ serbia<-serbia%>%
                             child_age=="12 to 24 months"~"0-2",
                             child_age=="2 to 4 years"~"2-6",
                             child_age=="4 to 6 years"~"2-6"),
+         education=recode(education,University=1,Basic=0,`Incomplete basic`=0,Secondary=0),
          country = 'serbia')%>%
   select(c(userid,endline,demo_cols,age_flag,country,names(ss)))
 
@@ -85,6 +86,7 @@ bulgaria<-bulgaria%>%
                             child_age=="12 to 24 months"~"0-2",
                             child_age=="2 to 4 years"~"2-6",
                             child_age=="4 to 6 years"~"2-6"),
+         education=recode(education,University=1,Basic=0,`Incomplete basic`=0,Secondary=0),
          country = 'bulgaria')%>%
   select(c(userid,endline,demo_cols,age_flag,country,names(ss)))
 
@@ -93,17 +95,17 @@ constructs<-rbind(serbia,bulgaria)
 # 4. Timing of events data
 # We use this to find the time that users are asked to download the app
 
-serbia_long<-read_csv("data/raw/serbia/serbia-long.csv")%>%
+serbia_long<-read_csv("../data/raw/serbia/serbia-long.csv")%>%
   filter(question_ref=='download_confirm_treatment')%>% #for each user, select the event details for when this question is asked
   select(userid,timestamp) #keep userid and timestamp of the event
 
-bulgaria_long<-read_csv("data/raw/bulgaria/bulgaria-long.csv")%>%
+bulgaria_long<-read_csv("../data/raw/bulgaria/bulgaria-long.csv")%>%
   filter(question_ref=='download_confirm_treatment')%>%
   select(userid,timestamp)
 
 download_time<-rbind(serbia_long,bulgaria_long)
 
-app_usage<-read_csv("data/raw/bq-results-20230824.csv")
+app_usage<-read_csv("../data/raw/bq-results-20230824.csv")
 
 #############################################################
 # App Usage Over Time
@@ -121,14 +123,16 @@ app_usage<-read_csv("data/raw/bq-results-20230824.csv")
 
 app_usage_weekly <- app_usage %>%
   merge(download_time,by.x='facebook_id',by.y='userid',all.x=TRUE,all.y=FALSE)%>%
+  merge(constructs,by.x='facebook_id',by.y='userid',all.x=TRUE,all.y=FALSE) %>%
   mutate(event_timestamp = parse_bq_date(event_timestamp), # event timestamp
          start_week = week(timestamp), # respondent's start week - week of respondent being asked to download the app
          event_day = wday(event_timestamp),
          week_since_start = round(difftime(event_timestamp,timestamp,units = "week"))) %>% # weeks since the start week (event timestamp - start time)
-  group_by(facebook_id,week_since_start)%>% #respondent's activity by weeks since joining
+  group_by(facebook_id,week_since_start,age_flag,education)%>% #respondent's activity by weeks since joining
   summarize(start_week=first(start_week),
             week_since_start=first(week_since_start),
             facebook_id = first(facebook_id),
+            #aggregation of events
             session_starts = sum(event_name == "session_start"),
             screen_views = sum(event_name == "screen_view"),
             user_engagements = sum(event_name == "user_engagement"), # user engagements 
@@ -136,6 +140,7 @@ app_usage_weekly <- app_usage %>%
             milestones_tracked = sum(event_name == "child_milestone_tracked"), 
             days_used = n_distinct(event_day), #hours used in the week
             usage_count=length(event_timestamp), #number of events logged in the week
+            #binary event variables
             opened=ifelse(sum(grepl('_opened',event_name))>0,1,0), #any page opened binary
             home_opened=ifelse(sum(grepl('Home_opened',event_name))>0,1,0), #home page opened binary
             session_started=ifelse(sum(grepl('session_start',event_name))>0,1,0))%>% #session started binary
@@ -150,7 +155,7 @@ weekly_aggregates<-app_usage_weekly%>%
             opened=sum(opened), # count of respondents who opened the app
             home_opens=sum(home_opened), # count of respondents who opened the home page
             session_starts=sum(session_started), # count of respondents who started a session
-            days_used=mean(days_used), #average number of hours used
+            days_used=mean(days_used), #average number of days used
             usage_count=mean(usage_count))%>% #number of events logged in the week
   mutate(week_after_treatment = paste0('week ',week_since_start))%>%
   filter(week_since_start>=1)%>%
@@ -161,49 +166,69 @@ weekly_aggregates%>%
   mutate(week_since_start=NULL)%>%
   write_table('weekly_aggregates')
 
+# 4b. App Usage Data weekly trends
+individual_aggregates<-app_usage_weekly%>%
+  group_by(facebook_id,age_flag,education)%>%
+  summarise(days_used=sum(days_used), #count of respondents
+            opened=sum(opened), # count of respondents who opened the app
+            home_opens=sum(home_opened), # count of respondents who opened the home page
+            session_starts=sum(session_started), # count of respondents who started a session
+            usage_count=sum(usage_count))%>% #number of events logged in the week
+  mutate_if(is.numeric,round,3)%>%
+  mutate(education=recode(education,`1`="University",`0`='Not University'))
+
 
 #############################################################
 # App Usage Over Time - PLOTS
 #############################################################
 
+# ggplot(individual_aggregates,aes(x=home_opens,fill=education,colour=education))+geom_histogram(alpha=0.5,position='identity')+ylab('total home opens')
+# ggplot(individual_aggregates,aes(x=home_opens,fill=age_flag,colour=age_flag))+geom_histogram(alpha=0.5,position='identity')+ylab('total home opens')
 
-ggplot(weekly_aggregates,aes(x=reorder(week_after_treatment,week_since_start),y=session_starts))+
+# ggplot(individual_aggregates,aes(x=days_used))+geom_histogram(binwidth = 1,fill="lightblue",colour="blue")+xlab('number of days used')+ylab('number of respondents')
+# ggsave('individual aggregates - # days used over lifetime.png')
+
+ggplot(individual_aggregates,aes(x=home_opens))+geom_histogram(binwidth = 1,fill="lightblue",colour="blue")+
+  xlab('total home opens')+
+  ylab('number of respondents')
+ggsave('individual aggregates - home opens over lifetime.png')
+
+ggplot(weekly_aggregates,aes(x=reorder(week_after_treatment,week_since_start),y=home_opens))+
   geom_bar(stat='identity',fill='lightblue')+
-  geom_bar(aes(x=reorder(week_after_treatment,week_since_start),y=opened),stat='identity',position='identity',fill="#FF6C91",alpha=0.6)+
-  geom_text(data=weekly_aggregates,aes(label=opened),size=3)+
+  # geom_bar(aes(x=reorder(week_after_treatment,week_since_start),y=opened),stat='identity',position='identity',fill="#FF6C91",alpha=0.6)+
+  geom_text(data=weekly_aggregates,aes(label=home_opens),size=3)+
   xlab('week after treatment')+
-  ylab('number of respondents who started a session')
+  ylab('number of respondents with a home open')
+ggsave('home opens over time - home opens.png')
 
-ggsave('app usage over time - respondents.png')
-
-#event_count
-ggplot(app_usage_weekly,aes(x=reorder(week_after_treatment,week_since_start),y=usage_count))+
-  geom_boxplot(outlier.colour = 'pink',outlier.size = 0.7)+
-  ylim(0,100)+
-  geom_text(data=weekly_aggregates,aes(label=opened),size=3)+
-  xlab('week after treatment')+
-  ylab('# of events logged')
-
-ggsave('app usage over time - usage count.png')
-
-#days_used
-ggplot(app_usage_weekly,aes(x=reorder(week_after_treatment,week_since_start),y=days_used))+
-  geom_boxplot(outlier.colour = 'pink',outlier.size = 0.7)+
-  ylim(0,6)+
-  geom_text(data=weekly_aggregates,aes(label=opened),size=3)+
-  xlab('week after treatment')+
-  ylab('# of days used')
-
-ggsave('app usage over time - days used.png')
-
-#home opens
-ggplot(app_usage_weekly,aes(x=reorder(week_after_treatment,week_since_start),y=home_opens))+
-  geom_boxplot(outlier.colour = 'pink',outlier.size = 0.7)+
-  ylim(0,10)+
-  xlab('week after treatment')+
-  ylab('# of home opens')
-
-ggsave('app usage over time - home opens.png')
+# #event_count
+# ggplot(app_usage_weekly,aes(x=reorder(week_after_treatment,week_since_start),y=usage_count))+
+#   geom_boxplot(outlier.colour = 'pink',outlier.size = 0.7)+
+#   ylim(0,100)+
+#   geom_text(data=weekly_aggregates,aes(label=opened),size=3)+
+#   xlab('week after treatment')+
+#   ylab('# of events logged')
+# 
+# ggsave('app usage over time - usage count.png')
+# 
+# #days_used
+# ggplot(app_usage_weekly,aes(x=reorder(week_after_treatment,week_since_start),y=days_used))+
+#   geom_boxplot(outlier.colour = 'pink',outlier.size = 0.7)+
+#   ylim(0,6)+
+#   geom_text(data=weekly_aggregates,aes(label=opened),size=3)+
+#   xlab('week after treatment')+
+#   ylab('# of days used')
+# 
+# ggsave('app usage over time - days used.png')
+# 
+# #home opens
+# ggplot(app_usage_weekly,aes(x=reorder(week_after_treatment,week_since_start),y=home_opens))+
+#   geom_boxplot(outlier.colour = 'pink',outlier.size = 0.7)+
+#   ylim(0,10)+
+#   xlab('week after treatment')+
+#   ylab('# of home opens')
+# 
+# ggsave('app usage over time - home opens.png')
 
 #############################################################
 # Attrition, App Usage and Baseline Characteristics
@@ -238,9 +263,11 @@ app_usage_user <- app_usage%>%
     milestones_tracked = sum(event_name == "child_milestone_tracked"),
     days_used = n_distinct(event_day), #hours used in the week
     usage_count=length(event_name),
-    opened=ifelse(sum(grepl('_opened',event_name))>0,1,0))%>%
+    opened=ifelse(sum(grepl('_opened',event_name))>0,1,0),
+    home_opened=ifelse(sum(grepl('Home_opened',event_name))>0,1,0))%>%
   merge(constructs,by.x='facebook_id',by.y='userid',all.x=TRUE,all.y=TRUE) %>%
   mutate(downloaded=ifelse(is.na(session_starts),0,1), #if they have app data, they have downloaded the app
+         home_opened=ifelse(is.na(home_opened),0,home_opened),
          treated = ifelse(is.na(timestamp),0,1))%>% #if they were asked to download the app, they have timestamp (from download_time dataset)
   filter(treated==1)
 
@@ -272,14 +299,13 @@ app_usage_user<-app_usage_user%>%
 #check for whether only run on downloaded
 #this regression drops observations for which we don't have home opens i.e. the model fits only data for those who downloaded the app
 #do baseline characteristics/demographics/survey patterns explain home opens?
+#within the subset of respondents who downloaded the app
 lin_mod1<-lm('home_opens ~ start_week+
              dev_knw_recog+
-             parent_knw+
              attitude+
              caregiver_well_being+
              self_care+
              family_care+
-             practices_24+
              practices_agree+
              practices_hostility+
              parent_age+
@@ -293,14 +319,12 @@ lin_mod1<-lm('home_opens ~ start_week+
 lin_mod_home_opens<-summary(lin_mod1)
 write_table(round(lin_mod_home_opens$coefficients,3),'app usage and baseline characteristics - linear reg')
 
-log_mod1<-glm('downloaded ~ start_week+
+log_mod1<-glm('home_opened ~ start_week+
              dev_knw_recog+
-             parent_knw+
              attitude+
              caregiver_well_being+
              self_care+
              family_care+
-             practices_24+
              practices_agree+
              practices_hostility+
              parent_age+
@@ -316,16 +340,13 @@ log_mod_downloaded<-summary(log_mod1)
 write_table(round(log_mod_downloaded$coefficients,3),'downloads and baseline characteristics - logistic reg')
 with(summary(log_mod1), 1 - deviance/null.deviance)
 
-
-
-
 #############################################################
 # B. Attrition and App Usage
 #############################################################
 #add a flag for calendar # of days used
-colnames(app_usage)
-mod1<-glm('attrition_flag ~ downloaded + session_starts + milestones_tracked + time_used + usage_count',data=app_usage_user,
-          family=binomial())
-summary(mod1)
+# colnames(app_usage)
+# mod1<-glm('attrition_flag ~ downloaded + session_starts + milestones_tracked + time_used + usage_count',data=app_usage_user,
+#           family=binomial())
+# summary(mod1)
 
 

@@ -21,8 +21,8 @@ source("variable creation.R")
 # In this section, we read and perform some pre-processing for the datasets we will require for this analysis
 
 # 1. Serbia Survey Respondents
-serbia <- read_csv("data/raw/serbia/responses.csv") %>% #read Serbia responses file
-  pick_serbia_resps() %>% #filter dataframe for Serbia respondents
+serbia <- read_csv("../data/raw/serbia/responses.csv") %>% #read Serbia responses file
+  pick_serbia_resps(stage="end") %>% #filter dataframe for Serbia respondents
   ind_treatment_control() %>% #create variables to indicate treatment, control
   ind_endline(country='serbia') %>% #create variables to indicate endline
   likert(likert_confs) %>% #convert likert construct variables to likert scale
@@ -32,8 +32,8 @@ serbia <- read_csv("data/raw/serbia/responses.csv") %>% #read Serbia responses f
   ungroup()
 
 # 2. Bulgaria Survey Responses
-bulgaria <- read_csv("data/raw/bulgaria/responses.csv") %>% #read Bulgaria responses file
-  pick_bulgaria_resps() %>% #filter dataframe for Bulgarian respondents
+bulgaria <- read_csv("../data/raw/bulgaria/responses.csv") %>% #read Bulgaria responses file
+  pick_bulgaria_resps(stage="end") %>% #filter dataframe for Bulgarian respondents
   ind_treatment_control() %>% #create variables to indicate treatment, control
   ind_endline(country='bulgaria') %>% #create variables to indicate endline
   likert(likert_confs) %>% #convert likert construct variables to likert scale
@@ -53,7 +53,7 @@ for (x in names(ss)) {
 }
 
 #############################################################
-# Paired t-tests
+# Paired t-tests by treatment/control
 #############################################################
 
 variable_cols<-unname(unlist(ss)) #all variables
@@ -79,6 +79,8 @@ rm(test)
 
 t.test.serbia<-as.data.table(t.test.serbia)
 colnames(t.test.serbia)<-c('variable','test statistic','p-val','std.error','conf.int lower','conf.int upper')
+t.test.serbia<-t.test.serbia[order(`p-val`)]
+write_table(t.test.serbia,'treatment_baseline_imbalance_serbia')
 
 #initialize a matrix to store results
 t.test.bulgaria<-matrix(nrow=length(all_cols),ncol=6)
@@ -99,4 +101,33 @@ for(col in all_cols){
 
 t.test.bulgaria<-as.data.table(t.test.bulgaria)
 colnames(t.test.bulgaria)<-c('variable','test statistic','p-val','std.error','conf.int lower','conf.int upper')
+t.test.bulgaria<-t.test.bulgaria[order(`p-val`)]
+write_table(t.test.bulgaria,'treatment_baseline_imbalance_bulgaria')
+
+
+#############################################################
+# Paired t-tests by country
+#############################################################
+
+#initialize a matrix to store results
+t.test.matrix<-matrix(nrow=length(all_cols),ncol=6)
+#baseline serbia
+tc.serbia<-serbia%>%filter(endline==0)
+#baseline bulgaria
+tc.bulgaria<-bulgaria%>%filter(endline==0)
+
+i=1
+for(col in all_cols){
+  print(col)
+  test<-t.test(x=tc.serbia[[col]],y=tc.bulgaria[[col]],mu=0,paired=FALSE,var.equal=TRUE)
+  t.test.matrix[i,1]  <-col
+  t.test.matrix[i,2:6]<-round(cbind(test$statistic,test$p.value,test$stderr,test$conf.int[1],test$conf.int[2]),3)
+  i=i+1
+  rm(test)
+}
+
+t.test.matrix<-as.data.table(t.test.matrix)
+colnames(t.test.matrix)<-c('variable','test statistic','p-val','std.error','conf.int lower','conf.int upper')
+t.test.matrix<-t.test.matrix[order(`p-val`)]
+write_table(t.test.matrix,'country_baseline_constructs_imbalance')
 
