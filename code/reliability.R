@@ -29,35 +29,50 @@ serbia <- read_csv("../data/raw/serbia/responses.csv") %>% #read Serbia response
   binarize(binary_confs) %>% #binarize construct variables
   group_by(userid) %>%
   mutate(gender = first(parent_gender, order_by = endline, na_rm = TRUE)) %>%
-  ungroup()
+  ungroup()%>%
+  mutate(country="serbia")
+
+bulgaria <- read_csv("../data/raw/bulgaria/responses.csv") %>% #read Serbia responses file
+  pick_bulgaria_resps(stage="end") %>% #filter dataframe for Serbia respondents
+  ind_treatment_control() %>% #create variables to indicate treatment, control
+  ind_endline(country='bulgaria') %>% #create variables to indicate endline
+  likert(likert_confs) %>% #convert likert construct variables to likert scale
+  binarize(binary_confs) %>% #binarize construct variables
+  group_by(userid) %>%
+  mutate(gender = first(parent_gender, order_by = endline, na_rm = TRUE)) %>%
+  ungroup()%>%
+  mutate(country="bulgaria")
+
 
 for (x in names(ss)) {
   serbia <- serbia %>%
     rowwise() %>%
     mutate("{x}" := mean(c_across(all_of(ss[[x]])),na.rm=TRUE)) #add columns summarizing constructs #how should we treat this if any one variable in the construct is NA?
+  
+  bulgaria <- bulgaria %>%
+    rowwise() %>%
+    mutate("{x}" := mean(c_across(all_of(ss[[x]])),na.rm=TRUE)) #add columns summarizing constructs #how should we treat this if any one variable in the construct is NA?
 }
-
-serbia<-serbia%>%mutate("merged_construct_1" := mean(c_across(all_of(c(ss[['parent_knw']],ss[['caregiver_well_being']]))),na.rm=TRUE))
 
 #############################################################
 # Reliability Analysis
 #############################################################
-serbia$merged_construct_1
+
+country_flag='bulgaria'
+if(country_flag=='serbia'){dat<-serbia}else if(country_flag=='bulgaria'){dat<-bulgaria}
+
 alpha_matrix<-matrix(ncol=4,nrow = length(names(ss)))
 alpha_drop_df<-data.frame()
 
-serbia%>%filter(endline==0)%>%select(c(ss[['personal_nee']],ss[['parent_knw']],ss[['self_care']]))%>%psych::alpha()
-serbia%>%filter(endline==0)%>%select(c('personal_needs','decrease_stress'))%>%psych::alpha()
-
-for(att in c(names(ss),'merged_construct_1')){
+for(att in names(ss)){
   
   var_count<-length(ss[[att]])
 
-  if (var_count>1){temp<-serbia%>%
+  if (var_count>1){temp<-dat%>%
     filter(endline==0)%>%
     select(all_of(ss[[att]]))%>%
     select_if(~ !all(is.na(.)))%>%
-    alpha()
+    psych::alpha()
   
   raw_alpha<-round(temp$total[1]$raw_alpha,2)
   std_alpha<-round(temp$total[2]$std.alpha,2)
@@ -78,7 +93,7 @@ for(att in c(names(ss),'merged_construct_1')){
 
 
 colnames(alpha_matrix)<-c("construct","variable count","raw.alpha","std.alpha")
-write_table(alpha_matrix,'constructs_alpha_matrix',align=TRUE)
+write_table(alpha_matrix,paste0('constructs_alpha_matrix_',country_flag),align=TRUE)
 alpha_matrix<-as.data.frame(alpha_matrix)
 
 alpha_drop_df$variable.dropped<-rownames(alpha_drop_df)
@@ -91,17 +106,18 @@ alpha_drop_df<-alpha_drop_df%>%
   mutate(raw.alpha=NULL)%>%
   relocate(c(variable.dropped,increment),.after=construct)
 
-write_table(alpha_drop_df,'alpha_drop',align=TRUE)
+write_table(alpha_drop_df,paste0('alpha_drop_',country_flag),align=TRUE)
 
+key<-key%>%as.data.table()
+key[!is.na(construct_variable),c("construct_variable","variable")]%>%write_table('construct variable mapping')
 
-
-dat <- serbia%>%filter(endline==0)%>%select(all_of(unname(unlist(ss))))%>%select_if(~ !any(is.na(.)))
-pca_dat <- prcomp(dat,scale = TRUE,center = TRUE)
-plot(c(1:length(pca_dat$sdev)),(pca_dat$sdev^2)/sum(pca_dat$sdev^2))
-loadings <- as.data.frame(pca_dat$rotation[,c(1:7)])%>%round(2)
-loadings%>%as.matrix()%>%corrplot(method='color',tl.cex = 0.75,cl.cex = 0.75)
-
-write_table(loadings,'all_variables_loadings',align=TRUE)
+# dat <- serbia%>%filter(endline==0)%>%select(all_of(unname(unlist(ss))))%>%select_if(~ !any(is.na(.)))
+# pca_dat <- prcomp(dat,scale = TRUE,center = TRUE)
+# plot(c(1:length(pca_dat$sdev)),(pca_dat$sdev^2)/sum(pca_dat$sdev^2))
+# loadings <- as.data.frame(pca_dat$rotation[,c(1:7)])%>%round(2)
+# loadings%>%as.matrix()%>%corrplot(method='color',tl.cex = 0.75,cl.cex = 0.75)
+# 
+# write_table(loadings,'all_variables_loadings',align=TRUE)
 
 
 # dat <- serbia%>%filter(endline==0)%>%select(all_of(ss[['dev_knw_concern_0_2']]))%>%drop_na()

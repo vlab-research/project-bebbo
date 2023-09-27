@@ -48,15 +48,10 @@ write_table <- function(x, filename, ...) {
   )
 }
 
-pick_serbia_resps <- function(df,stage="base") {
-  
-  if(stage=="base"){code<-"bebborsbaseserb" #filter for users who reach baseline
-  }else if(stage=="end"){code<-"bebborsendeng" #filter for users who reach endline
-  }else if(stage=="follow"){code<-"bebborsfueng" #filter for users who reach followup
-  }
+pick_serbia_resps <- function(df) {
   
   users <- df %>%
-    filter(shortcode == code) %>%
+    # filter(shortcode == code)%>%
     filter(thankyou_you_qualify == "OK") %>%
     filter(version > 4) %>%
     distinct(userid) %>%
@@ -68,15 +63,10 @@ pick_serbia_resps <- function(df,stage="base") {
 }
 
 
-pick_bulgaria_resps <- function(df,stage="base") {
-  
-  if(stage=="base"){code<-"bebbobg2basebul" #filter for users who reach baseline
-  }else if(stage=="end"){code<-"bebbobgendeng" #filter for users who reach endline
-  }else if(stage=="follow"){code<-"bebbobgfueng" #filter for users who reach followup
-  }
+pick_bulgaria_resps <- function(df) {
   
   users <- df %>%
-    filter(shortcode == code) %>% #
+    # filter(shortcode == code)%>%
     filter(thankyou_you_qualify == "OK") %>%
     filter(version >= 12) %>%
     distinct(userid) %>%

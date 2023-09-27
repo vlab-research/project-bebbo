@@ -2,11 +2,10 @@
 # Variable creation
 #############################################################
 
-key <- read_csv("../data/raw/Bebbo Evaluation Survey - Serbia - English Analysis notes - Baseline.csv")
+# key <- read_csv("../data/raw/Bebbo Evaluation Survey - Serbia - English Analysis notes - Baseline.csv")
+key <- read_csv("../data/raw/key baseline 09-19.csv")
 
 key[which(key$variable=='past_24h_play'),'Correct']<-'Yes'
-
-# key <- parse_multi_choice(key)
 
 all_vars <- key %>%
   filter(!is.na(Domain)) %>%
