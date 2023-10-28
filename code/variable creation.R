@@ -2,8 +2,8 @@
 # Variable creation
 #############################################################
 
-# key <- read_csv("../data/raw/Bebbo Evaluation Survey - Serbia - English Analysis notes - Baseline.csv")
-key <- read_csv("../data/raw/key baseline 09-19.csv")
+key <- read_csv("data/raw/Bebbo Evaluation Survey - Serbia - English Analysis notes - Baseline.csv")
+## key <- read_csv("data/raw/key baseline 09-19.csv")
 
 key[which(key$variable=='past_24h_play'),'Correct']<-'Yes'
 
