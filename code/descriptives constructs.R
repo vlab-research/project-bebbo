@@ -52,13 +52,13 @@ write_descriptive_tables <- function(dat, country, endline_flag) {
         descriptives(type = "likert") %>%
         merge(constructs[, c("variable", "Subdomain")], by.x = "name", by.y = "variable", all.x = TRUE) %>%
         relocate(Subdomain, .before = "name") %>%
+        filter(!is.na(Subdomain)) %>%
         arrange(Subdomain)
 
     # 1-4b. Binary Variables - Most granular summary of binary variables
     descrip_variable_binary <- dat %>%
         filter(endline == endline_flag) %>%
-        select(all_of(variable_cols)) %>%
-        select(!likert_cols) %>%
+        select(all_of(binary_cols)) %>%
         descriptives(type = "binary") %>%
         merge(constructs[, c("variable", "Subdomain")], by.x = "name", by.y = "variable", all.x = TRUE) %>%
         relocate(Subdomain, .before = "name") %>%
@@ -77,24 +77,29 @@ write_descriptive_tables <- function(dat, country, endline_flag) {
 
     pal <- colorRampPalette(c("red", "navy"))
 
+
     dat %>%
         filter(endline == endline_flag) %>%
         select(all_of(construct_cols)) %>%
         lowerCor() %>%
         corrplot(method = "number", number.cex = 1, type = "lower", col = pal(2), tl.cex = 0.8)
 
+    table_folder <- "report/descriptives/tables"
+    plot_folder <- "report/descriptives/plots"    
+
     dev.print(
         device = jpeg,
-        filename = paste0("correlations_constructs_", country, "_", suffix, ".jpg"),
+        filename = paste0(plot_folder, "/", "correlations_constructs_", country, "_", suffix, ".jpg"),
         width = 800,
         height = 800
     )
 
 
-    write_table(constructs, paste0("constructs", suffix), align = TRUE)
-    write_table(descrip_variable_likert, paste0("descriptives_likert_", country, suffix), align = TRUE)
-    write_table(descrip_variable_binary, paste0("descriptives_binary_", country, suffix), align = TRUE)
-    write_table(descrip_construct, paste0("descriptives_constructs_", country, suffix), align = TRUE)
+
+    write_table(constructs, table_folder, paste0("constructs", suffix), align = TRUE)
+    write_table(descrip_variable_likert, table_folder, paste0("descriptives_likert_", country, suffix), align = TRUE)
+    write_table(descrip_variable_binary, table_folder, paste0("descriptives_binary_", country, suffix), align = TRUE)
+    write_table(descrip_construct, table_folder, paste0("descriptives_constructs_", country, suffix), align = TRUE)
 
     # return tables?? 
 }

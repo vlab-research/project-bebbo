@@ -38,38 +38,49 @@ binarize <- function(df, cols) {
     df
 }
 
-write_table <- function(x, filename, ...) {
+write_table <- function(x, folder, filename, ...) {
     stargazer(
         as.matrix(x),
-        out = glue("tables/{filename}.tex"),
+        out = glue("{folder}/{filename}.tex"),
         digits = 2,
         label = glue("tbl:{filename}"),
         ...
     )
 }
 
+tag_impacted <- function(df, code, versions) {
+    users <- df %>%
+        filter(shortcode == code) %>%
+        filter(version %in% versions) %>%
+        distinct(userid) %>%
+        pull(userid)
+
+    df %>% mutate(impacted = userid %in% users)
+}
+
 pick_serbia_resps <- function(df) {
     users <- df %>%
         filter(thankyou_you_qualify == "OK") %>%
-        filter(version > 4) %>%
         distinct(userid) %>%
         pull(userid)
 
     df %>%
         filter(shortcode != "bebborsintermediatebail") %>%
-        filter(userid %in% users)
+        filter(userid %in% users) %>%
+        tag_impacted("bebborsendeng", c(1, 3)) %>%
+        mutate(country = "serbia")
 }
-
 
 pick_bulgaria_resps <- function(df) {
     users <- df %>%
         filter(thankyou_you_qualify == "OK") %>%
-        filter(version >= 12) %>%
         distinct(userid) %>%
         pull(userid)
 
     df %>%
-        filter(userid %in% users)
+        filter(userid %in% users) %>%
+        tag_impacted("bebbobgendeng", c(6, 12, 13)) %>%
+        mutate(country = "bulgaria")        
 }
 
 ind_treatment_control <- function(df) {
@@ -187,4 +198,25 @@ descriptives <- function(df, cols, type = "binary") {
 
 parse_bq_date <- function(i) {
     as.POSIXct(i / 1000 / 1000)
+}
+
+flip_likert <- function(df, col) {
+    c <- df[[col]]
+
+    df %>%
+        mutate(
+            "{col}" := dplyr::case_when(
+                c == 4 ~ 1,
+                c == 3 ~ 2,
+                c == 2 ~ 3,
+                c == 1 ~ 4
+            )
+        )
+}
+
+flip_likerts <- function(df, cols) {
+    for (c in cols) {
+        df <- flip_likert(df, c)
+    }
+    df
 }
