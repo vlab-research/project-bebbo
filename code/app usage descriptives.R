@@ -15,7 +15,7 @@ library(moments)
 library(data.table)
 library(ggplot2)
 source("functions.R")
-source("variable creation.R")
+source("data.R")
 
 #############################################################
 # Reading all datasets
@@ -29,78 +29,45 @@ source("variable creation.R")
 # ##### 4. Stage of the survey reached by users
 # ##### 5. shortcode based (intermediatebail or others)
 
-# 1. Serbia Survey Respondents
-
-serbia <- read_csv("../data/raw/serbia/responses.csv") %>% # read Serbia responses file
-    ind_endline(country = "serbia") %>%
-    likert(likert_confs) %>% # convert likert construct variables to likert scale
-    binarize(binary_confs) %>% # binarize construct variables
-    group_by(userid) %>%
-    mutate(gender = first(parent_gender, order_by = endline, na_rm = TRUE)) %>%
-    ungroup() # create variables to indicate endline
-
-
-# 2. Bulgaria Survey Responses
-
-bulgaria <- read_csv("../data/raw/bulgaria/responses.csv") %>% # read Bulgaria responses file
-    ind_endline(country = "bulgaria") %>% # create variables to indicate endline
-    likert(likert_confs) %>% # convert likert construct variables to likert scale
-    binarize(binary_confs) %>% # binarize construct variables
-    group_by(userid) %>%
-    mutate(gender = first(parent_gender, order_by = endline, na_rm = TRUE)) %>%
-    ungroup()
-
-# 3. Creating construct variables
-
-for (x in names(ss)) {
-    serbia <- serbia %>%
-        rowwise() %>%
-        mutate("{x}" := mean(c_across(all_of(ss[[x]])), na.rm = TRUE))
-
-    bulgaria <- bulgaria %>%
-        rowwise() %>%
-        mutate("{x}" := mean(c_across(all_of(ss[[x]])), na.rm = TRUE))
-}
-
 demo_cols <- c("parent_age", "number_children", "parent_gender", "survey_duration", "education")
 
-serbia <- serbia %>%
-    filter(endline == 0) %>%
-    mutate(
-        parent_age = as.numeric(parent_age),
-        number_children = as.numeric(number_children),
-        age_flag = case_when(
-            child_age == "0 to 6 months" ~ "0-2",
-            child_age == "6 to 12 months" ~ "0-2",
-            child_age == "12 to 24 months" ~ "0-2",
-            child_age == "2 to 4 years" ~ "2-6",
-            child_age == "4 to 6 years" ~ "2-6"
-        ),
-        education = recode(education, University = 1, Basic = 0, `Incomplete basic` = 0, Secondary = 0),
-        country = "serbia",
-        parent_gender = recode(parent_gender, "Woman" = "Woman", "Man" = "Not Woman", "Prefer not to answer" = "Not Woman"),
-        survey_duration = log(survey_duration + 1)
-    ) %>%
-    select(c(userid, endline, demo_cols, age_flag, country, names(ss)))
+## serbia <- serbia %>%
+##     filter(endline == 0) %>%
+##     mutate(
+##         parent_age = as.numeric(parent_age),
+##         number_children = as.numeric(number_children),
+##         age_flag = case_when(
+##             child_age == "0 to 6 months" ~ "0-2",
+##             child_age == "6 to 12 months" ~ "0-2",
+##             child_age == "12 to 24 months" ~ "0-2",
+##             child_age == "2 to 4 years" ~ "2-6",
+##             child_age == "4 to 6 years" ~ "2-6"
+##         ),
+##         education = recode(education, University = 1, Basic = 0, `Incomplete basic` = 0, Secondary = 0),
+##         country = "serbia",
+##         parent_gender = recode(parent_gender, "Woman" = "Woman", "Man" = "Not Woman", "Prefer not to answer" = "Not Woman"),
+##         survey_duration = log(survey_duration + 1)
+##     ) %>%
+##     select(c(userid, endline, demo_cols, age_flag, country, names(ss)))
 
-bulgaria <- bulgaria %>%
-    filter(endline == 0) %>%
-    mutate(
-        parent_age = as.numeric(parent_age),
-        number_children = as.numeric(number_children),
-        age_flag = case_when(
-            child_age == "0 to 6 months" ~ "0-2",
-            child_age == "6 to 12 months" ~ "0-2",
-            child_age == "12 to 24 months" ~ "0-2",
-            child_age == "2 to 4 years" ~ "2-6",
-            child_age == "4 to 6 years" ~ "2-6"
-        ),
-        education = recode(education, University = 1, Basic = 0, `Incomplete basic` = 0, Secondary = 0),
-        country = "bulgaria",
-        parent_gender = recode(parent_gender, "Woman" = "Woman", "Man" = "Not Woman", "Prefer not to answer" = "Not Woman"),
-        survey_duration = log(survey_duration + 1)
-    ) %>%
-    select(c(userid, endline, demo_cols, age_flag, country, names(ss)))
+## bulgaria <- bulgaria %>%
+##     filter(endline == 0) %>%
+##     mutate(
+##         parent_age = as.numeric(parent_age),
+##         number_children = as.numeric(number_children),
+##         age_flag = case_when(
+##             child_age == "0 to 6 months" ~ "0-2",
+##             child_age == "6 to 12 months" ~ "0-2",
+##             child_age == "12 to 24 months" ~ "0-2",
+##             child_age == "2 to 4 years" ~ "2-6",
+##             child_age == "4 to 6 years" ~ "2-6"
+##         ),
+##         education = recode(education, University = 1, Basic = 0, `Incomplete basic` = 0, Secondary = 0),
+##         country = "bulgaria",
+##         parent_gender = recode(parent_gender, "Woman" = "Woman", "Man" = "Not Woman", "Prefer not to answer" = "Not Woman"),
+##         survey_duration = log(survey_duration + 1)
+##     ) %>%
+##     select(c(userid, endline, demo_cols, age_flag, country, names(ss)))
 
 constructs <- rbind(serbia, bulgaria)
 
@@ -117,7 +84,7 @@ bulgaria_long <- read_csv("../data/raw/bulgaria/bulgaria-long.csv") %>%
 
 download_time <- rbind(serbia_long, bulgaria_long)
 
-app_usage <- read_csv("../data/raw/bq-results-20230824.csv")
+app_usage <- read_csv("../data/raw/bq-results-20231105.csv")
 
 #############################################################
 # App Usage Over Time

@@ -34,8 +34,12 @@ source("code/data.R")
 # 5. Correlations - Serbia
 # 6. Correlations - Bulgaria
 
+
+table_folder <- "report/descriptives/tables"
+plot_folder <- "report/descriptives/plots"
+
 write_descriptive_tables <- function(dat, country, endline_flag) {
-    suffix <- ifelse(endline_flag == 0, "_baseline", "_endline")
+    suffix <- ifelse(endline_flag == 0, "Baseline", "Endline")
 
     constructs <- key[, c("Domain", "Subdomain", "construct_variable", "variable", "Grouping of constructs")] %>%
         mutate(
@@ -84,8 +88,6 @@ write_descriptive_tables <- function(dat, country, endline_flag) {
         lowerCor() %>%
         corrplot(method = "number", number.cex = 1, type = "lower", col = pal(2), tl.cex = 0.8)
 
-    table_folder <- "report/descriptives/tables"
-    plot_folder <- "report/descriptives/plots"    
 
     dev.print(
         device = jpeg,
@@ -96,28 +98,26 @@ write_descriptive_tables <- function(dat, country, endline_flag) {
 
 
 
-    write_table(constructs, table_folder, paste0("constructs", suffix), align = TRUE)
-    write_table(descrip_variable_likert, table_folder, paste0("descriptives_likert_", country, suffix), align = TRUE)
-    write_table(descrip_variable_binary, table_folder, paste0("descriptives_binary_", country, suffix), align = TRUE)
-    write_table(descrip_construct, table_folder, paste0("descriptives_constructs_", country, suffix), align = TRUE)
+    write_table(constructs, table_folder, glue("Constructs {suffix}"), align = TRUE)
+    write_table(descrip_variable_likert, table_folder, glue("Likert Variable Descriptives {country} {suffix}"), align = TRUE)
+    write_table(descrip_variable_binary, table_folder, glue("Binary Variable Descriptives {country} {suffix}"), align = TRUE)
+    write_table(descrip_construct, table_folder, glue("Outcome Construct Descriptives {country} {suffix}"), align = TRUE)
 
-    # return tables?? 
+    # return tables??
 }
 
 
 # 1. Baseline Descriptives - Serbia
-write_descriptive_tables(serbia, "serbia", 0)
+write_descriptive_tables(serbia, "Serbia", 0)
 
 # 2. Baseline Descriptives - Bulgaria
-write_descriptive_tables(bulgaria, "bulgaria", 0)
+write_descriptive_tables(bulgaria, "Bulgaria", 0)
 
 # 3. Endline Descriptives - Serbia
-write_descriptive_tables(serbia, "serbia", 1)
+write_descriptive_tables(serbia, "Serbia", 1)
 
 # 4. Endline Descriptives - Bulgaria
-write_descriptive_tables(bulgaria, "bulgaria", 1)
+write_descriptive_tables(bulgaria, "Bulgaria", 1)
 
 
-
-
-
+domains_constructs_variables %>% write_table(table_folder, "Construct Variable Mapping")

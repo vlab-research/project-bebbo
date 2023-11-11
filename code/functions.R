@@ -43,6 +43,19 @@ write_table <- function(x, folder, filename, ...) {
         as.matrix(x),
         out = glue("{folder}/{filename}.tex"),
         digits = 2,
+        title = filename,
+        label = glue("tbl:{filename}"),
+        ...
+    )
+}
+
+
+write_regressions <- function(models, folder, filename, ...) {
+    stargazer(
+        models,
+        out = glue("{folder}/{filename}.tex"),
+        digits = 2,
+        title = filename,
         label = glue("tbl:{filename}"),
         ...
     )
@@ -68,7 +81,7 @@ pick_serbia_resps <- function(df) {
         filter(shortcode != "bebborsintermediatebail") %>%
         filter(userid %in% users) %>%
         tag_impacted("bebborsendeng", c(1, 3)) %>%
-        mutate(country = "serbia")
+        mutate(country = "Serbia")
 }
 
 pick_bulgaria_resps <- function(df) {
@@ -80,7 +93,7 @@ pick_bulgaria_resps <- function(df) {
     df %>%
         filter(userid %in% users) %>%
         tag_impacted("bebbobgendeng", c(6, 12, 13)) %>%
-        mutate(country = "bulgaria")        
+        mutate(country = "Bulgaria")
 }
 
 ind_treatment_control <- function(df) {
