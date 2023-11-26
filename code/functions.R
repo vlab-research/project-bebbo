@@ -96,10 +96,14 @@ pick_bulgaria_resps <- function(df) {
         mutate(country = "Bulgaria")
 }
 
-ind_treatment_control <- function(df) {
+ind_treatment_control <- function(df, treated) {
+    
     df %>%
         mutate(seed_2 = seed %% 2 + 1) %>% # create seed_2
-        mutate(treatment = recode(seed_2, `1` = "treated", `2` = "control")) # create treatment variable based on seed_2
+        mutate(treatment = case_when(
+                   seed_2 == treated ~ "treated",
+                   seed_2 != treated ~ "control"
+               ))
 }
 
 ind_endline <- function(df, country) {

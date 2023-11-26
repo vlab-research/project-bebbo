@@ -3,6 +3,7 @@ library(stringr)
 library(dplyr)
 
 source("code/functions.R")
+source("code/app_data.R")
 
 #############################################################
 # Variable creation
@@ -89,7 +90,7 @@ control_cols <- c(
 
 
 additional_features <- function(dat) {
-    dat %>% mutate(
+    dat <- dat %>% mutate(
         parent_age = as.numeric(parent_age),
         number_children = as.numeric(number_children),
         age_flag = case_when(
@@ -108,6 +109,11 @@ additional_features <- function(dat) {
             parent_age > 35 ~ "Over 35"
         ),
     )
+
+
+    dat <- dat %>% 
+        left_join(app_usage, by = "userid") %>% 
+        mutate(has_learning_event = if_else(is.na(learning_events), FALSE, learning_events > 0))
 }
 
 add_controls <- function(dat) {
@@ -148,7 +154,7 @@ clean_responses <- function(dat) {
 # 1. Serbia Survey Respondents
 serbia <- read_csv("data/raw/serbia/responses.csv") %>% # read Serbia responses file
     pick_serbia_resps() %>% # filter dataframe for Serbia respondents
-    ind_treatment_control() %>% # create variables to indicate treatment, control
+    ind_treatment_control("1") %>% # create variables to indicate treatment, control
     ind_endline(country = "serbia") %>% # create variables to indicate endline
     normalize_variables() %>%
     clean_responses()
@@ -168,7 +174,7 @@ flipped_cols <- c(
 
 bulgaria <- read_csv("data/raw/bulgaria/responses.csv") %>% # read Bulgaria responses file
     pick_bulgaria_resps() %>% # filter dataframe for Bulgarian respondents
-    ind_treatment_control() %>% # create variables to indicate treatment, control
+    ind_treatment_control("2") %>% # create variables to indicate treatment, control
     ind_endline(country = "bulgaria") %>% # create variables to indicate endline
     normalize_variables() %>%
     clean_responses() %>%
@@ -208,3 +214,4 @@ serbia <- serbia %>% filter(!impacted)
 
 serbia <- serbia %>% relocate(colnames(bulgaria))
 dat <- rbind(serbia, bulgaria)
+pooled <- rbind(serbia_with_impacted, bulgaria_with_impacted)

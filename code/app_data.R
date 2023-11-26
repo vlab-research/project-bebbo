@@ -5,7 +5,7 @@ parse_bq_date <- function(i) {
     as.POSIXct(i / 1000 / 1000)
 }
 
-raw_app <- read_csv("data/raw/bq-results-20231105.csv")
+raw_app <- read_csv("data/raw/bq-results-20231123.csv")
 
 learning_events <- c(
     "advise_details_opened",
@@ -28,4 +28,5 @@ app_usage <- raw_app %>%
         learning_events = sum(event_name %in% learning_events),
         milestones_tracked = sum(event_name == "child_milestone_tracked"),
         time_used = max(event_timestamp) - min(event_timestamp)
-    )
+    ) %>%
+    mutate(userid = facebook_id)
