@@ -51,7 +51,7 @@ write_descriptive_tables <- function(dat, country, endline_flag) {
 
     # 1-4a. Likert Variables - Most granular summary of likert variables
     descrip_variable_likert <- dat %>%
-        filter(endline == endline_flag) %>%
+        filter(wave == endline_flag) %>%
         select(all_of(likert_cols)) %>%
         descriptives(type = "likert") %>%
         merge(constructs[, c("variable", "Subdomain")], by.x = "name", by.y = "variable", all.x = TRUE) %>%
@@ -61,7 +61,7 @@ write_descriptive_tables <- function(dat, country, endline_flag) {
 
     # 1-4b. Binary Variables - Most granular summary of binary variables
     descrip_variable_binary <- dat %>%
-        filter(endline == endline_flag) %>%
+        filter(wave == endline_flag) %>%
         select(all_of(binary_cols)) %>%
         descriptives(type = "binary") %>%
         merge(constructs[, c("variable", "Subdomain")], by.x = "name", by.y = "variable", all.x = TRUE) %>%
@@ -70,7 +70,7 @@ write_descriptive_tables <- function(dat, country, endline_flag) {
 
     # 1-4c. Construct Variables
     descrip_construct <- dat %>%
-        filter(endline == endline_flag) %>%
+        filter(wave == endline_flag) %>%
         select(all_of(construct_cols)) %>%
         descriptives(type = "summary") %>%
         merge(constructs[, c("construct_variable", "Subdomain")], by.x = "name", by.y = "construct_variable", all.x = TRUE) %>%
@@ -83,7 +83,7 @@ write_descriptive_tables <- function(dat, country, endline_flag) {
 
 
     dat %>%
-        filter(endline == endline_flag) %>%
+        filter(wave == endline_flag) %>%
         select(all_of(construct_cols)) %>%
         lowerCor() %>%
         corrplot(method = "number", number.cex = 1, type = "lower", col = pal(2), tl.cex = 0.8)

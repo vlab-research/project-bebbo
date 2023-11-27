@@ -3,7 +3,7 @@ source("code/data.R")
 
 check_var_outcome <- function(dat, var, country_) {
     dat %>% 
-        filter(endline == 2) %>% 
+        filter(wave == 2) %>% 
         filter(treatment == "control") %>% 
         filter(!is.na(across(var))) %>% 
         group_by(across(var)) %>% 

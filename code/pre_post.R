@@ -2,7 +2,7 @@ source("code/data.R")
 
 
 normalize <- function(dat, outcome) {
-    base <- dat %>% filter(endline == 0)
+    base <- dat %>% filter(wave == 0)
     m <- mean(base[[outcome]], na.rm=TRUE)
     sd <-  sd(base[[outcome]], na.rm=TRUE)
     
@@ -14,19 +14,23 @@ normalize <- function(dat, outcome) {
 
 dat <- pooled
 
-dat <- dat |> mutate(takeup = case_when(
-                         treatment == "control" ~ "control",
-                         treatment == "treated" & has_learning_event ==FALSE ~ "treated-no-takeup",
-                         treatment == "treated" & has_learning_event ==TRUE ~ "treated-takeup",
+# Measure takeup for endline only 
+takeup <- dat %>% 
+    filter(wave == 1) %>%
+    mutate(
+        takeup = case_when(
+            treatment == "control" ~ "control",
+            treatment == "treated" & has_learning_event == FALSE ~ "treated-no-takeup",
+            treatment == "treated" & has_learning_event == TRUE ~ "treated-takeup")
+    ) %>%
+    select(userid, takeup)
 
-))
 
-endline_users <- dat %>% filter(endline == 1) %>% distinct(userid) %>% pull(userid)
+endline_users <- dat %>% filter(wave == 1) %>% distinct(userid) %>% pull(userid)
 
-dat <- dat %>% filter(userid %in% endline_users)
+dat <- dat %>% filter(userid %in% endline_users) %>% inner_join(takeup, by = "userid")
 
-dat <- dat %>% filter(endline != 2)
-
+dat <- dat %>% filter(wave != 2)
 
 out <- tibble()
 
@@ -34,7 +38,7 @@ for (outcome in construct_cols) {
     dat <- dat %>% normalize(outcome)
 
     tmp <- dat %>% 
-        group_by(takeup, endline) %>% 
+        group_by(takeup, wave) %>% 
         summarise(
             outcome = outcome, 
             m = mean(.data[[outcome]], na.rm=TRUE), 
@@ -47,19 +51,17 @@ for (outcome in construct_cols) {
     out <- rbind(out, tmp)
 }
 
-outcomes_ <- construct_cols[6:7]
+splits <- split(construct_cols, ceiling(seq_along(construct_cols) / 2))
 
-out <- out %>% filter(outcome %in% outcomes_)
+for (outcomes_ in splits) {
 
+    d <- out %>% filter(outcome %in% outcomes_)
 
-## ggplot(out, aes(x = endline, y = m, color = takeup)) + 
-##     geom_point() + 
-##     geom_line() + 
-##     geom_errorbar(aes(ymin=lower, ymax=upper))
+    ggplot(d, aes(x = wave, y = m, color = takeup)) + 
+        geom_point() + 
+        geom_errorbar(aes(ymin=lower, ymax=upper)) + 
+        facet_grid(rows = . ~ outcome + takeup, scale="free_y") + 
+        theme(axis.title.x = element_blank(), axis.text.x= element_blank())
 
-
-ggplot(out, aes(x = endline, y = m, color = takeup)) + 
-    geom_point() + 
-    geom_errorbar(aes(ymin=lower, ymax=upper)) + 
-    facet_grid(rows = . ~ outcome + takeup, scale="free_y") + 
-    theme(axis.title.x = element_blank(), axis.text.x= element_blank())
+    ggsave(glue("report/plots/pre_post/{outcomes_}.png"))
+}

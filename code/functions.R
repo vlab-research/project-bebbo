@@ -109,7 +109,7 @@ ind_treatment_control <- function(df, treated) {
 ind_endline <- function(df, country) {
     if (country == "serbia") {
         df %>% mutate(
-            endline = recode(shortcode,
+            wave = recode(shortcode,
                 bebborsendeng = 1,
                 bebborsbaseserb = 0,
                 bebborsfueng = 2
@@ -117,7 +117,7 @@ ind_endline <- function(df, country) {
         )
     } else if (country == "bulgaria") {
         df %>% mutate(
-            endline = recode(shortcode,
+            wave = recode(shortcode,
                 bebbobgendeng = 1,
                 bebbobg2basebul = 0,
                 bebbobgfueng = 2

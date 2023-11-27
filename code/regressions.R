@@ -5,8 +5,8 @@ source("code/data.R")
 
 make_outcome_difs <- function(dat, outcomes) {
     baselines <- dat %>%
-        filter(endline == 0) %>%
-        select(userid, construct_cols)
+        filter(wave == 0) %>%
+        select(userid, all_of(construct_cols))
 
 
     for (outcome in outcomes) {
@@ -15,7 +15,7 @@ make_outcome_difs <- function(dat, outcomes) {
     }
 
     waves <- dat %>%
-        filter(endline != 0) %>%
+        filter(wave != 0) %>%
         inner_join(baselines, by = "userid")
 
     for (outcome in outcomes) {
@@ -30,7 +30,7 @@ make_outcome_difs <- function(dat, outcomes) {
 
 format_for_reg <- function(dat, outcome, endline_flag) {
     dat %>%
-        filter(endline == endline_flag)
+        filter(wave == endline_flag)
 }
 
 
@@ -120,14 +120,6 @@ datasets <- list(
     `Pooled` = pooled
 )
 
-outcomes <- construct_cols
-
-domains <- list(
-    `Knowledge and Awareness` = c("health_knw", "dev_knw_recog"),
-    `Confidence and Attitudes` = c("confidence", "attitude"),
-    `Practices` = c("was_breastfed", "practices_24", "practices_agree", "practices_hostility")
-)
-
 models <- list(
     `OLS` = run_regression,
     `2SLS` = run_tot_regression
@@ -188,22 +180,22 @@ for (wave in names(waves)) {
 
                 # Created adjusted coefficients for coef plot 
                 for (m in results) {
-                    l <- c(bf_adjusted_ci(m, var_of_interest, 0.05, 1), list(model = model, wave = wave, dataset = dataset, name = name))
+                    l <- c(bf_adjusted_ci(m, var_of_interest, 0.10, 8), list(model = model, wave = wave, dataset = dataset, name = name))
                     adjusted_coefficients <- rbind(adjusted_coefficients, l)
                 }                
 
 
-                ## write_regressions(
-                ##     results,
-                ##     "report/regressions",
-                ##     glue("{dataset}: {model} - {wave} - {name}"),
-                ##     add.lines = lines,
-                ##     ## style = "all",
-                ##     p = local_p_values,
-                ##     star.cutoffs = c(0.10, 0.05, 0.01),
-                ##     ## omit = c(control_cols),
-                ##     keep.stat = c("n", "rsq")
-                ## )
+                write_regressions(
+                    results,
+                    "report/regressions",
+                    glue("{dataset}: {model} - {wave} - {name}"),
+                    add.lines = lines,
+                    ## style = "all",
+                    p = local_p_values,
+                    star.cutoffs = c(0.10, 0.05, 0.01),
+                    ## omit = c(control_cols),
+                    keep.stat = c("n", "rsq")
+                )
             }
         }
     }

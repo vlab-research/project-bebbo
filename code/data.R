@@ -1,6 +1,7 @@
 library(readr)
 library(stringr)
 library(dplyr)
+library(purrr)
 
 source("code/functions.R")
 source("code/app_data.R")
@@ -54,10 +55,19 @@ likert_confs <- key %>%
 binary_confs <- c(binary_confs, binarized_vars)
 
 # constructs
-construct_cols <- key %>%
-    filter(!is.na(construct_variable)) %>%
-    pull(construct_variable) %>%
-    unique()
+## construct_cols <- key %>%
+##     filter(!is.na(construct_variable)) %>%
+##     pull(construct_variable) %>%
+##     unique()
+
+
+domains <- list(
+    `Knowledge and Awareness` = c("health_knw", "dev_knw_recog"),
+    `Confidence and Attitudes` = c("confidence", "attitude"),
+    `Practices` = c("was_breastfed", "practices_24", "practices_agree", "practices_hostility")
+)
+
+construct_cols <- as.character(flatten(domains))
 
 # grab all variables associated with the constructs in s
 ss <- sapply(construct_cols, function(x) {
@@ -89,36 +99,95 @@ control_cols <- c(
 )
 
 
-additional_features <- function(dat) {
-    dat <- dat %>% mutate(
-        parent_age = as.numeric(parent_age),
-        number_children = as.numeric(number_children),
-        age_flag = case_when(
-            child_age == "0 to 6 months" ~ "0-2",
-            child_age == "6 to 12 months" ~ "0-2",
-            child_age == "12 to 24 months" ~ "0-2",
-            child_age == "2 to 4 years" ~ "2-6",
-            child_age == "4 to 6 years" ~ "2-6"
-        ),
-        children_count = case_when(
-            number_children < 4 ~ "1-3",
-            number_children >= 4 ~ "4+"
-        ),
-        parent_age_flag = case_when(
-            parent_age <= 35 ~ "35 and under",
-            parent_age > 35 ~ "Over 35"
-        ),
-    )
+add_app_usage_features <- function(dat) {
+    start_times <- dat %>%
+        select(userid, baseline_start, endline_start, followup_start) %>%
+        group_by(userid) %>%
+        summarise_all(first)
 
+    f <- app_events %>%
+        inner_join(start_times, by = "userid") %>%
+        mutate(event_wave = case_when(
+            (event_timestamp >= baseline_start) & (event_timestamp <= endline_start) ~ 1,
+            (event_timestamp >= endline_start) & (event_timestamp <= followup_start) ~ 2,
+            TRUE ~ NA
+        )) %>%
+        filter(!is.na(event_wave)) %>%
+        rollup_events(c("event_wave")) %>%
+        rename(wave = event_wave)
 
-    dat <- dat %>% 
-        left_join(app_usage, by = "userid") %>% 
-        mutate(has_learning_event = if_else(is.na(learning_events), FALSE, learning_events > 0))
+    wave_2 <- f %>%
+        filter(!is.na(wave)) %>%
+        group_by(userid) %>%
+        summarise(across(where(is.numeric), ~ sum(.x)), across(where(is.logical), ~ any(.x))) %>%
+        ungroup() %>%
+        mutate(wave = 2)
+
+    wave_1 <- f %>% filter(wave == 1)
+
+    waves <- rbind(wave_1, wave_2)
+
+    dat %>%
+        left_join(waves, by = c("userid", "wave")) %>%
+        mutate(has_learning_event = if_else(is.na(has_learning_event), FALSE, has_learning_event))
 }
+
+
+additional_features <- function(dat) {
+    dat %>%
+        mutate(
+            parent_age = as.numeric(parent_age),
+            number_children = as.numeric(number_children),
+            age_flag = case_when(
+                child_age == "0 to 6 months" ~ "0-2",
+                child_age == "6 to 12 months" ~ "0-2",
+                child_age == "12 to 24 months" ~ "0-2",
+                child_age == "2 to 4 years" ~ "2-6",
+                child_age == "4 to 6 years" ~ "2-6"
+            ),
+            children_count = case_when(
+                number_children < 4 ~ "1-3",
+                number_children >= 4 ~ "4+"
+            ),
+            parent_age_flag = case_when(
+                parent_age <= 35 ~ "35 and under",
+                parent_age > 35 ~ "Over 35"
+            ),
+        ) %>%
+        add_app_usage_features()
+
+
+}
+
+
+
+add_start_times <- function(dat) {
+    base <- dat %>%
+        filter(wave == 0) %>%
+        select(userid, survey_start_time) %>%
+        rename(baseline_start = survey_start_time)
+
+    end <- dat %>%
+        filter(wave == 1) %>%
+        select(userid, survey_start_time) %>%
+        rename(endline_start = survey_start_time)
+
+    follow <- dat %>%
+        filter(wave == 2) %>%
+        select(userid, survey_start_time) %>%
+        rename(followup_start = survey_start_time)
+
+    starts <- base %>%
+        left_join(end, by = "userid") %>%
+        left_join(follow, by = "userid")
+
+    dat %>% left_join(starts, by = "userid")
+}
+
 
 add_controls <- function(dat) {
     controls <- dat %>%
-        filter(endline == 0) %>%
+        filter(wave == 0) %>%
         select(userid, baseline_control_cols)
 
     dat %>%
@@ -129,6 +198,7 @@ add_controls <- function(dat) {
 normalize_variables <- function(dat) {
     dat %>%
         add_controls() %>%
+        add_start_times() %>%
         likert(likert_confs) %>% # convert likert construct variables to likert scale
         binarize(binary_confs) %>% # binarize construct variables
         group_by(userid) %>%

@@ -14,8 +14,8 @@ library(lavaan)
 library(moments)
 library(data.table)
 library(ggplot2)
-source("functions.R")
-source("data.R")
+source("code/functions.R")
+source("code/data.R")
 
 #############################################################
 # Reading all datasets
@@ -29,7 +29,7 @@ source("data.R")
 # ##### 4. Stage of the survey reached by users
 # ##### 5. shortcode based (intermediatebail or others)
 
-demo_cols <- c("parent_age", "number_children", "parent_gender", "survey_duration", "education")
+## demo_cols <- c("parent_age", "number_children", "parent_gender", "survey_duration", "education")
 
 ## serbia <- serbia %>%
 ##     filter(endline == 0) %>%
@@ -69,22 +69,24 @@ demo_cols <- c("parent_age", "number_children", "parent_gender", "survey_duratio
 ##     ) %>%
 ##     select(c(userid, endline, demo_cols, age_flag, country, names(ss)))
 
-constructs <- rbind(serbia, bulgaria)
+## constructs <- rbind(serbia, bulgaria)
 
 # 4. Timing of events data
 # We use this to find the time that users are asked to download the app
 
-serbia_long <- read_csv("../data/raw/serbia/serbia-long.csv") %>%
-    filter(question_ref == "download_confirm_treatment") %>% # for each user, select the event details for when this question is asked
-    select(userid, timestamp) # keep userid and timestamp of the event
-
-bulgaria_long <- read_csv("../data/raw/bulgaria/bulgaria-long.csv") %>%
+serbia_long <- read_csv("data/raw/serbia/responses-long.csv") %>%
     filter(question_ref == "download_confirm_treatment") %>%
     select(userid, timestamp)
 
-download_time <- rbind(serbia_long, bulgaria_long)
+## bulgaria_long <- read_csv("../data/raw/bulgaria/bulgaria-long.csv") %>%
+##     filter(question_ref == "download_confirm_treatment") %>%
+##     select(userid, timestamp)
 
-app_usage <- read_csv("../data/raw/bq-results-20231105.csv")
+## download_time <- rbind(serbia_long, bulgaria_long)
+
+download_time <- serbia_long
+
+source("code/app_data.R")
 
 #############################################################
 # App Usage Over Time
@@ -100,67 +102,107 @@ app_usage <- read_csv("../data/raw/bq-results-20231105.csv")
 # This dataset only contains respondents that downloaded the app and have events logged.
 # For each respondent, we get the total weekly home opens, time used in the week (days), and number of events logged (usage_count)
 
-app_usage_weekly <- app_usage %>%
-    merge(download_time, by.x = "facebook_id", by.y = "userid", all.x = TRUE, all.y = FALSE) %>%
-    merge(constructs, by.x = "facebook_id", by.y = "userid", all.x = TRUE, all.y = FALSE) %>%
+
+
+survey_data <- serbia
+
+start_times <- survey_data %>%
+    select(userid, baseline_start, endline_start, followup_start) %>%
+    group_by(userid) %>%
+    summarise_all(first)
+
+
+events <- raw_app %>%
+    mutate(event_timestamp = parse_bq_date(event_timestamp)) %>%
+    mutate(userid = facebook_id) %>%
+    left_join(start_times, by = "userid") %>%
+    left_join(download_time, by = "userid") %>%
+    mutate(event_wave = case_when(
+        (event_timestamp >= baseline_start) & (event_timestamp <= endline_start) ~ 1,
+        (event_timestamp >= endline_start) & (event_timestamp <= followup_start) ~ 2,
+        TRUE ~ NA
+    )) %>%
     mutate(
-        event_timestamp = parse_bq_date(event_timestamp), # event timestamp
-        start_week = week(timestamp), # respondent's start week - week of respondent being asked to download the app
+        # respondent's start week - week of respondent being asked to download the app
+        start_week = week(timestamp),
         event_day = wday(event_timestamp),
-        week_since_start = round(difftime(event_timestamp, timestamp, units = "week"))
-    ) %>% # weeks since the start week (event timestamp - start time)
-    group_by(facebook_id, week_since_start, age_flag, education) %>% # respondent's activity by weeks since joining
-    summarize(
-        start_week = first(start_week),
-        week_since_start = first(week_since_start),
-        facebook_id = first(facebook_id),
-        # aggregation of events
-        session_starts = sum(event_name == "session_start"),
-        screen_views = sum(event_name == "screen_view"),
-        user_engagements = sum(event_name == "user_engagement"), # user engagements
-        home_opens = sum(event_name == "Home_opened"), # total weekly home opens
-        milestones_tracked = sum(event_name == "child_milestone_tracked"),
-        days_used = n_distinct(event_day), # hours used in the week
-        usage_count = length(event_timestamp), # number of events logged in the week
-        # binary event variables
-        opened = ifelse(sum(grepl("_opened", event_name)) > 0, 1, 0), # any page opened binary
-        home_opened = ifelse(sum(grepl("Home_opened", event_name)) > 0, 1, 0), # home page opened binary
-        session_started = ifelse(sum(grepl("session_start", event_name)) > 0, 1, 0)
-    ) %>% # session started binary
-    mutate(
-        week_since_start = week_since_start + 1,
+        # weeks since the start week (event timestamp - start time)
+        week_since_start = round(difftime(event_timestamp, timestamp, units = "week")),
         week_after_treatment = paste0("week ", week_since_start)
+    )
+
+
+rollup_events <- function(events, variables) {
+    events %>%
+        group_by(across(all_of(c("userid", variables)))) %>%
+        summarize(
+
+        # aggregation of events
+        learning_events = sum(event_name %in% learning_events),
+        session_starts = sum(event_name == "session_start"),
+        home_opens = sum(event_name == "Home_opened"),
+        days_used = n_distinct(event_day),
     ) %>%
-    filter(week_since_start >= 1)
+    mutate(
+        has_learning_event = if_else(is.na(learning_events), FALSE, learning_events > 0),
+        has_home_open = if_else(is.na(home_opens), FALSE, home_opens > 0),
+        has_session_start = if_else(is.na(session_starts), FALSE, session_starts > 0),
+    )    
+}
+
+app_usage_weekly <- rollup_events(events, c("start_week", "week_since_start"))
+
+app_usage_wave <- rollup_events(events %>% filter(!is.na(event_wave)), c("event_wave"))
+
+app_usage_wave %>%
+    ggplot(aes(x = ))
+
+
+## RESTRICT TO WITHIN THE SURVEY --> endline/followup/all? 
+app_usage <- app_usage_weekly %>%
+    select(-week_since_start, -start_week) %>%
+    group_by(userid) %>%
+    summarise(across(where(is.numeric), ~ sum(.x)))
+
+takeup_users <- app_usage %>% filter(learning_events > 0) %>% pull(userid)
+
+total_takeup <- length(takeup_users)
+
 
 # 4b. App Usage Data weekly trends
 weekly_aggregates <- app_usage_weekly %>%
+    filter(userid %in% takeup_users) %>%
     group_by(week_since_start) %>%
     summarise(
-        respondents = n_distinct(facebook_id), # count of respondents
-        opened = sum(opened), # count of respondents who opened the app
-        home_opens = sum(home_opened), # count of respondents who opened the home page
-        session_starts = sum(session_started), # count of respondents who started a session
-        days_used = mean(days_used), # average number of days used
-        usage_count = mean(usage_count)
+        respondents = n_distinct(userid), # count of respondents
+        with_home_open = sum(has_home_open), # count of respondents who opened the home page
+        with_session_start = sum(has_session_start), # count of respondents who started a session
+        days_used = mean(days_used), # average number of days used - including zeros??? 
+        usage_count = mean(usage_count), 
+        with_learning_event = sum(has_learning_event),
     ) %>% # number of events logged in the week
     mutate(week_after_treatment = paste0("week ", week_since_start)) %>%
-    filter(week_since_start >= 1) %>%
-    mutate_if(is.numeric, round, 3)
+        filter(week_since_start >= 0) %>%
+        mutate_if(is.numeric, round, 3) 
+    
+
+weekly_aggregates %>% ggplot(aes(x = week_since_start, y = with_learning_event)) + geom_bar(stat='identity')
+
 
 weekly_aggregates %>%
     relocate(week_after_treatment, .before = respondents) %>%
     mutate(week_since_start = NULL) %>%
     write_table("weekly_aggregates")
 
+
 # 4b. App Usage Data weekly trends
 individual_aggregates <- app_usage_weekly %>%
-    group_by(facebook_id, age_flag, education) %>%
+    group_by(userid, age_flag, education) %>%
     summarise(
         days_used = sum(days_used), # count of respondents
         opened = sum(opened), # count of respondents who opened the app
-        home_opens = sum(home_opened), # count of respondents who opened the home page
-        session_starts = sum(session_started), # count of respondents who started a session
+        home_opens = sum(has_home_open), # count of respondents who opened the home page
+        session_starts = sum(has_session_start), # count of respondents who started a session
         usage_count = sum(usage_count)
     ) %>% # number of events logged in the week
     mutate_if(is.numeric, round, 3) %>%
@@ -231,17 +273,17 @@ individual_aggregates <- app_usage_weekly %>%
 # ####     We can do so by filtering OUT week 14 since treatment and after
 
 app_usage_user <- app_usage %>%
-    merge(download_time, by.x = "facebook_id", by.y = "userid", all.x = TRUE, all.y = TRUE) %>%
+    merge(download_time, by.x = "userid", by.y = "userid", all.x = TRUE, all.y = TRUE) %>%
     mutate(
         event_timestamp = parse_bq_date(event_timestamp),
         start_week = week(timestamp),
         event_day = wday(event_timestamp)
     ) %>%
-    group_by(facebook_id) %>%
+    group_by(userid) %>%
     summarise(
         start_week = first(start_week),
         timestamp = first(timestamp), # time asked to download the app
-        userid = first(facebook_id),
+        userid = first(userid),
         session_starts = sum(event_name == "session_start"),
         screen_views = sum(event_name == "screen_view"),
         user_engagements = sum(event_name == "user_engagement"),
@@ -250,12 +292,12 @@ app_usage_user <- app_usage %>%
         days_used = n_distinct(event_day),
         usage_count = length(event_name),
         opened = ifelse(sum(grepl("_opened", event_name)) > 0, 1, 0),
-        home_opened = ifelse(sum(grepl("Home_opened", event_name)) > 0, 1, 0)
+        has_home_open = ifelse(sum(grepl("Home_opened", event_name)) > 0, 1, 0)
     ) %>%
-    merge(constructs, by.x = "facebook_id", by.y = "userid", all.x = TRUE, all.y = TRUE) %>%
+    merge(constructs, by.x = "userid", by.y = "userid", all.x = TRUE, all.y = TRUE) %>%
     mutate(
         downloaded = ifelse(is.na(session_starts), 0, 1), # if they have app data, they have downloaded the app
-        home_opened = ifelse(is.na(home_opened), 0, home_opened),
+        has_home_open = ifelse(is.na(has_home_open), 0, has_home_open),
         treated = ifelse(is.na(timestamp), 0, 1)
     ) %>% # if they were asked to download the app, they have timestamp (from download_time dataset)
     filter(treated == 1)
@@ -309,7 +351,7 @@ lin_mod1 <- lm("home_opens ~ start_week+
 lin_mod_home_opens <- summary(lin_mod1)
 write_table(round(lin_mod_home_opens$coefficients, 3), "app usage and baseline characteristics - linear reg")
 
-log_mod1 <- glm("home_opened ~ start_week+
+log_mod1 <- glm("has_home_open ~ start_week+
              dev_knw_recog+
              confidence+
              attitude+
@@ -360,7 +402,7 @@ write_table(round(mod1$coefficients, 3), "attrition and baseline characteristics
 with(mod1, 1 - deviance / null.deviance)
 
 
-mod2 <- glm("attrition_flag ~ home_opened +
+mod2 <- glm("attrition_flag ~ has_home_open +
           usage_count +
           days_used +
           downloaded",
