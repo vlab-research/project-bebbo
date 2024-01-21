@@ -108,6 +108,7 @@ write_descriptive_tables <- function(dat, country, endline_flag) {
 
 
 # 1. Baseline Descriptives - Serbia
+
 write_descriptive_tables(serbia, "Serbia", 0)
 
 # 2. Baseline Descriptives - Bulgaria
@@ -120,4 +121,12 @@ write_descriptive_tables(serbia, "Serbia", 1)
 write_descriptive_tables(bulgaria, "Bulgaria", 1)
 
 
+# 2. Baseline Descriptives - Bulgaria
+write_descriptive_tables(pooled, "Pooled", 0)
+
+# 3. Endline Descriptives - Serbia
+write_descriptive_tables(pooled, "Pooled", 1)
+
+# \begin{tabular}{@{\extracolsep{5pt}} p{0.25\linewidth} p{0.20\linewidth} | p{0.55\linewidth}}
+# \begin{tabular}{@{\extracolsep{5pt}} p{0.15\linewidth} p{0.15\linewidth} p{0.30\linewidth} | p{0.40\linewidth}}
 domains_constructs_variables %>% write_table(table_folder, "Construct Variable Mapping")

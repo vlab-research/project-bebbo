@@ -176,7 +176,7 @@ No",Yes,,both,both,Practices,ECD engagement,
 past_24h_outside,multiple_choice,"In the past 24 hours, did you take {{field:child_name}} outside the home?",,practices_24,,"Yes
 No",Yes,,both,both,Practices,ECD engagement,
 past_24h_play,multiple_choice,"In the past 24 hours, did you play with {{field:child_name}}?",,practices_24,,"Yes
-No",yes,,both,both,Practices,ECD engagement,
+No",Yes,,both,both,Practices,ECD engagement,
 past_24h_draw,multiple_choice,"In the past 24 hours, did you name, count or draw things with or for {{field:child_name}}?",,practices_24,,"Yes
 No",Yes,,both,both,Practices,ECD engagement,
 statement_0,statement,Adults use certain ways to teach children the right behavior or to address a behavior problem.,,,,,,,both,both,Practices,,

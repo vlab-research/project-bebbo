@@ -1,11 +1,28 @@
 source("code/data.R")
 
+binary_outcomes <- c("health_knw", "was_breastfed", "attitude")
+
+
+standard_dev <- function(dat, outcome) {
+    if (outcome %in% binary_outcomes) {
+        m <- mean(dat[[outcome]])
+        n <- nrow(dat)
+        res <- sqrt( (m*(1-m)) / n)
+        return(res)
+    }
+
+    sd(dat[[outcome]])
+}
 
 normalize <- function(dat, outcome) {
-    base <- dat %>% filter(wave == 0)
+    base <- dat %>% filter(wave == 0) %>% filter(treatment == "control")
     m <- mean(base[[outcome]], na.rm=TRUE)
     sd <-  sd(base[[outcome]], na.rm=TRUE)
-    
+
+    if (outcome %in% binary_outcomes) {
+        sd <- 1
+    }
+
     dat %>% mutate(
                 "{outcome}" := (.data[[outcome]] - m) / sd
     )
@@ -38,11 +55,12 @@ for (outcome in construct_cols) {
     dat <- dat %>% normalize(outcome)
 
     tmp <- dat %>% 
+        filter(!is.na(across(outcome))) %>%
         group_by(takeup, wave) %>% 
         summarise(
             outcome = outcome, 
-            m = mean(.data[[outcome]], na.rm=TRUE), 
-            var = sd(.data[[outcome]], na.rm=TRUE)**2 / n()
+            m = mean(.data[[outcome]]), 
+            var = standard_dev(.data, outcome)**2 / n()
         ) %>% 
         mutate(sd = sqrt(var)) %>% 
         mutate(upper = m + sd*1.96, lower = m - sd*1.96) %>%
@@ -50,6 +68,7 @@ for (outcome in construct_cols) {
     
     out <- rbind(out, tmp)
 }
+
 
 splits <- split(construct_cols, ceiling(seq_along(construct_cols) / 2))
 
@@ -61,7 +80,11 @@ for (outcomes_ in splits) {
         geom_point() + 
         geom_errorbar(aes(ymin=lower, ymax=upper)) + 
         facet_grid(rows = . ~ outcome + takeup, scale="free_y") + 
-        theme(axis.title.x = element_blank(), axis.text.x= element_blank())
+        theme(axis.title.x = element_blank(), 
+              axis.title.y = element_blank(), 
+              axis.text.x= element_blank(), 
+              axis.text.y=element_blank(),
+              legend.position = "none")
 
-    ggsave(glue("report/plots/pre_post/{outcomes_}.png"))
+    ggsave(glue("report/plots/pre_post/{outcomes_}.png"), width=10, height=5)
 }

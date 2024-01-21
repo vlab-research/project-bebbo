@@ -48,6 +48,8 @@ ggplot(df, aes(x=`Effect Size`, y=Power, color=Dataset)) +
     geom_line() + 
     facet_grid(cols = vars(Significance))
 
+ggsave("report/plots/Power Calculations.png", width=10, height=10)
+
 
 
 
@@ -73,19 +75,24 @@ max_lookup <-  dat %>%
     pivot_longer(cols=construct_cols) %>% 
     rename(max = value)
 
-d <- dat %>% 
-    select(userid, wave, treatment, construct_cols) %>% 
-    pivot_longer(cols = construct_cols) %>% 
-    filter(wave == 0) %>%
-    inner_join(sd_lookup, by="name") %>%
-    mutate(name = factor(name, levels = construct_cols))
 
-ggplot(d, aes(x=value, y = after_stat(density), color=treatment)) + 
-    geom_histogram(position="identity", alpha = 0.2) + 
-    facet_wrap(vars(name), nrow=4, ncol=2)
+for (domain in names(domains)) {
+    d <- dat %>% 
+        select(userid, wave, treatment, construct_cols) %>% 
+        pivot_longer(cols = construct_cols) %>% 
+        filter(wave == 0) %>%
+        inner_join(sd_lookup, by="name") %>%
+        filter(name %in% domains[[domain]]) %>%
+        mutate(name = as.character(name)) %>%
+        mutate(name = map_chr(name, \(x) pretty_vars[[x]]))
 
+    ggplot(d, aes(x=value, y = after_stat(density), color=treatment)) + 
+        geom_histogram(position="identity", alpha = 0.2) + 
+        facet_wrap(vars(name), nrow=2, ncol=2)
 
+    ggsave(glue("report/plots/Original Data - {domain}.png"), width=10, height=5)
 
+}
 
 
 
@@ -107,6 +114,6 @@ d <- d %>% inner_join(means, by=c("name", "treatment"))
 ggplot(d, aes(x=normalized_value, y = after_stat(density), color=treatment)) + 
     geom_histogram(position="identity", alpha = 0.2) + 
     geom_vline(aes(xintercept = mean, color = treatment)) + 
-    ## geom_vline(aes(xintercept = 0.3*0.5)) + 
-    ## geom_vline(aes(xintercept = -0.3*0.5)) + 
     facet_wrap(vars(name), nrow=4, ncol=2)
+
+ggsave(glue("report/plots/Transformed Data.png"), width=10, height=10)

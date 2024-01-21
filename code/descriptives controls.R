@@ -28,10 +28,11 @@ create_respondent_counts <- function(dat, col) {
         pivot_wider(id_cols = {{ col }}, id_expand = TRUE, names_from = country, names_expand = FALSE, values_from = n) %>%
         ungroup() %>%
         mutate(
-            variable = "survey stage",
+            variable = col,
             `Bulgaria %` = Bulgaria / sum(Bulgaria, rm.na = TRUE),
             `Serbia %` = Serbia / sum(Serbia, rm.na = TRUE)
-        )
+        ) %>%
+        slice(-1)
 }
 
 
@@ -49,16 +50,21 @@ survey_stage <- dat %>%
     )
 
 
-vars <- c("treatment", control_cols)
+dat <- pooled
+var <- control_cols
 results <- lapply(vars, function(col) create_respondent_counts(dat %>% filter(wave == 0), col))
 
-results <- c(list(survey_stage), results)
+# Run survey stage analysis at a different place
+## results <- c(list(survey_stage), results)
 final <- rbindlist(results, use.names = FALSE)
 
 final <- final %>%
     relocate(variable, .before = wave) %>%
     relocate(`Bulgaria %`, .before = Serbia)
-names(final) <- c("variable", "value", "bulgaria", "bulgaria_prop", "serbia", "serbia_prop")
-final <- final %>% mutate_if(is.numeric, round, 3)
+
+names(final) <- c("Variable", "Value", "Bulgaria", "Bulgaria %", "Serbia", "Serbia %")
+
+final <- final %>%
+    mutate_if(is.numeric, round, 2)
 
 final %>% write_table("report/descriptives/tables", "Baseline Respondent Characteristics")

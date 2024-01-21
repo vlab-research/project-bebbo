@@ -1,7 +1,9 @@
 library(readr)
+
 library(stringr)
 library(dplyr)
 library(purrr)
+library(tidyr)
 
 source("code/functions.R")
 source("code/app_data.R")
@@ -216,6 +218,15 @@ clean_responses <- function(dat) {
         filter(!is.na(parent_age_flag)) %>%
         filter(answer_time_90 / answer_time_min >= 1.5)
 }
+
+make_translation_lookup <- function(long) {
+    long %>%
+        group_by(shortcode, surveyid, question_ref) %>%
+        filter(!is.na(response) & !is.na(translated_response)) %>%
+        slice(1) %>%
+        select(shortcode, surveyid, question_ref, response, translated_response)
+}
+
 
 #############################################################
 # Data sets for analysis

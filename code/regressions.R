@@ -112,7 +112,18 @@ bf_adjusted_ci <- function(model, var, alpha, total_measures) {
     list(variable = variable, mean = mean, lower = mean - ci, upper = mean + ci)
 }
 
-
+pretty_vars = list(
+    treatmenttreated = "Treatment",
+    has_learning_eventTRUE = "Used App",
+    health_knw = "Vaccine Knowledge",
+    dev_knw_recog = "Child Dev. Knowledge",
+    confidence = "Parenting Confidence",
+    attitude = "Attitude to Phys. Punishment",
+    was_breastfed = "Breastfed",
+    practices_24 = "Activities Past 24h",
+    practices_agree = "Positive Practices",
+    practices_hostility = "Hostile Practices"
+)
 
 datasets <- list(
     `Serbia` = serbia,
@@ -184,16 +195,21 @@ for (wave in names(waves)) {
                     adjusted_coefficients <- rbind(adjusted_coefficients, l)
                 }                
 
+                controls <- pick_controls(dat, outcome)
+
+                covariate_labels <- c(pretty_vars[[var_of_interest]])
+                dep_vars <- as.character(sapply(domains[[name]], function(n) pretty_vars[[n]]))
 
                 write_regressions(
                     results,
                     "report/regressions",
                     glue("{dataset}: {model} - {wave} - {name}"),
                     add.lines = lines,
-                    ## style = "all",
+                    dep.var.labels=dep_vars,
+                    covariate.labels=covariate_labels,
                     p = local_p_values,
                     star.cutoffs = c(0.10, 0.05, 0.01),
-                    ## omit = c(control_cols),
+                    omit = c(controls, "Constant", "countrySerbia"),
                     keep.stat = c("n", "rsq")
                 )
             }
