@@ -1,0 +1,283 @@
+variable,question_type,question,Grouping of constructs,construct_variable,Notes for analysis,answers,Correct,description,age group,version,Domain,Subdomain,Baseline Control
+id,hidden,hidden,,,,,,,,,,,
+e_payment_http_response,hidden,hidden,,,,,,,,,,,
+e_payment_http_error_message,hidden,hidden,,,,,,,,,,,
+e_payment_http_success,hidden,hidden,,,,,,,,,,,
+seed_2,hidden,hidden,,,,,,,,,,,
+intro_1,multiple_choice,"Hello! We are a social science research company called Virtual Lab. We are conducting a study on the use of a mobile app on parenting, parents’ knowledge and awareness on child development, and parental practices on behalf of UNICEF. The study aims to positively contribute to the development of child well-being focused programs. The study involves completing a survey today, installing and using a mobile app on parenting, a second survey 4 weeks later, and a third survey 8 weeks later.",,,,OK,,,both,both,,,
+intro_1b_treatment,multiple_choice,"Each survey takes about 10-15 minutes to complete. After completing the survey you will be given a link to download a free parenting app Bebbo, which can help you support your child's development. Once you download the app, you will earn a gift card in the amount of 430 RSD.",,,,OK,,if treatment (seed=1),,,,,
+intro_1b_control,multiple_choice,"Each survey takes about 10-15 minutes to complete. After completing the survey you will be given a link to a free parenting website, which can help you support your child's development. After visiting the site, you will earn a gift card in the amount of 430 RSD.",,,,OK,,if control,,,,,
+intro_2,statement,"Your answers will be stored securely and kept confidential, they will only be seen by the research team. If at any time you wish to see your personal data or request that all your personal data be deleted, you can write an email to privacy@vlab.digital.",,,,,,,,,,,
+intro_3,multiple_choice,"You can delete this thread after you have finished the survey, to keep your answers private from anyone else using your phone.
+
+There are no significant risks associated with participating in this study.",,,,OK,,,both,both,,,
+intro_4,statement,"Your participation is voluntary and you may withdraw at any time without consequences. If at any point during the survey you stop responding, we will send a single reminder message. If you wish to stop the survey, you can stop replying.
+
+Some questions will have buttons that you can click on to respond. If there is no button provided, you should use your keyboard to type the answers. ",,,,,,,both,both,,,
+consent,multiple_choice,Do you agree to participate in the survey?,,,,"Yes
+No
+",,"If no, then thankyou_screen",both,both,,,
+thankyou_optout,thankyou_screen,"Ok, no problem. Thank you for your time!",,,,,,,both,both,,,
+parent_age,number,"Great, thanks!
+
+How old are you?",,,,,,18+ only,both,both,,,TRUE
+number_children,number,How many children are there in your family?,,,,,,1+ only,,,,,TRUE
+child_0-6,multiple_choice,Are there any children in your family aged 0 to 6?,,,,"-A. No
+-B. Yes, 1
+-C. Yes, more than 1",,Only show if previous is >0; exclude if A,,,,,
+parent_gender,multiple_choice,What is your gender?,,,,"-A. Man
+-B. Woman
+-C. Prefer not to answer",,,,,,,TRUE
+location,multiple_choice,Where do you live?,,,,"-A. Capital
+-B. Large regional centers
+-C. Smaller cities
+-D. Village",,,both,both,,,TRUE
+education,multiple_choice,What is your highest level of education?,,,,"-A. Incomplete basic
+-B. Basic
+-C. Secondary
+-D. University",,,both,both,,,TRUE
+thankyou_early,thankyou_screen,"I'm sorry, but you are not eligible for this survey. We'll let you know if you qualify for any other surveys in the future. Thank you for your interest!",,,,,,If <18 OR no child in the family OR no child in the family aged 0-6 y/o,both,both,,,
+language,multiple_choice,What is the language most commonly used in your family?,,,,"-A. Serbian
+-B. Hungarian
+-C. Roma
+-D. Other",,,both,both,,,TRUE
+statement_1,statement,"Because you have more than 1 child, please pick 1 child aged 0 to 6 as your focal child and answer all of the following questions for that child.",,,,,,If more than 1 in child_0-6,both,both,,,
+child_name,short_text,What is your child's (first) name?,,,,,,,both,both,,,
+child_age,multiple_choice,How old is {{field:child_name}}?,,,,"-A. 0 to 6 months
+-B. 6 to 12 months
+-C. 12 to 24 months
+-D. 2 to 4 years
+-E. 4 to 6 years",,,both,both,,,TRUE
+relationship_to_child,multiple_choice,What is your relationship to {{field:child_name}}?,,,,"-A. Mother
+-B. Father
+-C. Grandparent
+-D. Other",,,both,both,,,TRUE
+statement_2,statement,"Now, we'd like to ask you a few questions about your knowledge of your child's health, nutrition, and development.",,,,,,,both,both,,,
+know_which_vaccine,multiple_choice,I know which vaccine {{field:child_name}} needs to take next.,Health knowledge,health_knw,28&29 go together,"-A. True
+-B. False
+-C. Not sure",True,,0 to 2,both,Knowledge and awareness,,
+know_when_vaccine,multiple_choice,"I know when {{field:child_name}} needs to take her/his next vaccine.
+",,,,"-A. True
+-B. False
+-C. Not sure",True,,0 to 2,both,Knowledge and awareness,,
+know_social_emotional_dev,multiple_choice,"I would be able to recognize if {{field:child_name}}  lags behind in social-emotional development (expressing & recognizing feelings and emotions, engaging in interactions, etc.).",Child development knowledge,dev_knw_recog,"30, 31, 32, 33 go together, check for internal consistency","-A. True
+-B. False
+-C. Not sure",True,,both,both,Knowledge and awareness,,
+know_cog_dev,multiple_choice,"I would be able to recognize if {{field:child_name}} lags behind in cognitive development (mental development, intellectual development).",Child development knowledge,dev_knw_recog,,"-A. True
+-B. False
+-C. Not sure",True,,both,both,Knowledge and awareness,,
+know_phys_dev,multiple_choice,I would be able to recognize if {{field:child_name}} lags behind in physical development.,Child development knowledge,dev_knw_recog,,"-A. True
+-B. False
+-C. Not sure",True,,both,both,Knowledge and awareness,,
+know_lang_dev,multiple_choice,I would be able to recognize if {{field:child_name}} lags behind in language development.,Child development knowledge,dev_knw_recog,,"-A. True
+-B. False
+-C. Not sure",True,,both,both,Knowledge and awareness,,
+confidence_deal_emotions,multiple_choice,How confident do you feel in your ability to deal with {{field:child_name}}’s emotions?,Confidence in parenting,confidence,34 and 35 go together,"-A. Very confident
+-B. Confident
+-C. Not confident
+-D. Not confident at all","A, B",,both,both,Confidence and attitudes,,
+confidence_respond_misbehave,multiple_choice,How confident do you feel in your ability to respond properly when {{field:child_name}} misbehaves?,Confidence in parenting,confidence,,"-A. Very confident
+-B. Confident
+-C. Not confident
+-D. Not confident at all","A, B",,both,both,Confidence and attitudes,,
+physical_punishment,multiple_choice,"Do you agree that in order to bring up, raise, or educate a child properly, the child needs to be physically punished?",Attitude,attitude,Stand alone item,"-A. Strongly agree
+-B. Agree
+-C. Do not agree
+-D. Do not agree at all","C, D",,both,both,Confidence and attitudes,,
+parenting_stress_1,multiple_choice,How often do you feel the stress of parenting? ,,,"37, 38 and 39 go together, check for internal consistency","-A. Almost always
+-B. Most of the times
+-C. Rarely
+-D. Almost never","C, D",,both,both,Confidence and attitudes,Caregiver well-being,
+parenting_stress_2,multiple_choice,How often can you handle stressful parenting situations successfully?,Caregiver well-being,caregiver_well_being,,"-A. Almost always
+-B. Most of the times
+-C. Rarely
+-D. Almost never","A, B","Only show if answered A, B, or C above",both,both,Confidence and attitudes,Caregiver well-being,
+personal_needs,multiple_choice,"How often do you manage to attend to your own personal needs?
+",,,,"-A. Almost always
+-B. Most of the times
+-C. Rarely
+-D. Almost never","A, B",,both,both,Confidence and attitudes,Caregiver well-being,
+concern_12mo,multiple_choice,Which of these is a sign of concern for the development of a 12-months-old child?,Child development knowledge,,,"-A. If the 12-months-old cannot sit up on her own
+-B. If the 12-months-old cannot always understand instructions or orders
+-C. If the 12-months-old show signs of being upset when separated from parents
+-D. If the 12-months-old cannot pick up very small objects
+-E. If the 12-months-old shows shyness or nervousness when communicating with strangers",If the 12-months-old cannot sit up on her own,,0 to 2,both,Knowledge and awareness,,
+concern_3yo,multiple_choice,Which of these is a sign of concern for the development of a 3-year-old child?,Child development knowledge,,,"-A. If the 3-year-old child cannot recognize 10 letters of the alphabet
+-B. If the 3-year-old child is becoming more independent
+-C. If the 3-year-old child does not play side by side with other children
+-D. If the 3-year-old child cannot draw an accurate image of human body
+-E. If the 3-year-old child likes to play ""pretend"" games",If the 3-year-old child does not play side by side with other children,,both,both,Knowledge and awareness,,
+concern_5yo,multiple_choice,Which of these is a sign of concern for the development of a 5-year-old child?,Child development knowledge,,,"-A. If the 5-year-old child cannot write properly
+-B. If the 5-year-old child cannot recognize all alphabet letters and does not have reading skills
+-C. If the 5-year-old child sometimes makes up his/her own rules for games
+-D. If the 5-year-old child cannot count to ten
+-E. If the 5-year-old child shows signs of taking responsibility",If the 5-year-old child cannot count to ten,,3 to 6,both,Knowledge and awareness,,
+statement_3,statement,"Keep going! You are halfway through the survey.
+
+Are the following statements true or wrong?",,,,,,,both,both,,,
+sit_support,multiple_choice,Most 4-months old children can sit with some support.,Child development knowledge,,"40, 41, 44-51  go together, check for ICR","-A. True
+-B. Wrong",Wrong,,0 to 2,both,Knowledge and awareness,Child development knowledge,
+meaning_of_no,multiple_choice,Most children will understand the meaning of the word 'No' by the time they are three months old.,Child development knowledge,,,"-A. True
+-B. Wrong",Wrong,,0 to 2,both,Knowledge and awareness,Child development knowledge,
+movement,multiple_choice,Most 9-month olds try to stand up.,Child development knowledge,,,"-A. True
+-B. Wrong",True,,0 to 2,both,Knowledge and awareness,Child development knowledge,
+scribble,multiple_choice,"Most 12-month-olds can stand, move and walk independently.",Child development knowledge,,,"-A. True
+-B. Wrong",Wrong,,0 to 2,both,Knowledge and awareness,Child development knowledge,
+cry_separated,multiple_choice,Most 12-month-olds cry when separated from parents.,Child development knowledge,,,"-A. True
+-B. Wrong",True,,0 to 2,both,Knowledge and awareness,Child development knowledge,
+express_feelings,multiple_choice,Most 2-year-olds can express their feelings.,Child development knowledge,,,"-A. True
+-B. Wrong",True,,0 to 2,both,Knowledge and awareness,Child development knowledge,
+say_name_age,multiple_choice,Most 2-year-olds can climb up and down the stairs on their own.,Child development knowledge,,,"-A. True
+-B. Wrong",Wrong,,0 to 2,both,Knowledge and awareness,Child development knowledge,
+sort_pair,multiple_choice,Most 2-year-olds start to sort and pair things.,Child development knowledge,,,"-A. True
+-B. Wrong",True,,0 to 2,both,Knowledge and awareness,Child development knowledge,
+simple_songs,multiple_choice,Most 3-year-olds can sing parts of simple songs and nursery rhymes.,Child development knowledge,,"41, 42, 52-58 go together, check for ICR","-A. True
+-B. Wrong",True,,3 to 6,both,Knowledge and awareness,Child development knowledge,
+count_to_ten,multiple_choice,Most 3-year-olds can count to ten and name ten objects without mistakes.,Child development knowledge,,,"-A. True
+-B. Wrong",True,,3 to 6,both,Knowledge and awareness,Child development knowledge,
+name_colors,multiple_choice,Most 5-year-olds can name at least four colors correctly.,Child development knowledge,,,"-A. True
+-B. Wrong",True,,3 to 6,both,Knowledge and awareness,Child development knowledge,
+alphabet,multiple_choice,Most 5-year-olds recognize the letters of the alphabet and have some reading skills.,Child development knowledge,,,"-A. True
+-B. Wrong",Wrong,,3 to 6,both,Knowledge and awareness,Child development knowledge,
+tell_story,multiple_choice,Most 5-year-olds can tell a story or retell part of a story.,Child development knowledge,,,"-A. True
+-B. Wrong",True,,3 to 6,both,Knowledge and awareness,Child development knowledge,
+know_name_age,multiple_choice,"Most 6-year-olds know their own name and surname, age and home address.",Child development knowledge,,,"-A. True
+-B. Wrong",True,,3 to 6,both,Knowledge and awareness,Child development knowledge,
+multiplication,multiple_choice,Most 6-year-olds know multiplication tables.,Child development knowledge,,,"-A. True
+-B. Wrong",Wrong,,3 to 6,both,Knowledge and awareness,Child development knowledge,
+statement_4,statement,"Now, we'd like to ask you about your parenting practices.",,,,,,,both,both,,,
+breastfed,multiple_choice,Has {{field:child_name}} been breastfed in the last 24 hours?,Breastfeeding,was_breastfed,,"Yes
+No",Yes,,0 to 2,both,Practices,Nutrition,
+healthy_food_groups,multiple_choice,"How many of the 5 healthy food groups have you given to {{field:child_name}} in the last 24 hours?
+ 
+ 1. Fruit
+ 2. Vegetables
+ 3. Grains (bread, pasta, breakfast cereals, etc.)
+ 4. Protein food (meat, fish, beans, etc.)
+ 5. Dairy",,,,"-A. One
+-B. Two
+-C. Three
+-D. Four
+-E. Five
+-F. Not applicable (child is less than 6 months old)",The more the better,,0 to 2,both,Practices,Nutrition,
+decrease_stress,multiple_choice,"Have you recently (in the last week) applied any techniques (e.g. keep a journal, do breathing exercises) to decrease your stress level?",,,,"Yes
+No",Yes,,both,both,Practices,Parent self-care,
+improve_family,multiple_choice,Have you recently (in the last week) done something to improve the functioning of your family?,,,,"Yes
+No",Yes,,both,both,Practices,Family care,
+statement_5,statement,"Keep going! There are only a few questions remaining.
+
+As a reminder, please answer honestly. Your responses are anonymous.",,,,,,"seed_2 (50% skip to left_alone, 50% skip to statement_6)",both,both,Practices,,
+past_24h_read,multiple_choice,"In the past 24 hours, did you read books or look at picture books with {{field:child_name}}?",,practices_24,,"Yes
+No",Yes,,both,both,Practices,ECD engagement,
+past_24h_stories,multiple_choice,"In the past 24 hours, did you tell stories with {{field:child_name}}?",,practices_24,,"Yes
+No",Yes,,both,both,Practices,ECD engagement,
+past_24h_sing,multiple_choice,"In the past 24 hours, did you sing songs (including lullabies) to or with {{field:child_name}}?",,practices_24,,"Yes
+No",Yes,,both,both,Practices,ECD engagement,
+past_24h_outside,multiple_choice,"In the past 24 hours, did you take {{field:child_name}} outside the home?",,practices_24,,"Yes
+No",Yes,,both,both,Practices,ECD engagement,
+past_24h_play,multiple_choice,"In the past 24 hours, did you play with {{field:child_name}}?",,practices_24,,"Yes
+No",Yes,,both,both,Practices,ECD engagement,
+past_24h_draw,multiple_choice,"In the past 24 hours, did you name, count or draw things with or for {{field:child_name}}?",,practices_24,,"Yes
+No",Yes,,both,both,Practices,ECD engagement,
+statement_0,statement,Adults use certain ways to teach children the right behavior or to address a behavior problem.,,,,,,,both,both,Practices,,
+statement_6,statement,Do you agree or disagree with the following statements?,,,,,,,both,both,Practices,,
+laugh_together,multiple_choice,"When {{field:child_name}} and I play together, we laugh a lot.",,practices_agree,,"-A. Strongly disagree
+-B. Disagree
+-C. Agree
+-D. Strongly agree","C, D",,both,both,Practices,Responsive parenting PA,
+joke_with_child,multiple_choice,I joke around with {{field:child_name}}.,,practices_agree,,"-A. Strongly disagree
+-B. Disagree
+-C. Agree
+-D. Strongly agree","C, D",,both,both,Practices,Responsive parenting PA,
+smile_around_child,multiple_choice,I often smile when I'm around {{field:child_name}}.,,practices_agree,,"-A. Strongly disagree
+-B. Disagree
+-C. Agree
+-D. Strongly agree","C, D",,both,both,Practices,Responsive parenting PA,
+play_on_floor,multiple_choice,{{field:child_name}} and I play together on the floor.,,practices_agree,,"-A. Strongly disagree
+-B. Disagree
+-C. Agree
+-D. Strongly agree","C, D",,both,both,Practices,Responsive parenting PA,
+snap_at_child,multiple_choice,I snap at {{field:child_name}} when he/she gets on my nerves.,,practices_hostility,,"-A. Strongly disagree
+-B. Disagree
+-C. Agree
+-D. Strongly agree","A, B",,both,both,Practices,Responsive parenting Hostility,
+lose_patience_punish,multiple_choice,"When {{field:child_name}} upsets me, I lose my patience and punish him/her more severely than I really mean to.",,practices_hostility,,"-A. Strongly disagree
+-B. Disagree
+-C. Agree
+-D. Strongly agree","A, B",,both,both,Practices,Responsive parenting Hostility,
+threaten,multiple_choice,"When {{field:child_name}} does something wrong, I sometimes threaten him/her.",,practices_hostility,,"-A. Strongly disagree
+-B. Disagree
+-C. Agree
+-D. Strongly agree","A, B",,both,both,Practices,Responsive parenting Hostility,
+make_fun_of,multiple_choice,I sometimes make fun of {{field:child_name}}.,,practices_hostility,,"-A. Strongly disagree
+-B. Disagree
+-C. Agree
+-D. Strongly agree","A, B",,both,both,Practices,Responsive parenting Hostility,
+download_bebbo_treatment,statement,"Thank you! That's all the questions we have for now. 
+
+There is just one more step to qualify for the Visa gift card of 430 RSD. 
+
+Please download Bebbo, the free parenting app, and discover how it can help you. Using Bebbo regularly can improve your interactions with your children and help you support their development better! You can do so by clicking the link below:
+
+https://bebboapp.page.link/?link=https://bebbo.app/?facebook_id={{hidden:id}}&apn=org.unicef.ecar.bebbo&amv=14&ibi=org.unicef.ecar.bebbo&isi=1588918146&utm_campaign=evaluation+study&utm_source=vlab",,,,,,if treatment (seed=1),both,both,,,
+download_bebbo_control,statement,"Thank you! That's all the questions we have for now. 
+
+There is just one more step to qualify for the Visa gift card of 430 RSD. 
+
+Please visit the following free parenting website and discover how it can help you. Using this website regularly  your interactions with your children and help you support their development better! You can do so by clicking the link below:
+
+https://9meseca.bg/",,,,,,if control,,,,,
+download_confirm_treatment,multiple_choice,Did you download the app?,,,,"Yes
+No",,,both,both,,,
+download_confirm_control,multiple_choice,Да ли сте посетили веб локацију?,,,,"Yes
+No",,,,,,,
+thankyou_you_qualify,multiple_choice,Thank you! You have qualified to receive a Visa gift card in the amount of 430 RSD!,,,,OK,,,both,both,,,
+payment_processing,statement,Please wait a few minutes. You should receive the gift card soon.,,,,,,"{
+  ""type"": ""wait"",
+  ""wait"": {
+    ""type"": ""external"",
+    ""value"": {
+      ""type"": ""payment:http"",
+      ""id"": ""giftcard_1""
+    }
+  },
+  ""payment"": {
+    ""provider"": ""http"",
+    ""details"": {
+      ""id"": ""giftcard_1"",
+      ""method"": ""POST"",
+      ""url"": ""https://www.tremendous.com/api/v2/orders"",
+      ""headers"": {
+        ""Authorization"": ""Bearer << TREMENDOUS_API_KEY >>"",
+        ""Content-Type"": ""application/json""
+      },
+      ""body"": {
+        ""payment"": { ""funding_source_id"": ""0KTUESSOFCBD"" },
+        ""rewards"": [{
+          ""value"": { ""denomination"": 4.0, ""currency_code"": ""USD"" },
+          ""delivery"": { ""method"": ""LINK"" },
+          ""recipient"": { ""name"": ""Study Participant"" },
+          ""products"": [""IUAQ1BXDVSH7""]
+        }]
+      },
+      ""errorMessage"": ""errors.message"",
+      ""responsePath"": ""order.rewards.0.delivery.link|@tostr""
+    }
+  }
+}",both,both,,,
+payment_accepted,statement,Thanks for waiting. Here it is: {{hidden:e_payment_http_response}},,,,,,,both,both,,,
+payment_failed,statement,"Sorry, we had an error. Please try again. {{hidden:e_payment_http_error_message}}",,,,,,,,,,,
+followup_permission,multiple_choice,Thank you for your time! We would like to ask you some more questions in a few weeks time. Can we contact you again in a few weeks?,,,,OK,,,both,both,,,
+thankyou_1,statement,"Great, thanks! We'll reach out again in a few weeks.",,,,,,"{
+ ""type"": ""wait"",
+ ""responseMessage"": ""Жао нам је, сада не можемо да одговоримо ни на једно питање, али ћемо ускоро поново писати са још питања. Хвала вам!"",
+ ""wait"": {
+ ""type"": ""timeout"",
+ ""value"": {
+ ""type"": ""relative"",
+ ""timeout"": ""28 days""
+ }
+ }
+}",both,both,,,
+hello_again,multiple_choice,"Hello again! Would you like to continue taking this survey? It will take 10-15 minutes of your time to complete and you will receive a gift card in the amount of 430 RSD. if you complete all the questions. Click ""Start"" to take the survey.",,,,Start,,,both,both,,,
+stitch_endline,statement,"Great, thanks!",,,,,,"{""type"": ""stitch"", ""stitch"": {""form"": ""bebborsendeng""}}",both,both,,,

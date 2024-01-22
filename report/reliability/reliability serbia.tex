@@ -1,0 +1,104 @@
+\documentclass{article}
+\usepackage{adjustbox}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{dcolumn}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=10mm,
+ top=10mm
+ }
+
+\title{Reliability Analysis for Serbian Respondents}
+\date{July 2023}
+
+\begin{document}
+
+\subsubsection*{Reliability Analysis Overview}
+
+For constructs, we refer to $construct\_variable$ field. All constructs are composed of either Likert scale variables or Binary scale variables and not both. For the first step of the reliability analysis, we test for the internal consistency of each construct using Cronbach's alpha. Table \ref{tbl:constructs_alpha_matrix} summarizes raw and standardized alpha of each construct along with the number of variables in it.
+
+\subsubsection*{Cronbach's Alpha}
+
+\begin{itemize}
+    \item \textbf{High reliability} : constructs that have a reliability of over (or close to) 0.7, indicating good internal consistency
+    \begin{enumerate}
+        \item $dev\_knw\_recog$
+        \item $parent\_knw$
+        \item $practices\_agree$
+        \item $practices\_hostility$
+    \end{enumerate}
+    \item \textbf{Low reliability} : constructs with reliability much lower than 0.7 indicating poor internal consistency
+    \begin{enumerate}
+        \item $dev\_knw\_concern\_0\_2$
+        \item $dev\_knw\_concern\_3\_6$
+        \item $health\_knw$
+        \item $practices\_24$
+        \item $caregiver\_well\_being$
+    \end{enumerate}
+\input{reliability/tables/alpha_matrix} 
+
+    \item For these constructs with low reliability, we look at the reliability with variables dropped.
+\end{itemize}
+
+
+\subsubsection*{Reliability after variable is dropped}
+
+For each construct in Table \ref{tbl:alpha_drop}, we see how the reliability changes if a variable from that construct is dropped.
+\begin{itemize}
+    \item $caregiver\_well\_being$ : Any variable dropped leads to lower reliability than with all variables included.
+    \item $dev\_knw\_concern\_0\_2$ : Dropping variables $scribble$ and $say\_name\_age$ leads to a higher reliability. 
+    \begin{itemize}
+        \item However, even after dropping either of these variables, the reliability would be 0.03-0.05.
+        \item It appears that the variables under construct Development Knowledge Concern (0-2) are generally uncorrelated or negatively correlated.
+        \item This might be because respondents have partial knowledge of children's development and might get only one or a few of the questions correct.
+    \end{itemize} 
+    
+ 
+    \item $dev\_knw\_concern\_3\_6$ : The construct's internal consistency can be improved by dropping variable $alphabet$.
+
+    \item $health\_knw$ : Any variable dropped leads to lower reliability than with all variables included.
+\end{itemize}
+
+\input{reliability/tables/alpha_drop} 
+ 
+
+% \subsubsection*{Factor Analysis}
+
+% For the factor analysis, I drop all questions that are shown to only some of the respondents based on selection criteria and have missing values for other respondents that were not shown the question. On the remaining variables, I run a principal component analysis. I infer the number of factors from a scree plot. Image \ref{img: variables loadings on factors} and Table \ref{tbl:all_variables_loadings} display the loadings of the different variables on the first 7 factors. 
+
+% Generally, most variables that belong to the same construct load on the same principal components. Some observations - 
+% \begin{itemize}
+%     \item $know\_social\_emotional\_dev$, $know\_cog\_dev$, $know\_phy\_dec$, $know\_lang\_dev$ all load on factor 2
+%     \item $confidence\_deal\_emotions$ and $confidence\_respond\_misbehave$ load on factor 5
+%     \item $decrease\_stress$ and $improve\_family$ load on factor 6
+%     \item $past\_24h\_read$, $past\_24h\_stories$, $past\_24h\_draw$, all load on factor 3. However, $past\_24h\_outside$ and $past\_24h\_play$ load on factor 7 more strongly. In fact, $past\_24h\_outside$ and $past\_24h\_draw$ are measuring different ends of the same factor.
+%     \item $snap\_at\_child$, $lose\_patience\_punish$, $threaten$, $make\_fun\_of$ all load on factor 5 and measure the opposite end of the factor that drives confidence in dealing with emotions.
+%     \item $laugh\_together$, $joke\_with\_child$, $play\_on\_floor$, $smile\_around\_child$ and $play\_on\_floor$ all load on factor 1.
+% \end{itemize}
+
+% \textbf{Based on the above, I would infer that }
+% \begin{itemize}
+%     \item factor 1 represents knowledgeable parenting practices with child
+%     \item factor 2 represents cognitive development knowledge
+%     \item factor 3 represents the regularity of positive parenting practices
+%     \item factor 4 represents positive parenting practices
+%     \item factor 5 confidence in dealing with emotion and the absence of which results in stressful and negative behavior
+%     \item factor 6 self-care or proactive behavior - these two variables are currently separate constructs but can be grouped as one.
+%     \item factor 7 represents past 24 hours outside vs past 24 hours draw. This could represent discipline vs a carefree attitude. More generally, it is plausible that parents that played outside with their children in the last 24 hours did not also draw with their children in the same time frame. A parent that did one would not do the other but we are not interested in that difference. Would it suffice to have a measure where parents did any one of the two? 
+
+% \end{itemize}
+
+% \begin{figure}[h!]
+
+% \caption{Principal Component Analysis - Variables Loadings on Factors}
+% \label{img: variables loadings on factors}
+% \vspace{1em}
+% \centering
+% \includegraphics[scale=0.8]{all_variable_loadings_img.png}
+% \end{figure}
+
+% \input{all_variables_loadings} 
+
+\end{document}
