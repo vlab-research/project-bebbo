@@ -10,7 +10,7 @@ make_outcome_difs <- function(dat, outcomes) {
 
 
     for (outcome in outcomes) {
-        baselines <- baselines %>% 
+        baselines <- baselines %>%
             rename("{outcome}_baseline" := {{ outcome }})
     }
 
@@ -20,7 +20,7 @@ make_outcome_difs <- function(dat, outcomes) {
 
     for (outcome in outcomes) {
         base <- paste0(outcome, "_baseline")
-        waves <- waves %>% 
+        waves <- waves %>%
             mutate("{outcome}" := waves[[outcome]] - waves[[base]])
     }
 
@@ -57,7 +57,7 @@ run_tot_regression <- function(dat, outcome, endline_flag, ...) {
     endog <- "has_learning_event"
 
     ff <- glue("{outcome} ~ {endog} + {control_formula} | treatment + {control_formula}")
-    fmla <- formula(ff)    
+    fmla <- formula(ff)
     model <- ivreg(fmla, data = format_for_reg(dat, outcome, endline_flag))
     model
 }
@@ -78,12 +78,12 @@ get_p_values <- function(model) {
     summary(model)$coefficients[, 4]
 }
 
-fix_p_values <- function(p_values, model, var_of_interest) { 
+fix_p_values <- function(p_values, model, var_of_interest) {
     p_value <- get_p_value(model, var_of_interest)
     adjusted <- adjust_p_value(p_values, p_value)
-    ps <- summary(model)$coefficients[,4]
-    ps <- sapply(ps, function (x) 1)
-    ps[var_of_interest] <- adjusted 
+    ps <- summary(model)$coefficients[, 4]
+    ps <- sapply(ps, function(x) 1)
+    ps[var_of_interest] <- adjusted
     ps
 }
 
@@ -93,18 +93,18 @@ get_p_value <- function(model, var) {
 
 get_diagnostic_p <- function(model, diagnostic) {
     p <- summary(model)$diagnostics[diagnostic, 4]
-    format(p, digits=3)
+    format(p, digits = 3)
 }
 
 
 bf_adjusted_ci <- function(model, var, alpha, total_measures) {
     df <- summary(model)$df[2]
     adjusted_alpha <- alpha / total_measures
-    t_score <- qt(p = adjusted_alpha/2, df = df, lower.tail=F)
-    
+    t_score <- qt(p = adjusted_alpha / 2, df = df, lower.tail = F)
+
     mean <- summary(model)$coefficients[, 1][var]
     sd <- summary(model)$coefficients[, 2][var]
-    ci <- unname(sd*t_score)
+    ci <- unname(sd * t_score)
     mean <- unname(mean)
 
     variable <- all.vars(terms(model))[1]
@@ -112,7 +112,7 @@ bf_adjusted_ci <- function(model, var, alpha, total_measures) {
     list(variable = variable, mean = mean, lower = mean - ci, upper = mean + ci)
 }
 
-pretty_vars = list(
+pretty_vars <- list(
     treatmenttreated = "Treatment",
     has_learning_eventTRUE = "Used App",
     health_knw = "Vaccine Knowledge",
@@ -128,7 +128,8 @@ pretty_vars = list(
 datasets <- list(
     `Serbia` = serbia,
     `Bulgaria` = bulgaria_with_impacted,
-    `Pooled` = pooled
+    `Pooled` = pooled,
+    `Pooled for Follow Up` = pooled_without_impacted
 )
 
 models <- list(
@@ -149,7 +150,7 @@ for (wave in names(waves)) {
 
     for (model in names(models)) {
         fun <- models[[model]]
-        
+
         for (dataset in names(datasets)) {
             dat <- datasets[[dataset]]
 
@@ -171,9 +172,9 @@ for (wave in names(waves)) {
             for (name in names(res)) {
                 results <- res[[name]]
 
-                local_p_values <- lapply(results, function (model) fix_p_values(p_values, model, var_of_interest))
+                local_p_values <- lapply(results, function(model) fix_p_values(p_values, model, var_of_interest))
 
-                local_treatment_p_values <- sapply(local_p_values, function (x) format(x[var_of_interest], digits=3))
+                local_treatment_p_values <- sapply(local_p_values, function(x) format(x[var_of_interest], digits = 3))
 
 
                 if (model == "2SLS") {
@@ -189,11 +190,11 @@ for (wave in names(waves)) {
                     )
                 }
 
-                # Created adjusted coefficients for coef plot 
+                # Created adjusted coefficients for coef plot
                 for (m in results) {
                     l <- c(bf_adjusted_ci(m, var_of_interest, 0.10, 8), list(model = model, wave = wave, dataset = dataset, name = name))
                     adjusted_coefficients <- rbind(adjusted_coefficients, l)
-                }                
+                }
 
                 controls <- pick_controls(dat, outcome)
 
@@ -205,8 +206,8 @@ for (wave in names(waves)) {
                     "report/regressions",
                     glue("{dataset}: {model} - {wave} - {name}"),
                     add.lines = lines,
-                    dep.var.labels=dep_vars,
-                    covariate.labels=covariate_labels,
+                    dep.var.labels = dep_vars,
+                    covariate.labels = covariate_labels,
                     p = local_p_values,
                     star.cutoffs = c(0.10, 0.05, 0.01),
                     omit = c(controls, "Constant", "countrySerbia"),
@@ -218,19 +219,21 @@ for (wave in names(waves)) {
 }
 
 ################################################
-# PLOT COEFFICIENTS WITH ADJUSTED CI's 
+# PLOT COEFFICIENTS WITH ADJUSTED CI's
 ################################################
 
 library(ggplot2)
 
-variable_order <- adjusted_coefficients %>% distinct(variable) %>% pull(variable)
-adjusted_coefficients <- adjusted_coefficients %>% mutate(variable = factor(variable, levels=variable_order))
+variable_order <- adjusted_coefficients %>%
+    distinct(variable) %>%
+    pull(variable)
+adjusted_coefficients <- adjusted_coefficients %>% mutate(variable = factor(variable, levels = variable_order))
 
 groups <- list(
     `Practices` = c("Practices"),
     `Knowledge and Attitudes` = c("Knowledge and Awareness", "Confidence and Attitudes")
 )
- 
+
 for (group in names(groups)) {
     outcomes <- groups[[group]]
 
@@ -240,22 +243,15 @@ for (group in names(groups)) {
 
     dd <- dd %>% mutate(group = glue("{dataset} {wave}"))
 
-    ggplot(dd, aes(x = mean, y = group, color=group)) + 
-        geom_point(size=3) + 
-        geom_errorbarh(aes(y = group, xmin = lower, xmax=upper, height=0)) + 
-        geom_vline(xintercept=0) + 
-        facet_grid(rows = vars(variable)) + 
-        theme(axis.title.y = element_blank(), axis.title.x = element_blank(),
-              legend.position="none")
+    ggplot(dd, aes(x = mean, y = group, color = group)) +
+        geom_point(size = 3) +
+        geom_errorbarh(aes(y = group, xmin = lower, xmax = upper, height = 0)) +
+        geom_vline(xintercept = 0) +
+        facet_grid(rows = vars(variable)) +
+        theme(
+            axis.title.y = element_blank(), axis.title.x = element_blank(),
+            legend.position = "none"
+        )
 
-    ggsave(glue("report/plots/Adjusted Coefficient Plot {group}.png"), width=10, height=5)
+    ggsave(glue("report/plots/Adjusted Coefficient Plot {group}.png"), width = 10, height = 5)
 }
-
-
-
-
-
-
-
-
-

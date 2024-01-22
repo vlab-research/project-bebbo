@@ -6,6 +6,11 @@
 \usepackage[utf8]{inputenc}
 \usepackage{geometry}
 \usepackage{lscape}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+
 \usepackage{dcolumn}
  \geometry{
  a4paper,
@@ -126,7 +131,7 @@ Given the design of the study, we can say that the following facts may have cont
 \end{enumerate}
 
 
-
+\clearpage
 
 \section{Study Design}
 
@@ -144,14 +149,43 @@ Study participants are randomized, from the beginning, to one of two conditions:
 
 App usage in the treatment group was tracked, however website visits in the control group were not tracked.
 
+\vspace{1cm}
+
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{images/design-timeline.png}
+\caption{Study Design}
+\label{fig:Study Design}
+\end{figure}
+
 \addcontentsline{toc}{subsection}{Recruitment}
 \subsection*{Recruitment}
 
-Participants were recruited to the study with social media ads on the Meta platform (Facebook and Instagram) using the Virtual Lab platform to create and run the recruitment ads. In exchange for participating in the study, they were told they could receive gift cards worth up to 12 USD (in their local currency). See [REF pictures] for examples of the ad material used for recruiting.
+Participants were recruited to the study with social media ads on the Meta platform (Facebook and Instagram) using the Virtual Lab platform to create and run the recruitment ads. In exchange for participating in the study, they were told they could receive gift cards worth up to 12 USD (in their local currency). See figure \ref{fig:Recruitment Ads} for examples of the ad material used for recruiting.
 
 Recruitment and survey administration was performed on a rolling basis between March and October, 2023. Each individual participant was treated at the end of the baseline survey and sent the endline survey 4 weeks after completing the baseline survey.
 
 The survey was administered via a chatbot in Facebook Messenger, using the Virtual Lab platform. Respondents who clicked on the advertisements were directed to a Messenger chat with the Virtual Lab Facebook page, which did not contain any content or information related to this study. Consent was provided via chat, as well as all answers to the survey questions and the treatment condition. Gift cards were also provided via chat, using the Tremendous gift card platform to provide Visa international prepaid cards.
+
+[TODO: add recruitment stats]
+
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}{0.3\textwidth}
+\centering
+\includegraphics[width=100px]{images/recruitment/558.png}
+\end{subfigure}
+\begin{subfigure}{0.3\textwidth}
+\centering
+\includegraphics[width=100px]{images/recruitment/639.png}
+\end{subfigure}
+\begin{subfigure}{0.3\textwidth}
+\centering
+\includegraphics[width=100px]{images/recruitment/742.png}
+\end{subfigure}
+\caption{Recruitment Ads}
+\label{fig:Recruitment Ads}
+\end{figure}
 
 
 \section{Descriptives}
@@ -171,9 +205,11 @@ Respondents in Bulgaria were more likely to have a university education (42\%) c
 \addcontentsline{toc}{subsection}{Construct Variables}
 \subsection*{Construct Variables}
 
-The...
+The outcomes of interest consist of eight constructs divided into three domains: knowledge and awareness, confidence and attitudes, and practices. The mapping between the constructs, domains, and questions that make up the constructs are laid out in table \ref{tbl:Construct Variable Mapping}.
 
-See table \ref{tbl:Construct Variable Mapping}
+The constructs ``health knowledge'', ``caregiver wellbeing'', and ``was breastfed'' are made up of only one question. The construct ``practices 24'' consists of a count of the number of activities, within the previous 24 hours, that the respondent has done. The rest of the constructs are created by averaging of a set of likert variables.
+
+Descriptive statistics regarding the baseline responses for the outcomes are shown in table \ref{tbl:Outcome Construct Descriptives Pooled Baseline}. Note that many of the constructs have quite high means and medians [TODO: add percent right-truncated to the table].
 
 % We now summarize the constructs measured by the variables. The constructs are calculated as the mean of the variables under them.
 % Table \ref{tbl:construct variable mapping} contains a mapping of variables to constructs.
@@ -187,6 +223,8 @@ See table \ref{tbl:Construct Variable Mapping}
 \input{descriptives/tables/Outcome Construct Descriptives Pooled Baseline}
 % \input{descriptives/tables/Outcome Construct Descriptives Serbia Baseline}
 % \input{descriptives/tables/Outcome Construct Descriptives Bulgaria Baseline}
+
+
 
 % \subsubsection*{Correlations within constructs}
 % The constructs are largely uncorrelated with each other with some exceptions -
@@ -207,6 +245,8 @@ See table \ref{tbl:Construct Variable Mapping}
 %     \label{fig:bulgaria correlations}
 % \end{minipage}%
 % \end{figure}
+
+\clearpage
 
 \addcontentsline{toc}{subsection}{Baseline Balance}
 \subsection*{Baseline Balance}
@@ -238,95 +278,35 @@ The most notable variable is the practices\_24 and was\_breastfed, which differ 
 % \clearpage
 
 
-% \section*{Pre Post Data}
-% \includegraphics[width=\textwidth]{plots/pre_post/health_knw.png}
-% \includegraphics[width=\textwidth]{plots/pre_post/confidence.png}
-% \includegraphics[width=\textwidth]{plots/pre_post/was_breastfed.png}
-% \includegraphics[width=\textwidth]{plots/pre_post/practices_agree.png}
+\addcontentsline{toc}{subsection}{Pre-Exposure to Bebbo}
+\subsection*{Pre-Exposure to Bebbo}
+
+To check for either pre-exposure or contamination, we ask control group users, at the end of the final follow up survey, if they have ever heard of Bebbo or used Bebbo.
+
+55\% of respondents said that they had heard about the app Bebbo and 23\% said that they had downloaded and used the app Bebbo. It's worth noting that there might be some social desireability bias or acquiesence bias in these responses and we do not have a good way to detect that in this instance. However, despite those potential biases, this is strong suggestive evidence that there was pre-exposure to the treatment in our sample.
+
+
+
+\addcontentsline{toc}{subsection}{Pre-Post Descriptives}
+\subsection*{Pre-Post Descriptives}
+
+One of the dangers of a prepost design is that you are priming your respondents with the first survey and that priming may impact how they answer the questions in the post-treatment survey(s) (\cite{Stantcheva2023}).
+
+Given this particular study design, where our control is a ``treatment as usual'' (TAU) that involved sharing a website and we do not have data regarding the takeup, or usage, of the website, it is difficult to isolate a priming effect.
+
+[TODO: Add an analysis of priming impact --> t-test for pre/post in the control group]
+
+Plots of pre-post means are available in
 
 
 % \clearpage
 
-% \section*{Bebbo Usage in Control}
+\addcontentsline{toc}{subsection}{Power Analysis}
+\subsection*{Power Analysis}
 
-% Checking for contamination or baseline usage in the control group, we ask control group users, at the end of the final follow up survey, if they have ever heard of Bebbo or used Bebbo.
-
-% \input{descriptives/tables/Bebbo Usage in Control Group}
-
-% \clearpage
-
-
-% \section*{Power}
-
-% \includegraphics[width=\textwidth]{plots/Power Calculations.png}
+\includegraphics[width=\textwidth]{plots/Power Calculations.png}
 
 % \clearpage
-
-% \section*{Regression}
-
-% We run the following regression model to measure the intent-to-treat effect (ITT) of assignment to the treatment arm on the outcome construct ($c$) of interest for individual $i$:
-
-% $$
-% y_{i} = \alpha + \beta T_{i} + \gamma_1X_{i} + \gamma_2Z_i + \epsilon
-% $$
-
-% Note that due to the relatively large number of sepearate outcomes (9), we adjust p-values of the treatment variable to control the false discovery rate (FDR), using Benjamini-Hochberg, reported as the ``Adjusted Treatment p-value.''
-
-% Tables with results are separated by the domain of the construct. ``Serbia'' contains only data from Serbia, which does not include any impacted users. Impacted users involve users for whom the control group was accidentally exposed to questions related to Bebbo usage in the endline survey. This would potentially impact their answers in the follow up if they then downloaded and used Bebbo.
-
-% Plot below shows coefficients with 90\% confidence intervals adjusted via a Bonferroni correction to correct for 8 simultaneous outcome measurement.
-
-% \includegraphics[width=\textwidth]{plots/adjusted_coefficient_plot.png}
-
-
-% \input{regressions/Serbia: OLS - Endline - Knowledge and Awareness.tex}
-% \input{regressions/Serbia: OLS - Endline - Confidence and Attitudes.tex}
-% \input{regressions/Serbia: OLS - Endline - Practices.tex}
-
-% \input{regressions/Serbia: 2SLS - Endline - Knowledge and Awareness.tex}
-% \input{regressions/Serbia: 2SLS - Endline - Confidence and Attitudes.tex}
-% \input{regressions/Serbia: 2SLS - Endline - Practices.tex}
-
-% \input{regressions/Pooled: OLS - Endline - Knowledge and Awareness.tex}
-% \input{regressions/Pooled: OLS - Endline - Confidence and Attitudes.tex}
-% \input{regressions/Pooled: OLS - Endline - Practices.tex}
-
-% \input{regressions/Pooled: 2SLS - Endline - Knowledge and Awareness.tex}
-% \input{regressions/Pooled: 2SLS - Endline - Confidence and Attitudes.tex}
-% \input{regressions/Pooled: 2SLS - Endline - Practices.tex}
-
-% \input{regressions/Bulgaria: OLS - Endline - Knowledge and Awareness.tex}
-% \input{regressions/Bulgaria: OLS - Endline - Confidence and Attitudes.tex}
-% \input{regressions/Bulgaria: OLS - Endline - Practices.tex}
-
-% \input{regressions/Bulgaria: 2SLS - Endline - Knowledge and Awareness.tex}
-% \input{regressions/Bulgaria: 2SLS - Endline - Confidence and Attitudes.tex}
-% \input{regressions/Bulgaria: 2SLS - Endline - Practices.tex}
-
-
-% \input{regressions/Serbia: OLS - Follow Up - Knowledge and Awareness.tex}
-% \input{regressions/Serbia: OLS - Follow Up - Confidence and Attitudes.tex}
-% \input{regressions/Serbia: OLS - Follow Up - Practices.tex}
-
-% \input{regressions/Serbia: 2SLS - Follow Up - Knowledge and Awareness.tex}
-% \input{regressions/Serbia: 2SLS - Follow Up - Confidence and Attitudes.tex}
-% \input{regressions/Serbia: 2SLS - Follow Up - Practices.tex}
-
-% \input{regressions/Pooled: OLS - Follow Up - Knowledge and Awareness.tex}
-% \input{regressions/Pooled: OLS - Follow Up - Confidence and Attitudes.tex}
-% \input{regressions/Pooled: OLS - Follow Up - Practices.tex}
-
-% \input{regressions/Pooled: 2SLS - Follow Up - Knowledge and Awareness.tex}
-% \input{regressions/Pooled: 2SLS - Follow Up - Confidence and Attitudes.tex}
-% \input{regressions/Pooled: 2SLS - Follow Up - Practices.tex}
-
-% \input{regressions/Bulgaria: OLS - Follow Up - Knowledge and Awareness.tex}
-% \input{regressions/Bulgaria: OLS - Follow Up - Confidence and Attitudes.tex}
-% \input{regressions/Bulgaria: OLS - Follow Up - Practices.tex}
-
-% \input{regressions/Bulgaria: 2SLS - Follow Up - Knowledge and Awareness.tex}
-% \input{regressions/Bulgaria: 2SLS - Follow Up - Confidence and Attitudes.tex}
-% \input{regressions/Bulgaria: 2SLS - Follow Up - Practices.tex}
 
 
 % \clearpage
@@ -396,8 +376,10 @@ The most notable variable is the practices\_24 and was\_breastfed, which differ 
 % \input{reliability/tables/alpha_drop_bulgaria}
 % \input{reliability/tables/alpha_drop_serbia}
 
-% \addcontentsline{toc}{section}{App Usage}
-% \section*{App Usage Over Time}
+\addcontentsline{toc}{subsection}{Treatment Takeup Behavior - App Usage}
+\subsection*{App Usage Over Time}
+
+[TODO: Add app usage over time plots and stats]x
 % \subsubsection*{Methodology}
 % For every respondent that was treated, i.e., asked to download the Bebbo app, we note the time that they were asked to download the app in the survey. We then aggregate their app usage activity by the weeks since they downloaded the app to get weekly app usage activity for each respondent. Note that this includes respondents across both Serbia and Bulgaria and across both baseline and endline periods.
 % We create variables summarizing their activity using events logged in the app.
@@ -435,87 +417,142 @@ The most notable variable is the practices\_24 and was\_breastfed, which differ 
 % \includegraphics[scale=0.35]{app usage/plots/app usage over time - home opens.png}
 % \end{figure}
 
-% \addcontentsline{toc}{subsection}{App activity and user characteristics}
-% \section*{App Activity and User Characteristics}
 
-% In this analysis, we attempt to answer the questions -
-% \begin{enumerate}
-%     \item Who are the respondents who used the app?
-%     \item Do more knowledgeable parents use the app more?
-% \end{enumerate}
+\addcontentsline{toc}{subsection}{Attrition}
+\subsection*{Attrition}
+We define attrition as a respondent present in baseline but
+not present in endline. Attrition is indicated with a binary flag at the user level. For all respondents, we fit a logistic regression model to whether the respondent attrited using the respondents' baseline characteristics, demographic variables, and a flag for treatment (Table \ref{tbl:attrition and baseline characteristics - logistic reg}).
 
-% We do so by regressing respondents' app usage activity against their characteristics.
-% \vspace{1em}
+\begin{itemize}
+    \item The goodness of fit measure used is the percentage improvement in deviance over the null deviance (pseudo $R^{2}$). The pseudo $R^{2}$ for this model is 0.95.
+    \item
+\end{itemize}
+\input{app usage/tables/attrition and baseline characteristics - logistic reg}
 
-% \textbf{Independent variables :}
-% \begin{itemize}
-%     \item \textbf{Baseline characteristics} - respondents' scores on the construct variables. We only use the construct variables that have sufficiently high internal consistency. We drop the constructs that are highly correlated with other constructs. We find $parent\_knw$ to be correlated with $caregiver\_well\_being$. We drop the construct with lower reliability $caregiver\_well\_being$.
-%     \item Demographics variables - parents' age flag (categorical), university flag (binary), gender (categorical), and number of children (numeric)
-%     \item Survey response variables - survey duration, start week, country flag
-% \end{itemize}
+We also fit a logistic regression model to whether the respondent attrited using the respondents' app usage (Table \ref{tbl:attrition and app usage - logistic reg}). This is fit only to the treated users who have app usage. The pseudo $R^{2}$ for this model is 0.007. A respondent's $usage\_count$ and $days\_used$ are weak signals of future attrition.
 
-% \textbf{Dependent variables :}
-% \begin{itemize}
-%     \item Home opened - binary variable indicating whether the respondent had a home opened event logged
-%     \item Home opens - continuous count variable indicating the respondents' count of total home opens
-% \end{itemize}
+\input{app usage/tables/attrition and app usage - logistic reg}
 
 
-% \subsubsection*{Home Opens and User Characteristics}
-% For respondents who downloaded the app, we regress their number of home opens against their baseline characteristics, demographic variables, and survey response variables. The $R^{2}$ for this model is 0.065. Note that the country flag is not significant which means that app usage does not differ significantly across the two countries after holding constant user characteristics (Table \ref{tbl:app usage and baseline characteristics - linear reg}).
-% \input{app usage/tables/app usage and baseline characteristics - linear reg}
 
-% \subsubsection*{Home Opened and User Characteristics}
-% For respondents who were treated, i.e., asked to download the Bebbo app, we fit a logistic regression model to whether the respondent had a home opened event logged using the respondents' baseline characteristics, demographic variables, and their survey response variables (Table \ref{tbl:downloads and baseline characteristics - logistic reg}). The goodness of fit measure used is the percentage improvement in deviance over the null deviance (pseudo $R^{2}$). The pseudo $R^{2}$ for this model is 0.03.
-% \input{app usage/tables/home opened and baseline characteristics - logistic reg}
+\section{Results}
 
-% \addcontentsline{toc}{section}{Attrition Analysis}
-% \section*{Attrition}
-% We define attrition as a respondent present in baseline but
-% not present in endline. Attrition is indicated with a binary flag at the user level. For all respondents, we fit a logistic regression model to whether the respondent attrited using the respondents' baseline characteristics, demographic variables, and a flag for treatment (Table \ref{tbl:attrition and baseline characteristics - logistic reg}).
+We run the following regression model to measure the intent-to-treat effect (ITT) of assignment to the treatment arm on the outcome construct ($c$) of interest for individual $i$:
 
-% \begin{itemize}
-%     \item The goodness of fit measure used is the percentage improvement in deviance over the null deviance (pseudo $R^{2}$). The pseudo $R^{2}$ for this model is 0.95.
-%     \item
-% \end{itemize}
-% \input{app usage/tables/attrition and baseline characteristics - logistic reg}
+$$
+y_{i} = \alpha + \beta T_{i} + \gamma_1X_{i} + \gamma_2Z_i + \epsilon
+$$
 
-% We also fit a logistic regression model to whether the respondent attrited using the respondents' app usage (Table \ref{tbl:attrition and app usage - logistic reg}). This is fit only to the treated users who have app usage. The pseudo $R^{2}$ for this model is 0.007. A respondent's $usage\_count$ and $days\_used$ are weak signals of future attrition.
+Note that due to the relatively large number of sepearate outcomes (8), we adjust p-values of the treatment variable to control the false discovery rate (FDR), using Benjamini-Hochberg, reported as the ``Adjusted Treatment p-value.''
 
-% \input{app usage/tables/attrition and app usage - logistic reg}
+% Tables with results are separated by the domain of the construct. ``Serbia'' contains only data from Serbia, which does not include any impacted users. Impacted users involve users for whom the control group was accidentally exposed to questions related to Bebbo usage in the endline survey. This would potentially impact their answers in the follow up if they then downloaded and used Bebbo.
+
+% Plot below shows coefficients with 90\% confidence intervals adjusted via a Bonferroni correction to correct for 8 simultaneous outcome measurement.
+
+% \includegraphics[width=\textwidth]{plots/adjusted_coefficient_plot.png}
+
+% \input{regressions/Serbia: OLS - Endline - Knowledge and Awareness.tex}
+% \input{regressions/Serbia: OLS - Endline - Confidence and Attitudes.tex}
+% \input{regressions/Serbia: OLS - Endline - Practices.tex}
+
+% \input{regressions/Serbia: 2SLS - Endline - Knowledge and Awareness.tex}
+% \input{regressions/Serbia: 2SLS - Endline - Confidence and Attitudes.tex}
+% \input{regressions/Serbia: 2SLS - Endline - Practices.tex}
+
+\input{regressions/Pooled: OLS - Endline - Knowledge and Awareness.tex}
+\input{regressions/Pooled: OLS - Endline - Confidence and Attitudes.tex}
+\input{regressions/Pooled: OLS - Endline - Practices.tex}
+
+\input{regressions/Pooled: 2SLS - Endline - Knowledge and Awareness.tex}
+\input{regressions/Pooled: 2SLS - Endline - Confidence and Attitudes.tex}
+\input{regressions/Pooled: 2SLS - Endline - Practices.tex}
+
+% \input{regressions/Bulgaria: OLS - Endline - Knowledge and Awareness.tex}
+% \input{regressions/Bulgaria: OLS - Endline - Confidence and Attitudes.tex}
+% \input{regressions/Bulgaria: OLS - Endline - Practices.tex}
+
+% \input{regressions/Bulgaria: 2SLS - Endline - Knowledge and Awareness.tex}
+% \input{regressions/Bulgaria: 2SLS - Endline - Confidence and Attitudes.tex}
+% \input{regressions/Bulgaria: 2SLS - Endline - Practices.tex}
 
 
-% \addcontentsline{toc}{section}{Balance Tests}
-% \section*{Balance Tests}
+% \input{regressions/Serbia: OLS - Follow Up - Knowledge and Awareness.tex}
+% \input{regressions/Serbia: OLS - Follow Up - Confidence and Attitudes.tex}
+% \input{regressions/Serbia: OLS - Follow Up - Practices.tex}
 
-% % \addcontentsline{toc}{subsection}{Baseline vs Endline}
-% % \subsection*{Baseline vs Endline}
-% \addcontentsline{toc}{subsection}{Serbia vs Bulgaria}
-% \subsection*{Testing for Baseline Imbalance by Country}
-% \subsubsection*{Methodology}
-% \begin{itemize}
-%     \item We test for differences in the means between countries of all the survey question responses, construct variables and demographic variables.
-%     \item We filter for baseline respondents who are also present in endline.
-%     \item We run independent t-tests one at a time for each variable being tested.
-%     \item We assume that the samples from both countries are being drawn from populations of equal variance.
-% \end{itemize}
+% \input{regressions/Serbia: 2SLS - Follow Up - Knowledge and Awareness.tex}
+% \input{regressions/Serbia: 2SLS - Follow Up - Confidence and Attitudes.tex}
+% \input{regressions/Serbia: 2SLS - Follow Up - Practices.tex}
 
-% \input{baseline imbalance/tables/country_baseline_constructs_imbalance}
+\input{regressions/Pooled for Follow Up: OLS - Follow Up - Knowledge and Awareness.tex}
+\input{regressions/Pooled for Follow Up: OLS - Follow Up - Confidence and Attitudes.tex}
+\input{regressions/Pooled for Follow Up: OLS - Follow Up - Practices.tex}
 
-% \addcontentsline{toc}{subsection}{Treatment vs Control}
-% \subsection*{Testing for Baseline Imbalance by Treatment}
-% \subsubsection*{Methodology}
+\input{regressions/Pooled for Follow Up: 2SLS - Follow Up - Knowledge and Awareness.tex}
+\input{regressions/Pooled for Follow Up: 2SLS - Follow Up - Confidence and Attitudes.tex}
+\input{regressions/Pooled for Follow Up: 2SLS - Follow Up - Practices.tex}
 
-% \begin{itemize}
-%     \item We test for differences in the means between treatment and control of all the survey question responses, construct variables, and demographic variables.
-%     \item We filter for baseline respondents who are also present in endline.
-%     \item We run independent t-tests one at a time for each variable being tested.
-%     \item We assume that the samples from both countries are being drawn from populations of equal variance.
-%     \item We repeat this analysis for both countries, Serbia and Bulgaria
-% \end{itemize}
+% \input{regressions/Bulgaria: OLS - Follow Up - Knowledge and Awareness.tex}
+% \input{regressions/Bulgaria: OLS - Follow Up - Confidence and Attitudes.tex}
+% \input{regressions/Bulgaria: OLS - Follow Up - Practices.tex}
 
-% \input{baseline imbalance/tables/treatment_baseline_imbalance_serbia}
-% \input{baseline imbalance/tables/treatment_baseline_imbalance_bulgaria}
+% \input{regressions/Bulgaria: 2SLS - Follow Up - Knowledge and Awareness.tex}
+% \input{regressions/Bulgaria: 2SLS - Follow Up - Confidence and Attitudes.tex}
+% \input{regressions/Bulgaria: 2SLS - Follow Up - Practices.tex}
+
+
+\section{User Characteristics Correlated with App Usage}
+
+In this analysis, we attempt to answer the questions -
+\begin{enumerate}
+    \item Who are the respondents who used the app?
+    \item Do more knowledgeable parents use the app more?
+\end{enumerate}
+
+We do so by regressing respondents' app usage activity against their characteristics.
+\vspace{1em}
+
+\textbf{Independent variables :}
+\begin{itemize}
+    \item \textbf{Baseline characteristics} - respondents' scores on the construct variables. We only use the construct variables that have sufficiently high internal consistency. We drop the constructs that are highly correlated with other constructs. We find $parent\_knw$ to be correlated with $caregiver\_well\_being$. We drop the construct with lower reliability $caregiver\_well\_being$.
+    \item Demographics variables - parents' age flag (categorical), university flag (binary), gender (categorical), and number of children (numeric)
+    \item Survey response variables - survey duration, start week, country flag
+\end{itemize}
+
+\textbf{Dependent variables :}
+\begin{itemize}
+    \item Home opened - binary variable indicating whether the respondent had a home opened event logged
+    \item Home opens - continuous count variable indicating the respondents' count of total home opens
+\end{itemize}
+
+
+\subsubsection*{Home Opens and User Characteristics}
+For respondents who downloaded the app, we regress their number of home opens against their baseline characteristics, demographic variables, and survey response variables. The $R^{2}$ for this model is 0.065. Note that the country flag is not significant which means that app usage does not differ significantly across the two countries after holding constant user characteristics (Table \ref{tbl:app usage and baseline characteristics - linear reg}).
+\input{app usage/tables/app usage and baseline characteristics - linear reg}
+
+\subsubsection*{Home Opened and User Characteristics}
+For respondents who were treated, i.e., asked to download the Bebbo app, we fit a logistic regression model to whether the respondent had a home opened event logged using the respondents' baseline characteristics, demographic variables, and their survey response variables (Table \ref{tbl:downloads and baseline characteristics - logistic reg}). The goodness of fit measure used is the percentage improvement in deviance over the null deviance (pseudo $R^{2}$). The pseudo $R^{2}$ for this model is 0.03.
+\input{app usage/tables/home opened and baseline characteristics - logistic reg}
+
+
+\printbibliography
+
+\appendix
+
+
+\section{Additional Plots}
+
+\addcontentsline{toc}{subsection}{Pre-Post Plots}
+\subsection*{Pre-Post Plots}
+
+% \begin{figure}
+\includegraphics[width=\textwidth]{plots/pre_post/health_knw.png}
+\includegraphics[width=\textwidth]{plots/pre_post/confidence.png}
+\includegraphics[width=\textwidth]{plots/pre_post/was_breastfed.png}
+\includegraphics[width=\textwidth]{plots/pre_post/practices_agree.png}
+% \label{fig:Pre Post Plots}
+% \end{figure}
+
 
 
 \end{document}

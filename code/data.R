@@ -157,8 +157,6 @@ additional_features <- function(dat) {
             ),
         ) %>%
         add_app_usage_features()
-
-
 }
 
 
@@ -296,3 +294,4 @@ serbia <- serbia %>% filter(!impacted)
 serbia <- serbia %>% relocate(colnames(bulgaria))
 dat <- rbind(serbia, bulgaria)
 pooled <- rbind(serbia_with_impacted, bulgaria_with_impacted)
+pooled_without_impacted <- rbin(serbia, bulgaria)
