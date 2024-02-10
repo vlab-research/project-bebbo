@@ -1,3 +1,4 @@
+library(ggplot2)
 source("code/data.R")
 
 binary_outcomes <- c("health_knw", "was_breastfed", "attitude")
@@ -8,6 +9,8 @@ standard_dev <- function(dat, outcome) {
         m <- mean(dat[[outcome]])
         n <- nrow(dat)
         res <- sqrt((m * (1 - m)) / n)
+        print(n)
+        print(m)
         return(res)
     }
 

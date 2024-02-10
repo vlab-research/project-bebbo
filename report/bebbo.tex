@@ -9,7 +9,7 @@
 \usepackage{lscape}
 \usepackage{csquotes}
 \usepackage{float}
-
+\usepackage{amsmath}
 
 \usepackage{caption}
 \usepackage{subcaption}
@@ -25,11 +25,13 @@
 \title{Bebbo}
 \date{September 2023}
 
+\maketitle
+
 \begin{document}
 
 \tableofcontents
 
-
+\clearpage
 \section{Executive Summary}
 
 To support parents to receive timely and quality guidance even when direct contact with service  providers is not possible and overcome barriers in access to localized digital solutions with verified  content, UNICEF Europe and Central Asia Regional Office (ECARO) developed a mobile parenting app,  Bebbo. The mobile application also supports the most vulnerable parents/caregivers with lower  education level, in terms of the navigation modalities, off-line operability and selection of the core  content. The two main objectives of Bebbo, in line with the UNICEF ECARO Early Childhood  Development Theory of Change, are: (1) Improving availability of information for parents on child  development, and (2) Supporting parents for responsive caregiving and early intervention.  Accordingly, Bebbo app provides users information and interactive tools to help nurture and aid their  child’s health and development. The launch of Bebbo in 11 countries in the ECA region is a direct  response to the identified objective to engage parents and caregivers in nurturing care, positive  parenting, stimulating, and learning.
@@ -54,7 +56,7 @@ We measure effects on eight outcomes across three domains: knowledge, attitudes,
 We do not find evidence that asking this population to use Bebbo has any impact beyond that of asking them to visit a parenting website. Given the study design, the following facts may have contributed to the lack of evidence of impact:
 
 \begin{enumerate}
-\item The population was already very “good” in regards to the outcomes of interest. We measured the improvement of parents over time, under treatment, but many could not improve from their baseline scores, which were perfect. This implies that either (i) the outcome questions were not the right questions or (ii) the problem being solved only exists in a subset of the population and a solution that targets the general population may not be the most efficient.
+\item The population was already very “good” in regards to the outcomes of interest. We measured the improvement of parents over time, under treatment, but many could not improve from their baseline scores, which were perfect. This implies that either (i) the outcome questions were not the right questions or (ii) the problem being solved only exists in a subset of the population and measuring the impact on the population as a whole might be difficult.
 \item Participants improved from the first questionnaire to the second questionnaire, regardless of treatment arm and regardless of compliance. This seems to imply that the very act of asking the questions improves the way that parents answer them. This implies that reminding parents about the questions, via an informational campaign, may be more important than providing resources to find the answers, which they seem to already have.
 \item Very few people complied with treatment and used Bebbo. Of those who were asked to use the app, 28\% used the app, 12\% used the app more than one day, and only 3\% used the app more than three days. Significant pre-exposure to the app in both countries (55\% knew about the app and 23\% reported having used it before) could have led to the low initial compliance. This implies that the app may only be an effective intervention for a small subset of the population who finds it engaging. [ADD SENTENCE ABOUT APP USAGE ANALYSIS].
 \end{enumerate}
@@ -232,20 +234,6 @@ To check for such ``pre-exposure,'' we ask control group users, at the end of th
 
 
 
-\addcontentsline{toc}{subsection}{Pre-Post Descriptives}
-\subsection*{Pre-Post Descriptives}
-
-One of the dangers of a prepost design is that you are priming your respondents with the first survey and that priming may impact how they answer the questions in the post-treatment survey(s) (\cite{Stantcheva2023}).
-
-Given this particular study design, where our control is a ``treatment as usual'' (TAU) that involved sharing a website and we do not have data regarding the takeup, or usage, of the website, it is difficult to isolate a priming effect.
-
-[TODO: Add an analysis of priming impact --> t-test for pre/post in the control group]
-
-Plots of pre-post means are available in
-
-
-\clearpage
-
 \addcontentsline{toc}{subsection}{Power Analysis}
 \subsection*{Power Analysis}
 
@@ -254,7 +242,7 @@ Post-hoc power analysis was performed to see the ability to detect an effect, in
 
 The results show that the study is reasonably powered (75\%) to detect a medium effect size on the 28\% takeup even when controlling for multiple testing (8 outcomes) with a Bonferroni correction. See figure \ref{fig:Power Analysis}.
 
-\clearpage
+
 
 
 % \clearpage
@@ -368,9 +356,18 @@ The results show that the study is reasonably powered (75\%) to detect a medium 
 % \end{figure}
 
 
+\addcontentsline{toc}{subsection}{Attrition}
+\subsection*{Attrition}
 
-% \addcontentsline{toc}{subsection}{Attrition}
-% \subsection*{Attrition}
+[show wave descritpives --> people at each wave.]
+
+[explain why there is such high attrition to the follow up.]
+
+[provide some descriptives on length of time between waves.]
+
+
+
+
 % We define attrition as a respondent present in baseline but
 % not present in endline. Attrition is indicated with a binary flag at the user level. For all respondents, we fit a logistic regression model to whether the respondent attrited using the respondents' baseline characteristics, demographic variables, and a flag for treatment (Table \ref{tbl:attrition and baseline characteristics - logistic reg}).
 
@@ -388,102 +385,125 @@ The results show that the study is reasonably powered (75\%) to detect a medium 
 
 \section{Results}
 
-We run the following regression model to measure the intent-to-treat effect (ITT) of assignment to the treatment arm on the outcome construct ($c$) of interest for individual $i$:
+We run the following regression model to measure the intent-to-treat effect (ITT) of assignment to the treatment arm:
+$$
+y_{i} - y^{b}_i = \gamma_1 + \beta T_{i} + \gamma_2X_{i} + \epsilon_i
+$$
 
-$$
-y_{i} = \alpha + \beta T_{i} + \gamma_1X_{i} + \gamma_2Z_i + \epsilon
-$$
+Where $y_i$ represents the outcome of interest for individual $i$ measured after treatment, $T_i$ represents the random treatment assignment, $X_i$ a set of control variables and $y^b_i$ represents the outcome of interest measured before treatment. The parameter of interest will be the treatment effect, $\beta$.
 
 Note that due to the relatively large number of sepearate outcomes (8), we adjust p-values of the treatment variable to control the false discovery rate (FDR), using Benjamini-Hochberg, reported as the ``Adjusted Treatment p-value.''
 
-% Tables with results are separated by the domain of the construct. ``Serbia'' contains only data from Serbia, which does not include any impacted users. Impacted users involve users for whom the control group was accidentally exposed to questions related to Bebbo usage in the endline survey. This would potentially impact their answers in the follow up if they then downloaded and used Bebbo.
+Of interest in this analysis is also the treatment effect on the treated (ToT), which can be estimated using an instrumental variable model given the monotonicity assumption of treatment (\cite{Imbens2015}), which assumes that people are not less likely to download and use the Bebbo app in the treatment group. To estimate our instrumental variable model, we use 2-stage least squares:
+\begin{align*}
+y_{i} - y^{b}_i &= \gamma_1 + \beta \hat{z}_{i} + \gamma_2X_{i} + \epsilon_i \\
+z_{i} &= \gamma_3 + \gamma_4 T_{i} + \gamma_5X_{i} + \delta_i
+\end{align*}
 
-% Plot below shows coefficients with 90\% confidence intervals adjusted via a Bonferroni correction to correct for 8 simultaneous outcome measurement.
+Where $z_i$ is a binary indicator of takeup based on the recorded app-usage data and $\hat{z_i}$ the predicted takeup based on the first stage regression. Once again, parameter of interest is $\beta$. It's worth noting that, given that we cannot say we measured any impact (results are not significant from zero) in the ITT model, the exact values of the ToT model are of less interest and the associated tables can be found in the appendix.
 
-% \includegraphics[width=\textwidth]{plots/adjusted_coefficient_plot.png}
+We also run the regression for two separate time periods: endline and follow-up. However, due to large attrition in the follow-up survey and the low long-term app takeup, we are underpowered in our analysis. The results of the follow up regressions can also be found in the appendix.
 
-% \input{regressions/Serbia: OLS - Endline - Knowledge and Awareness.tex}
-% \input{regressions/Serbia: OLS - Endline - Confidence and Attitudes.tex}
-% \input{regressions/Serbia: OLS - Endline - Practices.tex}
+One of the dangers of a prepost design is that you are priming your respondents with the first survey and that priming may impact how they answer the questions in the post-treatment survey(s) (\cite{Stantcheva2023}). Given this particular study design, where our control is a ``treatment as usual'' (TAU) that involved sharing a website and we do not have data regarding the takeup, or usage, of the website, it is difficult to isolate a priming effect.
 
-% \input{regressions/Serbia: 2SLS - Endline - Knowledge and Awareness.tex}
-% \input{regressions/Serbia: 2SLS - Endline - Confidence and Attitudes.tex}
-% \input{regressions/Serbia: 2SLS - Endline - Practices.tex}
+We will also plot raw charts showing mean scores at baseline and endline for three groups for each variable: control, treatment with takeup (those who we know downloaded and used the app), treatment without takeup (those for whom we have no data showing they downloaded or used the app). These plots can provide suggestive evidence of priming effects by showing the shift in mean between baseline and endline across all three groups.
+
+\addcontentsline{toc}{subsection}{Knowledge and Awareness}
+\subsection*{Knowledge and Awareness}
+
+Regression analysis of these outcome constructs show no significant result of treatment:
 
 \input{regressions/Pooled: OLS - Endline - Knowledge and Awareness.tex}
+
+These two constructs, Vaccine Knowledge and Child Development Knowledge, both suffered from ceiling effects in the baseline survey (72\% and 73\% respectively). On top of those ceiling effets, they both potentially suffered from priming effects, as evidenced by the consistent improvement in the endline survey for all groups.
+
+Note that there is some suggestive evidence that those with less vaccine knowledge were more likely to download the app, indicating that takeup might be biased towards those who need it the most. That might be driving the small and statistically insignificant positive measured impact on Vaccine Knowledge in the regression. Unfortunately, the study was not designed for subgroup analysis on a small group such as the 28\% who failed the vaccine knowledge question at baseline.
+\begin{figure}[H]
+  \centering
+\includegraphics[width=\textwidth]{plots/pre_post/Vaccine Knowledge.png}
+\end{figure}
+
+
+\addcontentsline{toc}{subsection}{Confidence and Attitudes}
+\subsection*{Confidence and Attitudes}
+
+Attitude Towards Physical punishment is a single question which asks if the parent believes the child needs to be physically punished. While there might seem to be some suggestive evidence from the coefficients of the regression model, the raw data shows that the positive coefficient is indicative of the fact that the control group got worse over time! They were more supportive of phyisical punishment in the endline survey. While there might be a story to that, it could also be the exact kind of statistical anomoly that multiple testing correction is designed to help us avoid when checking so many outcomes.
+
+Parenting Confidence shows no significant impact in the regression analysis. The raw data shows suggestive evidence that those with lower confidence might be more likely to take up the treatment. The lack of a positive coefficient in the regression, however, might indicate that those in the control group were equally likely to take up either the control website or seek out information on their own in order to improve by endline.
+
 \input{regressions/Pooled: OLS - Endline - Confidence and Attitudes.tex}
+\begin{figure}[H]
+  \centering
+\includegraphics[width=\textwidth]{plots/pre_post/Parenting Confidence.png}
+\end{figure}
+
+
+\addcontentsline{toc}{subsection}{Practices}
+\subsection*{Practices}
+
+These four constructs all relate to practices and behaviors of the parent. No significant effect was found for any of the behaviors and there is not much suggestive evidence of selective takeup either.
+
 \input{regressions/Pooled: OLS - Endline - Practices.tex}
 
-\input{regressions/Pooled: 2SLS - Endline - Knowledge and Awareness.tex}
-\input{regressions/Pooled: 2SLS - Endline - Confidence and Attitudes.tex}
-\input{regressions/Pooled: 2SLS - Endline - Practices.tex}
+\begin{figure}[H]
+  \centering
+\includegraphics[width=0.9\textwidth]{plots/pre_post/Breastfed.png}
+\includegraphics[width=0.9\textwidth]{plots/pre_post/Positive Practices.png}
 
-% \input{regressions/Bulgaria: OLS - Endline - Knowledge and Awareness.tex}
-% \input{regressions/Bulgaria: OLS - Endline - Confidence and Attitudes.tex}
-% \input{regressions/Bulgaria: OLS - Endline - Practices.tex}
+\end{figure}
 
-% \input{regressions/Bulgaria: 2SLS - Endline - Knowledge and Awareness.tex}
-% \input{regressions/Bulgaria: 2SLS - Endline - Confidence and Attitudes.tex}
-% \input{regressions/Bulgaria: 2SLS - Endline - Practices.tex}
+\addcontentsline{toc}{subsection}{Policy Implications of the Results}
+\subsection*{Policy Implications of the Results}
 
+We do not find any significant effect of the use of Bebbo on any of the outcome constructs of interest.
 
-% \input{regressions/Serbia: OLS - Follow Up - Knowledge and Awareness.tex}
-% \input{regressions/Serbia: OLS - Follow Up - Confidence and Attitudes.tex}
-% \input{regressions/Serbia: OLS - Follow Up - Practices.tex}
-
-% \input{regressions/Serbia: 2SLS - Follow Up - Knowledge and Awareness.tex}
-% \input{regressions/Serbia: 2SLS - Follow Up - Confidence and Attitudes.tex}
-% \input{regressions/Serbia: 2SLS - Follow Up - Practices.tex}
-
-\input{regressions/Pooled for Follow Up: OLS - Follow Up - Knowledge and Awareness.tex}
-\input{regressions/Pooled for Follow Up: OLS - Follow Up - Confidence and Attitudes.tex}
-\input{regressions/Pooled for Follow Up: OLS - Follow Up - Practices.tex}
-
-\input{regressions/Pooled for Follow Up: 2SLS - Follow Up - Knowledge and Awareness.tex}
-\input{regressions/Pooled for Follow Up: 2SLS - Follow Up - Confidence and Attitudes.tex}
-\input{regressions/Pooled for Follow Up: 2SLS - Follow Up - Practices.tex}
-
-% \input{regressions/Bulgaria: OLS - Follow Up - Knowledge and Awareness.tex}
-% \input{regressions/Bulgaria: OLS - Follow Up - Confidence and Attitudes.tex}
-% \input{regressions/Bulgaria: OLS - Follow Up - Practices.tex}
-
-% \input{regressions/Bulgaria: 2SLS - Follow Up - Knowledge and Awareness.tex}
-% \input{regressions/Bulgaria: 2SLS - Follow Up - Confidence and Attitudes.tex}
-% \input{regressions/Bulgaria: 2SLS - Follow Up - Practices.tex}
-
-
-\section{User Characteristics Correlated with App Usage}
-
-In this analysis, we attempt to answer the questions -
+Three reasons, shown in the descriptive data as well as the raw pre-post data might explain why that is the case:
 \begin{enumerate}
-    \item Who are the respondents who used the app?
-    \item Do more knowledgeable parents use the app more?
+\item The presence of ceiling effects, where much of the population scored high in the baseline and could not improve in the endline.
+\item Priming effects led to participants improving from the first questionnaire to the second questionnaire, regardless of treatment arm and regardless of compliance.
+\item Low app usage. While takeup defined as ``had at least one learning event'' was 28\%, which would be enough to measure impacts, it's reasonable to believe that in order to have an impact on these outcomes, especially behaviors and attitudes, participants would need to use the app continuously. Especially if we consider the advantage of an app over a static website or informational fly, the advantage comes through continued usage (it is available on your home screen, can send you push notifications, etc.). Given that only 3\% used the app more than three days, we would not expect to see much of an impact of this app on the population.
 \end{enumerate}
 
-We do so by regressing respondents' app usage activity against their characteristics.
-\vspace{1em}
+Ceiling effects might be a failure in the creation of the survey instrument. They could also be an example in the bias of the sample population (they are all better-than-average caregivers). But there could be a policy implication as well: it could indicate that most caregivers are quite good already at these outcomes, which is important to consider in the means of addressing the problem. In particular: it could indicate the importance of learning about and focusing effort on subgroups that are worse off. Towards that end, we will perform an analysis to determine the characteristics of the ``worse'' caregivers.
 
-\textbf{Independent variables :}
-\begin{itemize}
-    \item \textbf{Baseline characteristics} - respondents' scores on the construct variables. We only use the construct variables that have sufficiently high internal consistency. We drop the constructs that are highly correlated with other constructs. We find $parent\_knw$ to be correlated with $caregiver\_well\_being$. We drop the construct with lower reliability $caregiver\_well\_being$.
-    \item Demographics variables - parents' age flag (categorical), university flag (binary), gender (categorical), and number of children (numeric)
-    \item Survey response variables - survey duration, start week, country flag
-\end{itemize}
+Priming effects are a result of the study design, however, they indicate potential policy implications as well. In particular: if asking people questions (``Do you know which vaccine your child needs to take next'') has such a powerful effect on their knowledge, awareness campaigns might be enough to drive results on these outcomes. Knowledge about vaccines and knowledge about child development both seem like good candidates for such an intervention, given this study.
 
-\textbf{Dependent variables :}
-\begin{itemize}
-    \item Home opened - binary variable indicating whether the respondent had a home opened event logged
-    \item Home opens - continuous count variable indicating the respondents' count of total home opens
-\end{itemize}
+Finally, low app usage implies that either (i) any app must go through extensive testing and improvement before it will be expected to make an impact measurable on a population level or (ii) apps might not be the most effective method of engaging parents. Like any intervention: the implementation matters and each app can be very different. One app failing to engage does not mean that all apps will fail to engage, however, it does leave the possibility open.
 
 
-\subsubsection*{Home Opens and User Characteristics}
-For respondents who downloaded the app, we regress their number of home opens against their baseline characteristics, demographic variables, and survey response variables. The $R^{2}$ for this model is 0.065. Note that the country flag is not significant which means that app usage does not differ significantly across the two countries after holding constant user characteristics (Table \ref{tbl:app usage and baseline characteristics - linear reg}).
-\input{app usage/tables/app usage and baseline characteristics - linear reg}
 
-\subsubsection*{Home Opened and User Characteristics}
-For respondents who were treated, i.e., asked to download the Bebbo app, we fit a logistic regression model to whether the respondent had a home opened event logged using the respondents' baseline characteristics, demographic variables, and their survey response variables (Table \ref{tbl:downloads and baseline characteristics - logistic reg}). The goodness of fit measure used is the percentage improvement in deviance over the null deviance (pseudo $R^{2}$). The pseudo $R^{2}$ for this model is 0.03.
-\input{app usage/tables/home opened and baseline characteristics - logistic reg}
+% \section{User Characteristics Correlated with App Usage}
+
+% In this analysis, we attempt to answer the questions -
+% \begin{enumerate}
+%     \item Who are the respondents who used the app?
+%     \item Do more knowledgeable parents use the app more?
+% \end{enumerate}
+
+% We do so by regressing respondents' app usage activity against their characteristics.
+% \vspace{1em}
+
+% \textbf{Independent variables :}
+% \begin{itemize}
+%     \item \textbf{Baseline characteristics} - respondents' scores on the construct variables. We only use the construct variables that have sufficiently high internal consistency. We drop the constructs that are highly correlated with other constructs. We find $parent\_knw$ to be correlated with $caregiver\_well\_being$. We drop the construct with lower reliability $caregiver\_well\_being$.
+%     \item Demographics variables - parents' age flag (categorical), university flag (binary), gender (categorical), and number of children (numeric)
+%     \item Survey response variables - survey duration, start week, country flag
+% \end{itemize}
+
+% \textbf{Dependent variables :}
+% \begin{itemize}
+%     \item Home opened - binary variable indicating whether the respondent had a home opened event logged
+%     \item Home opens - continuous count variable indicating the respondents' count of total home opens
+% \end{itemize}
+
+
+% \subsubsection*{Home Opens and User Characteristics}
+% For respondents who downloaded the app, we regress their number of home opens against their baseline characteristics, demographic variables, and survey response variables. The $R^{2}$ for this model is 0.065. Note that the country flag is not significant which means that app usage does not differ significantly across the two countries after holding constant user characteristics (Table \ref{tbl:app usage and baseline characteristics - linear reg}).
+% \input{app usage/tables/app usage and baseline characteristics - linear reg}
+
+% \subsubsection*{Home Opened and User Characteristics}
+% For respondents who were treated, i.e., asked to download the Bebbo app, we fit a logistic regression model to whether the respondent had a home opened event logged using the respondents' baseline characteristics, demographic variables, and their survey response variables (Table \ref{tbl:downloads and baseline characteristics - logistic reg}). The goodness of fit measure used is the percentage improvement in deviance over the null deviance (pseudo $R^{2}$). The pseudo $R^{2}$ for this model is 0.03.
+% \input{app usage/tables/home opened and baseline characteristics - logistic reg}
 
 
 \printbibliography
@@ -529,7 +549,7 @@ The most notable variable is the practices\_24 and was\_breastfed, which differ 
 \subsection*{Pre-Post Plots}
 
 \begin{figure}
-\includegraphics[width=\textwidth]{plots/pre_post/health_knw.png}
+
 \includegraphics[width=\textwidth]{plots/pre_post/confidence.png}
 \includegraphics[width=\textwidth]{plots/pre_post/was_breastfed.png}
 \includegraphics[width=\textwidth]{plots/pre_post/practices_agree.png}
@@ -543,11 +563,63 @@ The most notable variable is the practices\_24 and was\_breastfed, which differ 
 \end{figure}
 
 
+% Plot below shows coefficients with 90\% confidence intervals adjusted via a Bonferroni correction to correct for 8 simultaneous outcome measurement.
+
+% \includegraphics[width=\textwidth]{plots/adjusted_coefficient_plot.png}
 
 \section{Additional Tables}
 
 \input{descriptives/tables/Outcome Construct Descriptives Serbia Baseline}
 \input{descriptives/tables/Outcome Construct Descriptives Bulgaria Baseline}
+
+\input{regressions/Pooled for Follow Up: OLS - Follow Up - Knowledge and Awareness.tex}
+\input{regressions/Pooled for Follow Up: OLS - Follow Up - Confidence and Attitudes.tex}
+\input{regressions/Pooled for Follow Up: OLS - Follow Up - Practices.tex}
+
+\input{regressions/Pooled: 2SLS - Endline - Knowledge and Awareness.tex}
+\input{regressions/Pooled: 2SLS - Endline - Confidence and Attitudes.tex}
+\input{regressions/Pooled: 2SLS - Endline - Practices.tex}
+
+
+
+\input{regressions/Pooled for Follow Up: 2SLS - Follow Up - Knowledge and Awareness.tex}
+\input{regressions/Pooled for Follow Up: 2SLS - Follow Up - Confidence and Attitudes.tex}
+\input{regressions/Pooled for Follow Up: 2SLS - Follow Up - Practices.tex}
+
+
+% \input{regressions/Serbia: OLS - Endline - Knowledge and Awareness.tex}
+% \input{regressions/Serbia: OLS - Endline - Confidence and Attitudes.tex}
+% \input{regressions/Serbia: OLS - Endline - Practices.tex}
+
+% \input{regressions/Serbia: 2SLS - Endline - Knowledge and Awareness.tex}
+% \input{regressions/Serbia: 2SLS - Endline - Confidence and Attitudes.tex}
+% \input{regressions/Serbia: 2SLS - Endline - Practices.tex}
+
+% \input{regressions/Bulgaria: OLS - Endline - Knowledge and Awareness.tex}
+% \input{regressions/Bulgaria: OLS - Endline - Confidence and Attitudes.tex}
+% \input{regressions/Bulgaria: OLS - Endline - Practices.tex}
+
+% \input{regressions/Bulgaria: 2SLS - Endline - Knowledge and Awareness.tex}
+% \input{regressions/Bulgaria: 2SLS - Endline - Confidence and Attitudes.tex}
+% \input{regressions/Bulgaria: 2SLS - Endline - Practices.tex}
+
+
+% \input{regressions/Serbia: OLS - Follow Up - Knowledge and Awareness.tex}
+% \input{regressions/Serbia: OLS - Follow Up - Confidence and Attitudes.tex}
+% \input{regressions/Serbia: OLS - Follow Up - Practices.tex}
+
+% \input{regressions/Serbia: 2SLS - Follow Up - Knowledge and Awareness.tex}
+% \input{regressions/Serbia: 2SLS - Follow Up - Confidence and Attitudes.tex}
+% \input{regressions/Serbia: 2SLS - Follow Up - Practices.tex}
+
+% \input{regressions/Bulgaria: OLS - Follow Up - Knowledge and Awareness.tex}
+% \input{regressions/Bulgaria: OLS - Follow Up - Confidence and Attitudes.tex}
+% \input{regressions/Bulgaria: OLS - Follow Up - Practices.tex}
+
+% \input{regressions/Bulgaria: 2SLS - Follow Up - Knowledge and Awareness.tex}
+% \input{regressions/Bulgaria: 2SLS - Follow Up - Confidence and Attitudes.tex}
+% \input{regressions/Bulgaria: 2SLS - Follow Up - Practices.tex}
+
 
 \section{Survey Instrument}
 
