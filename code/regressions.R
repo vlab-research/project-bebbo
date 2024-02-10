@@ -112,19 +112,6 @@ bf_adjusted_ci <- function(model, var, alpha, total_measures) {
     list(variable = variable, mean = mean, lower = mean - ci, upper = mean + ci)
 }
 
-pretty_vars <- list(
-    treatmenttreated = "Treatment",
-    has_learning_eventTRUE = "Used App",
-    health_knw = "Vaccine Knowledge",
-    dev_knw_recog = "Child Dev. Knowledge",
-    confidence = "Parenting Confidence",
-    attitude = "Attitude to Phys. Punishment",
-    was_breastfed = "Breastfed",
-    practices_24 = "Activities Past 24h",
-    practices_agree = "Positive Practices",
-    practices_hostility = "Hostile Practices"
-)
-
 datasets <- list(
     `Serbia` = serbia,
     `Bulgaria` = bulgaria_with_impacted,

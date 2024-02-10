@@ -1,4 +1,4 @@
-\documentclass{article}
+\message{ !name(bebbo.tex)}\documentclass{article}
 \usepackage[backend=biber, citestyle=authoryear, bibencoding=utf8]{biblatex}
 \addbibresource{./bibs/vlab-report.bib}
 \addbibresource{./bibs/unicef-ie.bib}
@@ -8,7 +8,6 @@
 \usepackage{geometry}
 \usepackage{lscape}
 \usepackage{csquotes}
-\usepackage{float}
 
 
 \usepackage{caption}
@@ -26,6 +25,9 @@
 \date{September 2023}
 
 \begin{document}
+
+\message{ !name(bebbo.tex) !offset(-3) }
+
 
 \tableofcontents
 
@@ -54,9 +56,9 @@ We measure effects on eight outcomes across three domains: knowledge, attitudes,
 We do not find evidence that asking this population to use Bebbo has any impact beyond that of asking them to visit a parenting website. Given the study design, the following facts may have contributed to the lack of evidence of impact:
 
 \begin{enumerate}
-\item The population was already very “good” in regards to the outcomes of interest. We measured the improvement of parents over time, under treatment, but many could not improve from their baseline scores, which were perfect. This implies that either (i) the outcome questions were not the right questions or (ii) the problem being solved only exists in a subset of the population and a solution that targets the general population may not be the most efficient.
-\item Participants improved from the first questionnaire to the second questionnaire, regardless of treatment arm and regardless of compliance. This seems to imply that the very act of asking the questions improves the way that parents answer them. This implies that reminding parents about the questions, via an informational campaign, may be more important than providing resources to find the answers, which they seem to already have.
-\item Very few people complied with treatment and used Bebbo. Of those who were asked to use the app, 28\% used the app, 12\% used the app more than one day, and only 3\% used the app more than three days. Significant pre-exposure to the app in both countries (55\% knew about the app and 23\% reported having used it before) could have led to the low initial compliance. This implies that the app may only be an effective intervention for a small subset of the population who finds it engaging. [ADD SENTENCE ABOUT APP USAGE ANALYSIS].
+\item The population was already very “good” in regards to the outcomes of interest. We measured the improvement of parents over time, under treatment, but many could not improve from their baseline scores, which were perfect.
+\item Participants improved from the first questionnaire to the second questionnaire, regardless of treatment arm and regardless of compliance. This seems to imply that the very act of asking the questions improves the way that parents answer them.
+\item Very few people complied with treatment and used Bebbo. Of those who were asked to use the app, 28\% used the app, 12\% used the app more than one day, and only 3\% used the app more than three days. Significant pre-exposure to the app in both countries (55\% knew about the app and 23\% reported having used it before) could have led to the low initial compliance.
 \end{enumerate}
 
 We were reasonably powered (75\%) to find a small effect size on the population or a medium effect size on the treated with a 28\% takeup and no effect on those who don't take up the treatment. Note, this implies that we were not able to detect a smaller effect size or a medium effect size on a smaller takeup group (i.e. the small group of treated users who used the app for multiple days).
@@ -68,12 +70,22 @@ We were reasonably powered (75\%) to find a small effect size on the population 
 The design of the study is set up to answer the following question in the positive:
 
 \begin{displayquote}
-Is asking parents to use Bebbo an effective policy to improve the parenting knowledge, attitudes, and practices of the general population of caregivers of young children in Bulgaria and Serbia?
+Is asking parents to use Bebbo an effective policy to improve the parenting knowledge, attitudes, and practices of the general population in Bulgaria and Serbia?
 \end{displayquote}
 
 \noindent Note that the study cannot fully answer the question in the negative, it cannot prove that this intervention is ineffective, it can only fail to measure its effectiveness.
 
-We are only testing the effectivess of ``asking'' or ``inviting'' parents to use the app. Alternatively, one might be interested in testing the effectiveness ``incentivizing'' or ``forcing'' parents to use the app, but we are not doing that in this evaluation. We consider ``an effective policy'' one which performs better than the ``treatment as usual'' case, which we will consider to be an existing, static website. Finally, we are studying the general population of caregivers of young children. No particular care was given to single out any particular subset of the population that might benefit the most (or the least) from Bebbo, nor those who would be most likely to use Bebbo.
+We are only testing the effectivess of ``asking'' or ``inviting'' parents to use the app. Alternatively, one might be interested in testing the effectiveness ``incentivizing'' or ``forcing'' parents to use the app, but we are not doing that in this evaluation. We consider ``an effective policy'' one which performs better than the ``treatment as usual'' case, which we will consider to be an existing, static website. An effective policy, in this study design, is one that can be measured to:
+
+
+Improve the way in which a treated individual responds to a set of survey questions, the second time they are asked, compared to the first time they were asked, and then compared to the treatment as usual.
+
+Does so when the treatment is applied to the individual after being asked the survey questions the first time and 4-6 weeks before answering the survey questions the second time.
+
+\paragraph*{General Population}
+The general population in these countries had significant pre-exposure to Bebbo before the beginning of the study. This population is different from a population that has no exposure to Bebbo. One would expect that asking people to download and use Bebbo would have a bigger impact on a population that has no exposure to Bebbo.
+
+Additionally, no care was given to single out any particular subset of the population that might benefit the most (or the least) from Bebbo, nor those who would be most likely to use Bebbo.
 
 
 \section{Study Design}
@@ -84,12 +96,14 @@ We are only testing the effectivess of ``asking'' or ``inviting'' parents to use
 This study follows a prepost design (\cite{Clifford2021}) in which we measure the outcomes of interest before treatment (in a baseline survey) and after treatment (in an endline survey). We add an additional survey after the endline, referred to as a follow up, to look for longer-term impacts and test the impact of continued app usage.
 
 
-% \vspace{1cm}
-\begin{figure}[H]
+\vspace{1cm}
+
+\begin{figure}[h]
 \includegraphics[width=\textwidth]{images/design-timeline.png}
 \caption{Study Design}
 \label{fig:Study Design}
 \end{figure}
+
 
 \noindent Study participants are randomized, from the beginning, to one of two conditions:
 
@@ -98,7 +112,7 @@ This study follows a prepost design (\cite{Clifford2021}) in which we measure th
 \item \textbf{Control.} Participants in the control condition were told that there was one more step to qualify for the study and were then asked to visit a parenting website and use it regularly, being encouraged that doing so will help them with their parenting.
 \end{enumerate}
 
-\noindent This follows a randomized encouragement design (\cite{Moayyedi2014}), as participants were asked to participate in the treatment, but it was not forced, thus leading to takeup that is less than 100\%. A randomized encouragement design is used here because:
+\noindent App usage in the treatment group was tracked, however website visits in the control group were not tracked. This follows a randomized encouragement design (\cite{Moayyedi2014}), as participants were asked to participate in the treatment, but it was not forced, thus leading to takeup that is less than 100\%. A randomized encouragement design is used here because:
 
 \begin{enumerate}
 \item We are interested in the impact of a treatment on a population where individuals can choose whether or not to take the treatment (the “compliers”).
@@ -108,50 +122,22 @@ This study follows a prepost design (\cite{Clifford2021}) in which we measure th
 
 
 
-\addcontentsline{toc}{subsection}{Treatment Condition}
-\subsection*{Treatment Condition}
 
-Participants were sent the following message at the end of the baseline survey:
-
-\begin{quote}
-There is just one more step to qualify for the Visa gift card of X. Please download Bebbo, the free parenting app, and discover how it can help you. Using Bebbo regularly can improve your interactions with your children and help you support their development better! You can do so by clicking the link below:
-\end{quote}
-
-Clicking on the link led them to the Bebbo app page where they were invited to download the app via the app stores (Google or Apple). App usage in the treatment group was tracked via tracking ids sent with the link to the app download page, allowing us to follow the app usage of each individual treatment participant and measure takeup. If someone decided to ignore the page, and instead went on their own to search for and download Bebbo, we would not have data on their usage. Thus, usage data and takeup should be considered a lower bound.
-
-[UNICEF TO ADD MORE INFORMATION ABOUT THE APP AND HOW IT WORKS]
-
-We collected all app usage events. For the sake of our study, we were interested in a subset of events that represented the accessing of content or features that contained information or might impact their behavior.
-
-
-\addcontentsline{toc}{subsection}{Control Condition}
-\subsection*{Control Condition}
-
-Participants were sent the following message at the end of the baseline survey:
-
-\begin{quote}
-
-There is just one more step to qualify for the Visa gift card of X. Please visit the following free parenting website and discover how it can help you. Using this website regularly  your interactions with your children and help you support their development better! You can do so by clicking the link below:
-\end{quote}
-
-The choice to use a website as a treatment-as-usual (TAU) condition was decided by the evaluation and program team because it represented an alternative (and traditional/existing) way to solve the problem that the Bebbo app was trying to solve. Another option that was considered was to use an alternate parenting app, but the team believed that using a website gave the best chance to detect a difference in the use of an app, rather than the specific implementation of the Bebbo app. Similarly, several websites were considered, and the most basic website was chosen so as to be ``static'' - without interactive features - so that it acted as an informational resource rather than a web app or platform which would similarly overlap with the concepts behind the Bebbo app.
-
-The website chosen or Bulgaria was 9meseca.bg. Due to a mistake in the implementation, no website was chosen for Serbia and the Bulgarian website was sent to participants in both countries. This implies that for Bulgaria, participants were provided a reasonable alternative to the app. However, in Serbia, they were sent a Bulgarian website, which would be expected to be suboptimal for the particpants. Similarity of results across countries shows that the choice of the treatment-as-usual website did not materially affect results, as discussed in the sections on results.
 
 
 \addcontentsline{toc}{subsection}{Recruitment}
 \subsection*{Recruitment}
 
-Participants were recruited to the study with social media ads on the Meta platform (Facebook and Instagram) using the Virtual Lab platform to create and run the recruitment ads. The Virtual Lab platform is used to track and measure the price-per-respondent across multiple strata, solving the core problem of monitoring, computing expectations, and adjusting budget when recruiting via social media platforms. In this study, recruitment was not stratified, due to initial budget pressures when stratifying in the initial pilot.
+Participants were recruited to the study with social media ads on the Meta platform (Facebook and Instagram) using the Virtual Lab platform to create and run the recruitment ads. In exchange for participating in the study, they were told they could receive gift cards worth up to 12 USD (in their local currency). See figure \ref{fig:Recruitment Ads} for examples of the ad material used for recruiting.
 
-In exchange for participating in the study, participants were told they could receive gift cards worth up to 12 USD (in their local currency). See figure \ref{fig:Recruitment Ads} for examples of the ad material used for recruiting. Recruitment and survey administration was performed on a rolling basis between March and October, 2023. Each individual participant was treated at the end of the baseline survey and sent the endline survey 4 weeks after completing the baseline survey.
+Recruitment and survey administration was performed on a rolling basis between March and October, 2023. Each individual participant was treated at the end of the baseline survey and sent the endline survey 4 weeks after completing the baseline survey.
 
-The survey was administered via a chatbot in Facebook Messenger, using the Virtual Lab platform. Respondents who clicked on the advertisements were directed to a Messenger chat with the Virtual Lab Facebook page, which did not contain any content or information related to this study. Consent was provided via chat, as well as all answers to the survey questions and the treatment condition. Gift cards were also provided via chat, using the Tremendous gift card platform to provide Visa international prepaid cards. The Virtual Lab chatbot allowed the researchers to create multi-wave surveys, with independent timing. It additionally allowed the easy provision of gift cards at the end of each wave, which is integrated into the survey directly via the platform.
+The survey was administered via a chatbot in Facebook Messenger, using the Virtual Lab platform. Respondents who clicked on the advertisements were directed to a Messenger chat with the Virtual Lab Facebook page, which did not contain any content or information related to this study. Consent was provided via chat, as well as all answers to the survey questions and the treatment condition. Gift cards were also provided via chat, using the Tremendous gift card platform to provide Visa international prepaid cards.
 
 [TODO: add recruitment stats]
 
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
 \begin{subfigure}{0.3\textwidth}
 \centering
@@ -170,34 +156,77 @@ The survey was administered via a chatbot in Facebook Messenger, using the Virtu
 \end{figure}
 
 
-\section{Descriptives}
+% \section{Descriptives}
 
 
-\addcontentsline{toc}{subsection}{Respondent Characteristics by Country}
-\subsection*{Respondent Characteristics by Country}
+% \addcontentsline{toc}{subsection}{Respondent Characteristics by Country}
+% \subsection*{Respondent Characteristics by Country}
 
-Table \ref{tbl:Baseline Respondent Characteristics} provides the baseline characteristics of the respondent population, separated by country.
+% Table \ref{tbl:Baseline Respondent Characteristics} provides the baseline characteristics of the respondent population, separated by country.
 
-Generally speaking, most respondents were themselves parents (not grandparents or other caregives), women, under 35 years of age, and spoke the dominant language of the country at home. A little over half had children 0-2, compared to 2-6 years of age. Respondents in Bulgaria were more likely to have a university education (42\%) compared to those in Serbia (29\%).
+% Generally speaking, most respondents were themselves parents (not grandparents or other caregives), women, under 35 years of age, and spoke the dominant language of the country at home. A little over half had children 0-2, compared to 2-6 years of age.
 
-\input{descriptives/tables/Baseline Respondent Characteristics}
+% Respondents in Bulgaria were more likely to have a university education (42\%) compared to those in Serbia (29\%).
 
-\addcontentsline{toc}{subsection}{Construct Variables}
-\subsection*{Construct Variables}
+% \input{descriptives/tables/Baseline Respondent Characteristics}
 
-The outcomes of interest consist of eight constructs divided into three domains: knowledge and awareness, confidence and attitudes, and practices. The mapping between the constructs, domains, and questions that make up the constructs are laid out in table \ref{tbl:Construct Variable Mapping}.
+% \addcontentsline{toc}{subsection}{Construct Variables}
+% \subsection*{Construct Variables}
 
-The constructs ``Vaccine Knowledge'', ``Parenting Confidence'', and ``Breastfed'' are made up of only one question. The construct ``Activities Past 24h'' consists of a count of the number of activities, within the previous 24 hours, that the respondent has done. The construct ``Child Dev. Knowledge'' consists of a series of true/false questions, which are averaged based on whether or not the respondent answered correctly. The rest of the constructs are created by averaging of a set of likert variables.
+% The outcomes of interest consist of eight constructs divided into three domains: knowledge and awareness, confidence and attitudes, and practices. The mapping between the constructs, domains, and questions that make up the constructs are laid out in table \ref{tbl:Construct Variable Mapping}.
 
-Descriptive statistics regarding the baseline responses for the outcomes are shown in table \ref{tbl:Outcome Construct Descriptives Pooled Baseline}. Note that many of the constructs have quite high means and medians and some have a high proportion of respondents with the max score. In particular, 73\% and 72\% of respondents scored perfectly on the knowledge questions. This is problematic, as knowledge is often considered the easiest to change quickly and was a core outcome of interest for the team. Additionally, knowledge questions seem to be heavily impacted by the repeated survey effect, as discussed further down.
+% The constructs ``health knowledge'', ``caregiver wellbeing'', and ``was breastfed'' are made up of only one question. The construct ``practices 24'' consists of a count of the number of activities, within the previous 24 hours, that the respondent has done. The rest of the constructs are created by averaging of a set of likert variables.
 
-% Respondents skewed more towards desired responses since we observe large proportions of respondents with desired responses (coded 3 and 4) and very few with "incorrect" responses (coded 1). This pattern is stronger for some variables than others. Variables measuring Responsive Parenting PA have lesser consensus than those measuring Caregiver well-being or Parenting Knowledge. Variables $make\_fun\_of$ and $smile\_around\_child$ each have more than $60\%$ of respondents responding positively.
+% Descriptive statistics regarding the baseline responses for the outcomes are shown in table \ref{tbl:Outcome Construct Descriptives Pooled Baseline}. Note that many of the constructs have quite high means and medians [TODO: add percent right-truncated to the table].
 
-% We observe ceiling effect for knowledge variables $past\_24h\_play$, $name\_colors$, $know\_name\_age$, $knows\_phys\_dev$ where over 90\% of respondents have marked the correct response. We observe NAs for variables that only some respondents view based on whether the question is applicable to them. Since 28 out of 33 variable have a mean of over 0.5, the responses skew towards being correct/desired response. The Child Development Knowledge variables with more uncertainty are $alphabet$, $say\_name\_age$ and $scribble$. Variables $breastfed$ and $decrease\_stress$ measuring whether the baby was breastfed within the last 24 hours and whether the parent has techniques to decrease stress levels, also have lower means.
+% We now summarize the constructs measured by the variables. The constructs are calculated as the mean of the variables under them.
+% Table \ref{tbl:construct variable mapping} contains a mapping of variables to constructs.
+% \input{descriptives/tables/Construct Variable Mapping}
 
-\input{descriptives/tables/Outcome Construct Descriptives Pooled Baseline}
+% % We do not observe any ceiling/floor effects at the construct level.
+% % Respondents skewed more towards desired responses since we observe large proportions of respondents with desired responses (coded 3 and 4) and very few with "incorrect" responses (coded 1). This pattern is stronger for some variables than others. Variables measuring Responsive Parenting PA have lesser consensus than those measuring Caregiver well-being or Parenting Knowledge. Variables $make\_fun\_of$ and $smile\_around\_child$ each have more than $60\%$ of respondents responding positively.
+
+% % We observe ceiling effect for knowledge variables $past\_24h\_play$, $name\_colors$, $know\_name\_age$, $knows\_phys\_dev$ where over 90\% of respondents have marked the correct response. We observe NAs for variables that only some respondents view based on whether the question is applicable to them. Since 28 out of 33 variable have a mean of over 0.5, the responses skew towards being correct/desired response. The Child Development Knowledge variables with more uncertainty are $alphabet$, $say\_name\_age$ and $scribble$. Variables $breastfed$ and $decrease\_stress$ measuring whether the baby was breastfed within the last 24 hours and whether the parent has techniques to decrease stress levels, also have lower means.
+
+% \input{descriptives/tables/Outcome Construct Descriptives Pooled Baseline}
+% \input{descriptives/tables/Outcome Construct Descriptives Serbia Baseline}
+% \input{descriptives/tables/Outcome Construct Descriptives Bulgaria Baseline}
 
 
+
+% \subsubsection*{Correlations within constructs}
+% The constructs are largely uncorrelated with each other with some exceptions -
+% Constructs measuring caregiver well-being and parenting confidence are positively correlated (0.36, 0.32 in Serbia and Bulgaria respectively). The caregiver well-being construct measures how often parents encounter stressful parenting situations. The parenting confidence construct measures confidence in dealing with their children's emotions and misbehavior. Parents who respond that they rarely encounter stressful parenting situations also feel confident in dealing with their children's emotions and behavior.
+
+% $practices\_hostility$ is correlated with $confidence$ (0.21), $attitude$ (0.29), and $caregiver\_well\_being$ (0.25) and $practices\_agree$ (0.25).
+
+% \begin{figure}[h!]
+% \begin{minipage}{.5\textwidth}
+%     \centering
+%     \includegraphics[scale=0.33]{descriptives/plots/correlations_constructs_Serbia_Baseline.jpg}
+%     \caption{Construct Correlations - Serbia}
+%     \label{fig:serbia correlations}
+% \end{minipage}%
+% \begin{minipage}{.5\textwidth}
+%     \includegraphics[scale=0.33]{descriptives/plots/correlations_constructs_Bulgaria_Baseline.jpg}
+%     \caption{Construct Correlations - Bulgaria}
+%     \label{fig:bulgaria correlations}
+% \end{minipage}%
+% \end{figure}
+
+% \clearpage
+
+% \addcontentsline{toc}{subsection}{Baseline Balance}
+% \subsection*{Baseline Balance}
+
+% To test for balance between our randomly assigned treatment and control groups, we run an omnibus test, following Hansen and Bowers (2008), to observe standardized differences at baseline and the associated omnibus p-value. Results are found in table \ref{tbl:Baseline Balance Pooled}.
+
+% The most notable variable is the practices\_24 and was\_breastfed, which differ a bit between the groups although they are still under 0.1 standard deviations in their diffrence. The omnibus test, with a p-value above 0.13, implies that the two groups are not different in a statistically significant manner.
+
+
+% \input{balance/Baseline Balance Pooled}
+% \input{balance/Baseline Balance Serbia}
+% \input{balance/Baseline Balance Bulgaria}
 
 % \clearpage
 
@@ -217,42 +246,33 @@ Descriptive statistics regarding the baseline responses for the outcomes are sho
 % \clearpage
 
 
-\addcontentsline{toc}{subsection}{Pre-Exposure to Bebbo}
-\subsection*{Pre-Exposure to Bebbo}
+% \addcontentsline{toc}{subsection}{Pre-Exposure to Bebbo}
+% \subsection*{Pre-Exposure to Bebbo}
 
-This study recruited Serbian and Bulgarian caregivers online, via social media ads, and invited half of them to download the app Bebbo. What if some people were already familiar with the app? Or had already downloaded and used it before?
+% To check for either pre-exposure or contamination, we ask control group users, at the end of the final follow up survey, if they have ever heard of Bebbo or used Bebbo.
 
-If someone had already downloaded the app and still had it on their phone, we would not be able to track their usage and they would be considered ``non-compliant'' in this design. This is desireable from an analysis perspective, as these people are ``always-takers'' (\cite{Imbens2015}) who would have the app regardless of whether they were assigned the treatment or control condition.
-
-Many other people, however, might have decided not to download the app because they had heard about it before or tried it out before and deleted it. This is a concern for the study because these people might have already gotten use out of Bebbo: they could have used it and learned everything there is to learn from the app already.
-
-To check for such ``pre-exposure,'' we ask control group users, at the end of the final follow up survey, if they have ever heard of Bebbo or used Bebbo.
-
-55\% of respondents said that they had heard about the app Bebbo and 23\% said that they had downloaded and used the app Bebbo. It's worth noting that there might be some social desireability bias or acquiesence bias (\cite{Stantcheva2023}) in these responses and we do not have a good way to detect that in this instance. However, despite those potential biases, this is strong suggestive evidence that there was pre-exposure to the treatment in our sample.
+% 55\% of respondents said that they had heard about the app Bebbo and 23\% said that they had downloaded and used the app Bebbo. It's worth noting that there might be some social desireability bias or acquiesence bias in these responses and we do not have a good way to detect that in this instance. However, despite those potential biases, this is strong suggestive evidence that there was pre-exposure to the treatment in our sample.
 
 
 
-\addcontentsline{toc}{subsection}{Pre-Post Descriptives}
-\subsection*{Pre-Post Descriptives}
+% \addcontentsline{toc}{subsection}{Pre-Post Descriptives}
+% \subsection*{Pre-Post Descriptives}
 
-One of the dangers of a prepost design is that you are priming your respondents with the first survey and that priming may impact how they answer the questions in the post-treatment survey(s) (\cite{Stantcheva2023}).
+% One of the dangers of a prepost design is that you are priming your respondents with the first survey and that priming may impact how they answer the questions in the post-treatment survey(s) (\cite{Stantcheva2023}).
 
-Given this particular study design, where our control is a ``treatment as usual'' (TAU) that involved sharing a website and we do not have data regarding the takeup, or usage, of the website, it is difficult to isolate a priming effect.
+% Given this particular study design, where our control is a ``treatment as usual'' (TAU) that involved sharing a website and we do not have data regarding the takeup, or usage, of the website, it is difficult to isolate a priming effect.
 
-[TODO: Add an analysis of priming impact --> t-test for pre/post in the control group]
+% [TODO: Add an analysis of priming impact --> t-test for pre/post in the control group]
 
-Plots of pre-post means are available in
+% Plots of pre-post means are available in
 
 
-\clearpage
+% \clearpage
 
 \addcontentsline{toc}{subsection}{Power Analysis}
 \subsection*{Power Analysis}
 
-
-Post-hoc power analysis was performed to see the ability to detect an effect, in terms of standardized deviations (corresponding to Coen's D effect sizes), in the datasets analyzed. To create the effect size, the standardized different is multiplied by the empircal takeup of 28\%, which was the percentage of participants that had at least one learning event in the treatment group.
-
-The results show that the study is reasonably powered (75\%) to detect a medium effect size on the 28\% takeup even when controlling for multiple testing (8 outcomes) with a Bonferroni correction. See figure \ref{fig:Power Analysis}.
+\includegraphics[width=\textwidth]{plots/Power Calculations.png}
 
 \clearpage
 
@@ -488,69 +508,23 @@ For respondents who were treated, i.e., asked to download the Bebbo app, we fit 
 
 \printbibliography
 
-\appendix
-
-\section{Baseline Balance}
-
-To test for balance between our randomly assigned treatment and control groups, we run an omnibus test, following Hansen and Bowers (2008), to observe standardized differences at baseline and the associated omnibus p-value. Results are found in table \ref{tbl:Baseline Balance Pooled}.
-
-The most notable variable is the practices\_24 and was\_breastfed, which differ a bit between the groups although they are still under 0.1 standard deviations in their diffrence. The omnibus test, with a p-value above 0.13, implies that the two groups are not different in a statistically significant manner.
+% \appendix
 
 
-\input{balance/Baseline Balance Pooled}
-% \input{balance/Baseline Balance Serbia}
-% \input{balance/Baseline Balance Bulgaria}
+% \section{Additional Plots}
 
-\section{Additional Plots}
+% \addcontentsline{toc}{subsection}{Pre-Post Plots}
+% \subsection*{Pre-Post Plots}
 
-\subsubsection*{Correlations within constructs}
-% The constructs are largely uncorrelated with each other with some exceptions -
-% Constructs measuring caregiver well-being and parenting confidence are positively correlated (0.36, 0.32 in Serbia and Bulgaria respectively). The caregiver well-being construct measures how often parents encounter stressful parenting situations. The parenting confidence construct measures confidence in dealing with their children's emotions and misbehavior. Parents who respond that they rarely encounter stressful parenting situations also feel confident in dealing with their children's emotions and behavior.
-
-% $practices\_hostility$ is correlated with $confidence$ (0.21), $attitude$ (0.29), and $caregiver\_well\_being$ (0.25) and $practices\_agree$ (0.25).
-
-\begin{figure}[h!]
-\begin{minipage}{.5\textwidth}
-    \centering
-    \includegraphics[scale=0.33]{descriptives/plots/correlations_constructs_Serbia_Baseline.jpg}
-    \caption{Construct Correlations - Serbia}
-    \label{fig:serbia correlations}
-\end{minipage}%
-\begin{minipage}{.5\textwidth}
-    \includegraphics[scale=0.33]{descriptives/plots/correlations_constructs_Bulgaria_Baseline.jpg}
-    \caption{Construct Correlations - Bulgaria}
-    \label{fig:bulgaria correlations}
-\end{minipage}%
-\end{figure}
-
-\clearpage
-
-\addcontentsline{toc}{subsection}{Pre-Post Plots}
-\subsection*{Pre-Post Plots}
-
-\begin{figure}
-\includegraphics[width=\textwidth]{plots/pre_post/health_knw.png}
-\includegraphics[width=\textwidth]{plots/pre_post/confidence.png}
-\includegraphics[width=\textwidth]{plots/pre_post/was_breastfed.png}
-\includegraphics[width=\textwidth]{plots/pre_post/practices_agree.png}
-\label{fig:Pre Post Plots}
-\end{figure}
-
-\begin{figure}
-  \includegraphics[width=\textwidth]{plots/Power Calculations.png}
-  \caption{Power Analysis at 28\% Takeup}
-  \label{fig:Power Analysis}
-\end{figure}
+% \begin{figure}
+% \includegraphics[width=\textwidth]{plots/pre_post/health_knw.png}
+% \includegraphics[width=\textwidth]{plots/pre_post/confidence.png}
+% \includegraphics[width=\textwidth]{plots/pre_post/was_breastfed.png}
+% \includegraphics[width=\textwidth]{plots/pre_post/practices_agree.png}
+% \label{fig:Pre Post Plots}
+% \end{figure}
 
 
-
-\section{Additional Tables}
-
-\input{descriptives/tables/Outcome Construct Descriptives Serbia Baseline}
-\input{descriptives/tables/Outcome Construct Descriptives Bulgaria Baseline}
-
-\section{Survey Instrument}
-
-\input{descriptives/tables/Construct Variable Mapping}
 
 \end{document}
+\message{ !name(bebbo.tex) !offset(-530) }

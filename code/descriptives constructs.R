@@ -54,29 +54,32 @@ write_descriptive_tables <- function(dat, country, endline_flag) {
         filter(wave == endline_flag) %>%
         select(all_of(likert_cols)) %>%
         descriptives(type = "likert") %>%
-        merge(constructs[, c("variable", "Subdomain")], by.x = "name", by.y = "variable", all.x = TRUE) %>%
-        relocate(Subdomain, .before = "name") %>%
-        filter(!is.na(Subdomain)) %>%
-        arrange(Subdomain)
+        ## merge(constructs[, c("variable", "Subdomain")], by.x = "name", by.y = "variable", all.x = TRUE) %>%
+        ## relocate(Subdomain, .before = "name") %>%
+        ## filter(!is.na(Subdomain)) %>%
+        ## arrange(Subdomain) %>%
+        prettify("name")
 
     # 1-4b. Binary Variables - Most granular summary of binary variables
     descrip_variable_binary <- dat %>%
         filter(wave == endline_flag) %>%
         select(all_of(binary_cols)) %>%
         descriptives(type = "binary") %>%
-        merge(constructs[, c("variable", "Subdomain")], by.x = "name", by.y = "variable", all.x = TRUE) %>%
-        relocate(Subdomain, .before = "name") %>%
-        arrange(Subdomain)
+        ## merge(constructs[, c("variable", "Subdomain")], by.x = "name", by.y = "variable", all.x = TRUE) %>%
+        ## relocate(Subdomain, .before = "name") %>%
+        ## arrange(Subdomain) %>%
+        prettify("name")
 
     # 1-4c. Construct Variables
     descrip_construct <- dat %>%
         filter(wave == endline_flag) %>%
         select(all_of(construct_cols)) %>%
         descriptives(type = "summary") %>%
-        merge(constructs[, c("construct_variable", "Subdomain")], by.x = "name", by.y = "construct_variable", all.x = TRUE) %>%
+        ## merge(constructs[, c("construct_variable", "Subdomain")], by.x = "name", by.y = "construct_variable", all.x = TRUE) %>%
         distinct() %>%
-        relocate(Subdomain, .before = "name") %>%
-        arrange(Subdomain)
+        prettify("name")
+    ## relocate(Subdomain, .before = "name") %>%
+    ## arrange(Subdomain)
 
 
     pal <- colorRampPalette(c("red", "navy"))
@@ -121,10 +124,10 @@ write_descriptive_tables(serbia, "Serbia", 1)
 write_descriptive_tables(bulgaria, "Bulgaria", 1)
 
 
-# 2. Baseline Descriptives - Bulgaria
+# 2. Baseline Descriptives - Pooled
 write_descriptive_tables(pooled, "Pooled", 0)
 
-# 3. Endline Descriptives - Serbia
+# 3. Endline Descriptives - Pooled
 write_descriptive_tables(pooled, "Pooled", 1)
 
 # \begin{tabular}{@{\extracolsep{5pt}} p{0.25\linewidth} p{0.20\linewidth} | p{0.55\linewidth}}

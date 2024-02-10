@@ -294,4 +294,17 @@ serbia <- serbia %>% filter(!impacted)
 serbia <- serbia %>% relocate(colnames(bulgaria))
 dat <- rbind(serbia, bulgaria)
 pooled <- rbind(serbia_with_impacted, bulgaria_with_impacted)
-pooled_without_impacted <- rbin(serbia, bulgaria)
+pooled_without_impacted <- rbind(serbia, bulgaria)
+
+pretty_vars <- list(
+    treatmenttreated = "Treatment",
+    has_learning_eventTRUE = "Used App",
+    health_knw = "Vaccine Knowledge",
+    dev_knw_recog = "Child Dev. Knowledge",
+    confidence = "Parenting Confidence",
+    attitude = "Attitude to Phys. Punishment",
+    was_breastfed = "Breastfed",
+    practices_24 = "Activities Past 24h",
+    practices_agree = "Positive Practices",
+    practices_hostility = "Hostile Practices"
+)

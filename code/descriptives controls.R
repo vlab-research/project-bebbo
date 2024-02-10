@@ -22,6 +22,7 @@ source("code/data.R")
 #############################################################
 
 create_respondent_counts <- function(dat, col) {
+    print(col)
     dat %>%
         group_by(country, .data[[col]]) %>%
         count() %>%
@@ -35,7 +36,7 @@ create_respondent_counts <- function(dat, col) {
         slice(-1)
 }
 
-
+dat <- pooled
 
 survey_stage <- dat %>%
     mutate(wave = recode(wave, `1` = "endline", `0` = "baseline", `2` = "followup")) %>%
@@ -50,7 +51,7 @@ survey_stage <- dat %>%
     )
 
 
-dat <- pooled
+
 var <- control_cols
 results <- lapply(vars, function(col) create_respondent_counts(dat %>% filter(wave == 0), col))
 
@@ -65,6 +66,7 @@ final <- final %>%
 names(final) <- c("Variable", "Value", "Bulgaria", "Bulgaria %", "Serbia", "Serbia %")
 
 final <- final %>%
-    mutate_if(is.numeric, round, 2)
+    mutate_if(is.numeric, round, 2) %>%
+    prettify("Variable")
 
 final %>% write_table("report/descriptives/tables", "Baseline Respondent Characteristics")

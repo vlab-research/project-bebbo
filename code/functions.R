@@ -97,13 +97,12 @@ pick_bulgaria_resps <- function(df) {
 }
 
 ind_treatment_control <- function(df, treated) {
-    
     df %>%
         mutate(seed_2 = seed %% 2 + 1) %>% # create seed_2
         mutate(treatment = case_when(
-                   seed_2 == treated ~ "treated",
-                   seed_2 != treated ~ "control"
-               ))
+            seed_2 == treated ~ "treated",
+            seed_2 != treated ~ "control"
+        ))
 }
 
 ind_endline <- function(df, country) {
@@ -206,6 +205,7 @@ descriptives <- function(df, cols, type = "binary") {
                 min = min(value, na.rm = TRUE),
                 max = max(value, na.rm = TRUE),
                 sd = sd(value, na.rm = TRUE),
+                prop_max = mean(value[!is.na(value)] == max(value, na.rm = TRUE)),
                 prop_na = mean(is.na(value))
             ) %>%
             arrange(desc(mean)) %>%
@@ -236,4 +236,8 @@ flip_likerts <- function(df, cols) {
         df <- flip_likert(df, c)
     }
     df
+}
+
+prettify <- function(df, col) {
+    dplyr::mutate(df, "{col}" := sapply(.data[col], function(n) pretty_vars[[n]]))
 }
