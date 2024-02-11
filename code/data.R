@@ -181,7 +181,26 @@ add_start_times <- function(dat) {
         left_join(end, by = "userid") %>%
         left_join(follow, by = "userid")
 
-    dat %>% left_join(starts, by = "userid")
+    dat %>%
+        left_join(starts, by = "userid") %>%
+        mutate(
+            delta_be = endline_start - baseline_start,
+            delta_ef = followup_start - endline_start
+        )
+}
+
+
+filter_short_time_gaps <- function(dat) {
+    dat %>%
+        filter(!((delta_be < 26) & wave == 1)) %>%
+        filter(!((delta_ef < 26) & wave == 2))
+}
+
+
+filter_long_time_gaps <- function(dat) {
+    dat %>%
+        filter(!((delta_be > 7 * 9) & wave == 1)) %>%
+        filter(!((delta_ef > 7 * 9) & wave == 2))
 }
 
 
@@ -195,10 +214,23 @@ add_controls <- function(dat) {
         inner_join(controls, by = "userid")
 }
 
+
+tag_finished_baseline <- function(df) {
+    users <- df %>%
+        filter(thankyou_you_qualify == "OK") %>%
+        distinct(userid) %>%
+        pull(userid)
+
+    df %>% mutate(finished_baseline = userid %in% users)
+}
+
 normalize_variables <- function(dat) {
     dat %>%
         add_controls() %>%
         add_start_times() %>%
+        tag_finished_baseline() %>%
+        filter_short_time_gaps() %>% # filters out additional testers
+        filter_long_time_gaps() %>% # must have answered within 9 weeks
         likert(likert_confs) %>% # convert likert construct variables to likert scale
         binarize(binary_confs) %>% # binarize construct variables
         group_by(userid) %>%
@@ -283,18 +315,17 @@ serbia <- serbia %>%
     mutate("practices_24" := sum(c_across(all_of(ss[["practices_24"]])), na.rm = FALSE)) %>%
     ungroup()
 
+
 serbia$form_test <- NULL
-
-bulgaria_with_impacted <- bulgaria
-serbia_with_impacted <- serbia
-
-bulgaria <- bulgaria %>% filter(!impacted)
-serbia <- serbia %>% filter(!impacted)
-
 serbia <- serbia %>% relocate(colnames(bulgaria))
-dat <- rbind(serbia, bulgaria)
-pooled <- rbind(serbia_with_impacted, bulgaria_with_impacted)
-pooled_without_impacted <- rbind(serbia, bulgaria)
+
+pooled_all_starts <- rbind(serbia, bulgaria)
+pooled <- pooled_all_starts %>% filter(finished_baseline)
+
+bulgaria_without_impacted <- bulgaria %>% filter(!impacted)
+serbia_without_impacted <- serbia %>% filter(!impacted)
+
+pooled_without_impacted <- rbind(serbia_without_impacted, bulgaria_without_impacted)
 
 pretty_vars <- list(
     treatmenttreated = "Treatment",
@@ -306,5 +337,13 @@ pretty_vars <- list(
     was_breastfed = "Breastfed",
     practices_24 = "Activities Past 24h",
     practices_agree = "Positive Practices",
-    practices_hostility = "Hostile Practices"
+    practices_hostility = "Hostile Practices",
+    woman = "Is Woman",
+    university = "University Educated",
+    dominant_language = "Speaks Dominant Lang.",
+    is_parent = "Is Parent",
+    age_flag = "Child Age",
+    children_count = "Num. Children",
+    parent_age_flag = "Parent Age",
+    urban = "Urban Area"
 )

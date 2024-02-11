@@ -71,27 +71,16 @@ tag_impacted <- function(df, code, versions) {
     df %>% mutate(impacted = userid %in% users)
 }
 
-pick_serbia_resps <- function(df) {
-    users <- df %>%
-        filter(thankyou_you_qualify == "OK") %>%
-        distinct(userid) %>%
-        pull(userid)
 
+pick_serbia_resps <- function(df) {
     df %>%
         filter(shortcode != "bebborsintermediatebail") %>%
-        filter(userid %in% users) %>%
         tag_impacted("bebborsendeng", c(1, 3)) %>%
         mutate(country = "Serbia")
 }
 
 pick_bulgaria_resps <- function(df) {
-    users <- df %>%
-        filter(thankyou_you_qualify == "OK") %>%
-        distinct(userid) %>%
-        pull(userid)
-
     df %>%
-        filter(userid %in% users) %>%
         tag_impacted("bebbobgendeng", c(6, 12, 13)) %>%
         mutate(country = "Bulgaria")
 }
@@ -239,5 +228,5 @@ flip_likerts <- function(df, cols) {
 }
 
 prettify <- function(df, col) {
-    dplyr::mutate(df, "{col}" := sapply(.data[col], function(n) pretty_vars[[n]]))
+    dplyr::mutate(df, "{col}" := sapply(.data[[col]], function(n) pretty_vars[[n]]))
 }

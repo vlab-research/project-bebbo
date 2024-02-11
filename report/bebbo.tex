@@ -25,9 +25,9 @@
 \title{Bebbo}
 \date{September 2023}
 
-\maketitle
-
 \begin{document}
+
+\maketitle
 
 \tableofcontents
 
@@ -61,7 +61,7 @@ We do not find evidence that asking this population to use Bebbo has any impact 
 \item Very few people complied with treatment and used Bebbo. Of those who were asked to use the app, 28\% used the app, 12\% used the app more than one day, and only 3\% used the app more than three days. Significant pre-exposure to the app in both countries (55\% knew about the app and 23\% reported having used it before) could have led to the low initial compliance. This implies that the app may only be an effective intervention for a small subset of the population who finds it engaging. [ADD SENTENCE ABOUT APP USAGE ANALYSIS].
 \end{enumerate}
 
-We were reasonably powered (75\%) to find a small effect size on the population or a medium effect size on the treated with a 28\% takeup and no effect on those who don't take up the treatment. Note, this implies that we were not able to detect a smaller effect size or a medium effect size on a smaller takeup group (i.e. the small group of treated users who used the app for multiple days).
+We were reasonably powered (70\%) to find a small effect size on the population or a medium effect size on the treated with a 28\% takeup and no effect on those who don't take up the treatment. Note, this implies that we were not able to detect a smaller effect size or a medium effect size on a smaller takeup group (i.e. the small group of treated users who used the app for multiple days).
 
 \section{Evaluation Questions}
 
@@ -240,82 +240,21 @@ To check for such ``pre-exposure,'' we ask control group users, at the end of th
 
 Post-hoc power analysis was performed to see the ability to detect an effect, in terms of standardized deviations (corresponding to Coen's D effect sizes), in the datasets analyzed. To create the effect size, the standardized different is multiplied by the empircal takeup of 28\%, which was the percentage of participants that had at least one learning event in the treatment group.
 
-The results show that the study is reasonably powered (75\%) to detect a medium effect size on the 28\% takeup even when controlling for multiple testing (8 outcomes) with a Bonferroni correction. See figure \ref{fig:Power Analysis}.
+The results show that the study is reasonably powered (70\%) to detect a medium effect size on the 28\% takeup at a significance level of 1.25\%, the equivalent of 10\% when controlling for multiple testing (8 outcomes) with a Bonferroni correction. See figure \ref{fig:Power Analysis}.
 
 
+\addcontentsline{toc}{subsection}{Reliability Analysis}
+\subsection*{Reliability Analysis}
 
+The outcomes consist of ``constructs,'' some of which combine the answers to multiple questions into one value. The theory is that these questions are measuring the same underlying construct and that the reliability of the construct is increased by combining multiple answers.
 
-% \clearpage
+We test this assumption, that they are measuring the same underlying construct, by looking for internal consistency using Chronbach's alpha within the variables associated with each construct. Note that all constructs are composed of either Likert scale variables or Binary scale variables and not both, making this analysis valid.
 
+This technique was used to finalize the construct/variable mapping after the data collection completed but before the analysis began, as some of the constructs had a lower internal consistency than hoped. Table \ref{tbl:Reliability: Alpha Matrix} summarizes raw and standardized alpha of each construct as used in the final analysis, along with the number of variables in it.
 
-% \addcontentsline{toc}{section}{Reliability}
-% \section*{Reliability}
-% \subsubsection*{Reliability Analysis Overview}
+Constructs witha reliability above 0.70 are considered internally consistent. All the constructs were modified to ensure higher reliability (sometimes dropping to one variable). The construct created from Activities in the Past 24 hours had the lowest reliability, possibly because some of the activities might be negatively correlated. Because of this, we decided to use the sum of the variables rather than the mean, removing any concern of internal consistency and rendering the low Chronbach's alpha irrelevant.
 
-% For constructs, we refer to $construct\_variable$ field. All constructs are composed of either Likert scale variables or Binary scale variables and not both. For the first step of the reliability analysis, we test for the internal consistency of each construct using Cronbach's alpha. Table \ref{tbl:constructs_alpha_matrix} summarizes raw and standardized alpha of each construct along with the number of variables in it.
-
-% \addcontentsline{toc}{subsection}{Cronbach's alpha}
-% \subsubsection*{Cronbach's Alpha}
-
-% \begin{itemize}
-%     \item \textbf{High reliability} : constructs that have a reliability of over (or close to) 0.7, indicating good internal consistency
-%     \begin{enumerate}
-%         \item $dev\_knw\_recog$ (S, B)
-%         \item $confidence$ (S, B)
-%         \item $practices\_agree$ (Bulgaria)
-%         \item $practices\_hostility$ (S, B)
-%     \end{enumerate}
-%     \item \textbf{Low reliability} : constructs with reliability lower than 0.7 indicating poor internal consistency
-%     \begin{enumerate}
-%         \item $health\_knw$ (S, B)
-%         \item $practices\_24$ (S, B)
-%         \item $caregiver\_well\_being$ (S, B)
-%         \item $practices\_agree$ (Serbia)
-%     \end{enumerate}
-% \input{reliability/tables/constructs_alpha_matrix_bulgaria}
-% \input{reliability/tables/constructs_alpha_matrix_serbia}
-%     \item For these constructs with low reliability, we look at the reliability with variables dropped.
-% \end{itemize}
-
-% \addcontentsline{toc}{subsection}{Reliability after variable is dropped}
-% \subsubsection*{Reliability after variable is dropped}
-
-% For each construct in Table \ref{tbl:alpha_drop}, we see how the reliability changes if a variable from that construct is dropped.
-% \begin{itemize}
-%     % \item $caregiver\_well\_being$ : Any variable dropped leads to lower reliability than with all variables included.
-%     % \item $dev\_knw\_concern\_0\_2$ : Dropping variables $scribble$ and $say\_name\_age$ leads to a higher reliability.
-%     % \begin{itemize}
-%     %     \item However, even after dropping either of these variables, the reliability would be 0.03-0.05.
-%     %     \item It appears that the variables under construct Development Knowledge Concern (0-2) are generally uncorrelated or negatively correlated.
-%     %     \item This might be because respondents have partial knowledge of children's development and might get only one or a few of the questions correct.
-%     % \end{itemize}
-%     % \item $dev\_knw\_concern\_3\_6$ : The construct's internal consistency can be improved by dropping variable $alphabet$.
-
-%     \item $health\_knw$ :
-%     \begin{itemize}
-%         \item Bulgaria : The construct's internal consistency can be improved by dropping variable $know\_which\_vaccine$.
-%     \end{itemize}
-%     \item $dev\_knw\_recog$ : Any variable dropped leads to lower reliability than with all variables included.
-%     \item $confidence$ : Any variable dropped leads to lower reliability than with all variables included.
-%     \item $caregiver\_well\_being$ :
-%     \begin{itemize}
-%         \item Serbia : The construct's internal consistency can be improved by dropping variable $parenting\_stress\_2$.
-%     \end{itemize}
-%     \item $practice\_24$ : Any variable dropped leads to lower reliability than with all variables included.
-%     \item $practice\_agree$ : Any variable dropped leads to lower reliability than with all variables included.
-%     \item $practices\_hostility$ :
-%     \begin{itemize}
-%         \item Bulgaria : The construct's internal consistency can be improved by dropping variable $make\_fun\_of$.
-%     \end{itemize}
-% \end{itemize}
-
-% \input{reliability/tables/alpha_drop_bulgaria}
-% \input{reliability/tables/alpha_drop_serbia}
-
-
-% \addcontentsline{toc}{subsection}{Treatment Takeup Behavior - App Usage}
-% \subsection*{App Usage Over Time}
-% [TODO: Add app usage over time plots and stats]x
+\input{descriptives/tables/Reliability: Alpha Matrix}
 
 
 % \subsubsection*{Methodology}
@@ -356,34 +295,27 @@ The results show that the study is reasonably powered (75\%) to detect a medium 
 % \end{figure}
 
 
-\addcontentsline{toc}{subsection}{Attrition}
-\subsection*{Attrition}
+\addcontentsline{toc}{subsection}{Attrition \& Survey Behavior}
+\subsection*{Attrition \& Survey Behavior}
 
-[show wave descritpives --> people at each wave.]
+As an online sudy, attrition was generally high: ~52\% of those who started the survey dropped off before completing it and 54\% never came back from the baseline to complete the endline. Table \ref{tbl:Response Rate by Stage} summarizes attrition by stage and treatment condition. It's worth noting that attrition was consistently higher among the treatment group, possibly related to the increased number of questions in the endline survey for that group (additional questions about app usage were added for the treated).
 
-[explain why there is such high attrition to the follow up.]
+Attrition was particularly high between endline and follow-up survey (66\%) but that was primarily driven by a problem in the implementation: due to a mistake in survey coding, the questions asked to the control and treatment group was switched at endline, which informed the control group about the existence of the Bebbo app, potentially contaminating them as a pure control. While high pre-existing awareness was discovered in all groups, even those without this mixup, we have removed all cohorts who experienced the mixup from the follow-up survey analysis to avoid any potential issues.
 
-[provide some descriptives on length of time between waves.]
+\input{descriptives/tables/Attrition: Pooled.tex}
 
+Note that respondents should have been contacted 4 weeks after each wave in order to take the subsequent wave. However, two factors may lead to them not always started the wave after exactly 4 weeks: (i) there were some technical issues which caused the notification to be delayed in some cases and (ii) not everyone begins the survey immediately when notified and maybe need to be reminded several times, or may remember on their own, significantly later.
 
+To improve consistency of the study, we removed anyone who took the endline or followup surveys more than 9 weeks after their previous survey, ensuring that all respondents were responding in a gap between 4-9 weeks. Table \ref{tbl:Time Gap Descriptives} summarizes the distribution of this time gap. As you can see, the vast majority (more than 80\%) took the survey after 4-5 weeks of the previous survey.
 
-
-% We define attrition as a respondent present in baseline but
-% not present in endline. Attrition is indicated with a binary flag at the user level. For all respondents, we fit a logistic regression model to whether the respondent attrited using the respondents' baseline characteristics, demographic variables, and a flag for treatment (Table \ref{tbl:attrition and baseline characteristics - logistic reg}).
-
-% \begin{itemize}
-%     \item The goodness of fit measure used is the percentage improvement in deviance over the null deviance (pseudo $R^{2}$). The pseudo $R^{2}$ for this model is 0.95.
-%     \item
-% \end{itemize}
-% \input{app usage/tables/attrition and baseline characteristics - logistic reg}
-
-% We also fit a logistic regression model to whether the respondent attrited using the respondents' app usage (Table \ref{tbl:attrition and app usage - logistic reg}). This is fit only to the treated users who have app usage. The pseudo $R^{2}$ for this model is 0.007. A respondent's $usage\_count$ and $days\_used$ are weak signals of future attrition.
-
-% \input{app usage/tables/attrition and app usage - logistic reg}
+\input{descriptives/tables/Time Gap Descriptives}
 
 
 
 \section{Results}
+
+\addcontentsline{toc}{subsection}{Regression Model}
+\subsection*{Regression Model}
 
 We run the following regression model to measure the intent-to-treat effect (ITT) of assignment to the treatment arm:
 $$
@@ -420,7 +352,7 @@ These two constructs, Vaccine Knowledge and Child Development Knowledge, both su
 Note that there is some suggestive evidence that those with less vaccine knowledge were more likely to download the app, indicating that takeup might be biased towards those who need it the most. That might be driving the small and statistically insignificant positive measured impact on Vaccine Knowledge in the regression. Unfortunately, the study was not designed for subgroup analysis on a small group such as the 28\% who failed the vaccine knowledge question at baseline.
 \begin{figure}[H]
   \centering
-\includegraphics[width=\textwidth]{plots/pre_post/Vaccine Knowledge.png}
+\includegraphics[width=\textwidth]{plots/pre_post/Pooled: Vaccine Knowledge.png}
 \end{figure}
 
 
@@ -434,21 +366,21 @@ Parenting Confidence shows no significant impact in the regression analysis. The
 \input{regressions/Pooled: OLS - Endline - Confidence and Attitudes.tex}
 \begin{figure}[H]
   \centering
-\includegraphics[width=\textwidth]{plots/pre_post/Parenting Confidence.png}
+\includegraphics[width=\textwidth]{plots/pre_post/Pooled: Parenting Confidence.png}
 \end{figure}
 
 
 \addcontentsline{toc}{subsection}{Practices}
 \subsection*{Practices}
 
-These four constructs all relate to practices and behaviors of the parent. No significant effect was found for any of the behaviors and there is not much suggestive evidence of selective takeup either.
+These four constructs all relate to practices and behaviors of the parent. No significant effect was found for any of the behaviors and there is not much suggestive evidence of selective takeup either. The raw regression results suggest that Activities Past 24h show suggestive evidence of impact, but the raw data shows that the much of the improvement is driven by those in the treated group who did not takeup the treatment, which gives credence to the assumption that this could be statistical noise and is why we have corrected for multiple testing.
 
 \input{regressions/Pooled: OLS - Endline - Practices.tex}
 
 \begin{figure}[H]
   \centering
-\includegraphics[width=0.9\textwidth]{plots/pre_post/Breastfed.png}
-\includegraphics[width=0.9\textwidth]{plots/pre_post/Positive Practices.png}
+\includegraphics[width=0.9\textwidth]{plots/pre_post/Pooled: Breastfed.png}
+\includegraphics[width=0.9\textwidth]{plots/pre_post/Pooled: Positive Practices.png}
 
 \end{figure}
 
@@ -472,38 +404,55 @@ Finally, low app usage implies that either (i) any app must go through extensive
 
 
 
-% \section{User Characteristics Correlated with App Usage}
-
-% In this analysis, we attempt to answer the questions -
-% \begin{enumerate}
-%     \item Who are the respondents who used the app?
-%     \item Do more knowledgeable parents use the app more?
-% \end{enumerate}
-
-% We do so by regressing respondents' app usage activity against their characteristics.
-% \vspace{1em}
-
-% \textbf{Independent variables :}
-% \begin{itemize}
-%     \item \textbf{Baseline characteristics} - respondents' scores on the construct variables. We only use the construct variables that have sufficiently high internal consistency. We drop the constructs that are highly correlated with other constructs. We find $parent\_knw$ to be correlated with $caregiver\_well\_being$. We drop the construct with lower reliability $caregiver\_well\_being$.
-%     \item Demographics variables - parents' age flag (categorical), university flag (binary), gender (categorical), and number of children (numeric)
-%     \item Survey response variables - survey duration, start week, country flag
-% \end{itemize}
-
-% \textbf{Dependent variables :}
-% \begin{itemize}
-%     \item Home opened - binary variable indicating whether the respondent had a home opened event logged
-%     \item Home opens - continuous count variable indicating the respondents' count of total home opens
-% \end{itemize}
+\section{User Characteristics Correlated with App Usage}
 
 
-% \subsubsection*{Home Opens and User Characteristics}
-% For respondents who downloaded the app, we regress their number of home opens against their baseline characteristics, demographic variables, and survey response variables. The $R^{2}$ for this model is 0.065. Note that the country flag is not significant which means that app usage does not differ significantly across the two countries after holding constant user characteristics (Table \ref{tbl:app usage and baseline characteristics - linear reg}).
-% \input{app usage/tables/app usage and baseline characteristics - linear reg}
+\addcontentsline{toc}{subsection}{Analysis Design}
+\subsection*{Analysis Design}
 
-% \subsubsection*{Home Opened and User Characteristics}
-% For respondents who were treated, i.e., asked to download the Bebbo app, we fit a logistic regression model to whether the respondent had a home opened event logged using the respondents' baseline characteristics, demographic variables, and their survey response variables (Table \ref{tbl:downloads and baseline characteristics - logistic reg}). The goodness of fit measure used is the percentage improvement in deviance over the null deviance (pseudo $R^{2}$). The pseudo $R^{2}$ for this model is 0.03.
-% \input{app usage/tables/home opened and baseline characteristics - logistic reg}
+
+In this analysis, we attempt to answer the questions -
+\begin{enumerate}
+    \item Who are the respondents who used the app?
+    \item Do more knowledgeable parents use the app more?
+\end{enumerate}
+
+We do so by regressing respondents' app usage activity against their characteristics.
+\vspace{1em}
+
+\textbf{Independent variables :}
+\begin{itemize}
+    \item \textbf{Baseline characteristics} - respondents' scores on the construct variables. We only use the construct variables that have sufficiently high internal consistency. We drop the constructs that are highly correlated with other constructs. We find $parent\_knw$ to be correlated with $caregiver\_well\_being$. We drop the construct with lower reliability $caregiver\_well\_being$.
+    \item Demographics variables - parents' age flag (categorical), university flag (binary), gender (categorical), and number of children (numeric)
+    \item Survey response variables - survey duration, start week, country flag
+\end{itemize}
+
+\textbf{Dependent variables :}
+\begin{itemize}
+    \item Home opened - binary variable indicating whether the respondent had a home opened event logged
+    \item Home opens - continuous count variable indicating the respondents' count of total home opens
+\end{itemize}
+
+\addcontentsline{toc}{subsection}{Download Analysis}
+\subsection*{Download Analysis}
+
+For respondents who were treated, i.e., asked to download the Bebbo app, we fit a logistic regression model to whether the respondent had a home opened event logged using the respondents' baseline characteristics, demographic variables, and their survey response variables (Table \ref{tbl:downloads and baseline characteristics - logistic reg}). The goodness of fit measure used is the percentage improvement in deviance over the null deviance (pseudo $R^{2}$). The pseudo $R^{2}$ for this model is 0.03.
+\input{app usage/tables/home opened and baseline characteristics - logistic reg}
+
+
+\addcontentsline{toc}{subsection}{Continued Usage Analysis}
+\subsection*{Continued Usage Analysis}
+
+
+For respondents who downloaded the app, we regress their number of home opens against their baseline characteristics, demographic variables, and survey response variables. The $R^{2}$ for this model is 0.065. Note that the country flag is not significant which means that app usage does not differ significantly across the two countries after holding constant user characteristics (Table \ref{tbl:app usage and baseline characteristics - linear reg}).
+\input{app usage/tables/app usage and baseline characteristics - linear reg}
+
+
+
+\section{Conclusions and Reccomendations}
+
+% \addcontentsline{toc}{subsection}{Analysis Design}
+% \subsection*{Analysis Design}
 
 
 \printbibliography
@@ -512,24 +461,16 @@ Finally, low app usage implies that either (i) any app must go through extensive
 
 \section{Baseline Balance}
 
-To test for balance between our randomly assigned treatment and control groups, we run an omnibus test, following Hansen and Bowers (2008), to observe standardized differences at baseline and the associated omnibus p-value. Results are found in table \ref{tbl:Baseline Balance Pooled}.
-
-The most notable variable is the practices\_24 and was\_breastfed, which differ a bit between the groups although they are still under 0.1 standard deviations in their diffrence. The omnibus test, with a p-value above 0.13, implies that the two groups are not different in a statistically significant manner.
+To test for balance between our randomly assigned treatment and control groups, we run an omnibus test, following Hansen and Bowers (2008), to observe standardized differences at baseline and the associated omnibus p-value. Results are reported separately for each country and found in tables \ref{tbl:Baseline Balance Serbia} and \ref{tbl:Baseline Balance Bulgaria}. Following \cite{Altman2014}, we do not change our analysis plan based on these results, but it is worth noting that the Bulgaria data does seem to suffer from slight unusual differences between treatment and control condition and the p-value of the omnibus test is significantly low. All the analysis is also reported for only those respondents in Serbia as well, which serves as a robustness check against any concerns that Bulgarians were randomizes into unlucky groups for our analysis.
 
 
-\input{balance/Baseline Balance Pooled}
-% \input{balance/Baseline Balance Serbia}
-% \input{balance/Baseline Balance Bulgaria}
+% \input{balance/Baseline Balance Pooled}
+\input{balance/Baseline Balance Serbia}
+\input{balance/Baseline Balance Bulgaria}
 
 \section{Additional Plots}
 
-\subsubsection*{Correlations within constructs}
-% The constructs are largely uncorrelated with each other with some exceptions -
-% Constructs measuring caregiver well-being and parenting confidence are positively correlated (0.36, 0.32 in Serbia and Bulgaria respectively). The caregiver well-being construct measures how often parents encounter stressful parenting situations. The parenting confidence construct measures confidence in dealing with their children's emotions and misbehavior. Parents who respond that they rarely encounter stressful parenting situations also feel confident in dealing with their children's emotions and behavior.
-
-% $practices\_hostility$ is correlated with $confidence$ (0.21), $attitude$ (0.29), and $caregiver\_well\_being$ (0.25) and $practices\_agree$ (0.25).
-
-\begin{figure}[h!]
+\begin{figure}[H]
 \begin{minipage}{.5\textwidth}
     \centering
     \includegraphics[scale=0.33]{descriptives/plots/correlations_constructs_Serbia_Baseline.jpg}
@@ -543,57 +484,71 @@ The most notable variable is the practices\_24 and was\_breastfed, which differ 
 \end{minipage}%
 \end{figure}
 
-\clearpage
-
-\addcontentsline{toc}{subsection}{Pre-Post Plots}
-\subsection*{Pre-Post Plots}
-
-\begin{figure}
-
-\includegraphics[width=\textwidth]{plots/pre_post/confidence.png}
-\includegraphics[width=\textwidth]{plots/pre_post/was_breastfed.png}
-\includegraphics[width=\textwidth]{plots/pre_post/practices_agree.png}
-\label{fig:Pre Post Plots}
-\end{figure}
-
-\begin{figure}
-  \includegraphics[width=\textwidth]{plots/Power Calculations.png}
+\begin{figure}[H]
+  \includegraphics[width=1.0\textwidth]{plots/Power Calculations.png}
   \caption{Power Analysis at 28\% Takeup}
   \label{fig:Power Analysis}
 \end{figure}
 
+\clearpage
 
-% Plot below shows coefficients with 90\% confidence intervals adjusted via a Bonferroni correction to correct for 8 simultaneous outcome measurement.
 
-% \includegraphics[width=\textwidth]{plots/adjusted_coefficient_plot.png}
+\begin{figure}[H]
+\includegraphics[width=\textwidth]{plots/Adjusted Coefficient Plot Knowledge and Attitudes.png}
+\includegraphics[width=\textwidth]{plots/Adjusted Coefficient Plot Practices.png}
+\caption{Adjusted Coefficient Plots of 2SLS in Pooled Dataset}
+\end{figure}
 
 \section{Additional Tables}
 
 \input{descriptives/tables/Outcome Construct Descriptives Serbia Baseline}
 \input{descriptives/tables/Outcome Construct Descriptives Bulgaria Baseline}
 
-\input{regressions/Pooled for Follow Up: OLS - Follow Up - Knowledge and Awareness.tex}
-\input{regressions/Pooled for Follow Up: OLS - Follow Up - Confidence and Attitudes.tex}
-\input{regressions/Pooled for Follow Up: OLS - Follow Up - Practices.tex}
+\input{descriptives/tables/Attrition: Serbia.tex}
+\input{descriptives/tables/Attrition: Bulgaria.tex}
+
+\section{Additional Regressions}
+
+
 
 \input{regressions/Pooled: 2SLS - Endline - Knowledge and Awareness.tex}
 \input{regressions/Pooled: 2SLS - Endline - Confidence and Attitudes.tex}
 \input{regressions/Pooled: 2SLS - Endline - Practices.tex}
 
+\input{regressions/Serbia: OLS - Endline - Knowledge and Awareness.tex}
+\begin{figure}[H]
+  \centering
+\includegraphics[width=0.9\textwidth]{plots/pre_post/Serbia: Vaccine Knowledge.png}
+\end{figure}
 
+
+\input{regressions/Serbia: OLS - Endline - Confidence and Attitudes.tex}
+\begin{figure}[H]
+  \centering
+\includegraphics[width=0.9\textwidth]{plots/pre_post/Serbia: Parenting Confidence.png}
+\end{figure}
+
+
+\input{regressions/Serbia: OLS - Endline - Practices.tex}
+\begin{figure}[H]
+  \centering
+\includegraphics[width=0.9\textwidth]{plots/pre_post/Serbia: Breastfed.png}
+\includegraphics[width=0.9\textwidth]{plots/pre_post/Serbia: Positive Practices.png}
+\end{figure}
+
+
+\input{regressions/Serbia: 2SLS - Endline - Knowledge and Awareness.tex}
+\input{regressions/Serbia: 2SLS - Endline - Confidence and Attitudes.tex}
+\input{regressions/Serbia: 2SLS - Endline - Practices.tex}
+
+\input{regressions/Pooled for Follow Up: OLS - Follow Up - Knowledge and Awareness.tex}
+\input{regressions/Pooled for Follow Up: OLS - Follow Up - Confidence and Attitudes.tex}
+\input{regressions/Pooled for Follow Up: OLS - Follow Up - Practices.tex}
 
 \input{regressions/Pooled for Follow Up: 2SLS - Follow Up - Knowledge and Awareness.tex}
 \input{regressions/Pooled for Follow Up: 2SLS - Follow Up - Confidence and Attitudes.tex}
 \input{regressions/Pooled for Follow Up: 2SLS - Follow Up - Practices.tex}
 
-
-% \input{regressions/Serbia: OLS - Endline - Knowledge and Awareness.tex}
-% \input{regressions/Serbia: OLS - Endline - Confidence and Attitudes.tex}
-% \input{regressions/Serbia: OLS - Endline - Practices.tex}
-
-% \input{regressions/Serbia: 2SLS - Endline - Knowledge and Awareness.tex}
-% \input{regressions/Serbia: 2SLS - Endline - Confidence and Attitudes.tex}
-% \input{regressions/Serbia: 2SLS - Endline - Practices.tex}
 
 % \input{regressions/Bulgaria: OLS - Endline - Knowledge and Awareness.tex}
 % \input{regressions/Bulgaria: OLS - Endline - Confidence and Attitudes.tex}

@@ -137,17 +137,17 @@ rollup_events <- function(events, variables) {
         group_by(across(all_of(c("userid", variables)))) %>%
         summarize(
 
-        # aggregation of events
-        learning_events = sum(event_name %in% learning_events),
-        session_starts = sum(event_name == "session_start"),
-        home_opens = sum(event_name == "Home_opened"),
-        days_used = n_distinct(event_day),
-    ) %>%
-    mutate(
-        has_learning_event = if_else(is.na(learning_events), FALSE, learning_events > 0),
-        has_home_open = if_else(is.na(home_opens), FALSE, home_opens > 0),
-        has_session_start = if_else(is.na(session_starts), FALSE, session_starts > 0),
-    )    
+            # aggregation of events
+            learning_events = sum(event_name %in% learning_events),
+            session_starts = sum(event_name == "session_start"),
+            home_opens = sum(event_name == "Home_opened"),
+            days_used = n_distinct(event_day),
+        ) %>%
+        mutate(
+            has_learning_event = if_else(is.na(learning_events), FALSE, learning_events > 0),
+            has_home_open = if_else(is.na(home_opens), FALSE, home_opens > 0),
+            has_session_start = if_else(is.na(session_starts), FALSE, session_starts > 0),
+        )
 }
 
 app_usage_weekly <- rollup_events(events, c("start_week", "week_since_start"))
@@ -158,13 +158,15 @@ app_usage_wave %>%
     ggplot(aes(x = ))
 
 
-## RESTRICT TO WITHIN THE SURVEY --> endline/followup/all? 
+## RESTRICT TO WITHIN THE SURVEY --> endline/followup/all?
 app_usage <- app_usage_weekly %>%
     select(-week_since_start, -start_week) %>%
     group_by(userid) %>%
     summarise(across(where(is.numeric), ~ sum(.x)))
 
-takeup_users <- app_usage %>% filter(learning_events > 0) %>% pull(userid)
+takeup_users <- app_usage %>%
+    filter(learning_events > 0) %>%
+    pull(userid)
 
 total_takeup <- length(takeup_users)
 
@@ -177,16 +179,17 @@ weekly_aggregates <- app_usage_weekly %>%
         respondents = n_distinct(userid), # count of respondents
         with_home_open = sum(has_home_open), # count of respondents who opened the home page
         with_session_start = sum(has_session_start), # count of respondents who started a session
-        days_used = mean(days_used), # average number of days used - including zeros??? 
-        usage_count = mean(usage_count), 
+        days_used = mean(days_used), # average number of days used - including zeros???
+        usage_count = mean(usage_count),
         with_learning_event = sum(has_learning_event),
     ) %>% # number of events logged in the week
     mutate(week_after_treatment = paste0("week ", week_since_start)) %>%
-        filter(week_since_start >= 0) %>%
-        mutate_if(is.numeric, round, 3) 
-    
+    filter(week_since_start >= 0) %>%
+    mutate_if(is.numeric, round, 3)
 
-weekly_aggregates %>% ggplot(aes(x = week_since_start, y = with_learning_event)) + geom_bar(stat='identity')
+
+weekly_aggregates %>% ggplot(aes(x = week_since_start, y = with_learning_event)) +
+    geom_bar(stat = "identity")
 
 
 weekly_aggregates %>%

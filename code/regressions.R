@@ -112,9 +112,10 @@ bf_adjusted_ci <- function(model, var, alpha, total_measures) {
     list(variable = variable, mean = mean, lower = mean - ci, upper = mean + ci)
 }
 
+# TODO: bulgaria doesn't work for follow up -- missing variation on some vars.
 datasets <- list(
-    `Serbia` = serbia,
-    `Bulgaria` = bulgaria_with_impacted,
+    `Serbia` = serbia_without_impacted,
+    `Bulgaria` = bulgaria,
     `Pooled` = pooled,
     `Pooled for Follow Up` = pooled_without_impacted
 )

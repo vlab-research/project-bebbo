@@ -12,18 +12,24 @@ library(lattice)
 library(nFactors)
 library(lavaan)
 library(moments)
+library(RItools)
 source("code/functions.R")
 source("code/data.R")
 
-
-
 folder <- "report/balance"
-
-outcomes <- construct_cols[!(construct_cols %in% c("caregiver_well_being"))]
+outcomes <- construct_cols
 fmla <- reformulate(outcomes, "treatment")
+dat <- pooled
+
+endlined <- pooled %>%
+    filter(wave == 1) %>%
+    pull(userid)
 
 for (co in c("Serbia", "Bulgaria")) {
-    bt <- balanceTest(fmla, dat %>% filter(country == co) %>% filter(endline == 0))
+    dd <- dat %>%
+        filter(country == co)
+
+    bt <- balanceTest(fmla, dd %>% filter(wave == 0))
     res <- data.frame(bt$results) %>%
         select("Control...", "Treatment...", "std.diff...", "z...") %>%
         rename(
@@ -33,7 +39,7 @@ for (co in c("Serbia", "Bulgaria")) {
             z_score = "z..."
         )
 
-    overall_p <- bt$overall$p.value
+    overall_p <- round(bt$overall$p.value, 3)
 
     write_table(
         res,
@@ -42,7 +48,6 @@ for (co in c("Serbia", "Bulgaria")) {
         notes = glue("Overall P-Value: {overall_p}")
     )
 }
-
 #############################################################
 # Paired t-tests by treatment/control
 #############################################################
