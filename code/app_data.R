@@ -16,8 +16,6 @@ parse_bq_date <- function(i) {
     as.POSIXct(i / 1000 / 1000)
 }
 
-# home_opens = event_name == "Home_opened"
-
 rollup_events <- function(events, variables) {
     events %>%
         filter(event_name %in% learning_events) %>%
@@ -31,6 +29,7 @@ rollup_events <- function(events, variables) {
         )
 }
 
+
 raw_app <- read_csv("data/raw/bq-results-20231123.csv")
 
 app_events <- raw_app %>%
@@ -41,19 +40,7 @@ app_events <- raw_app %>%
     )
 
 
+d <- rollup_events(app_events, c())
 
-## app_usage <- raw_app %>%
-##     mutate(event_timestamp = parse_bq_date(event_timestamp)) %>%
-##     group_by(facebook_id) %>%
-##     summarize(
-##         facebook_id = first(facebook_id),
-##         session_starts = sum(event_name == "session_start"),
-##         screen_views = sum(event_name == "screen_view"),
-##         user_engagements = sum(event_name == "user_engagement"),
-##         home_opens = sum(event_name == "Home_opened"),
-##         learning_events = sum(event_name %in% learning_events),
-##         milestones_tracked = sum(event_name == "child_milestone_tracked"),
-##         time_used = max(event_timestamp) - min(event_timestamp)
-##     ) %>%
-##     mutate(userid = facebook_id) %>%
-##     arrange(userid)
+d %>% ggplot(aes(x = days_learned)) +
+    geom_histogram()

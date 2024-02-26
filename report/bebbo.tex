@@ -43,26 +43,25 @@ Mobile apps are one of the most convenient and easy ways to access information a
 
 \subsection*{The App}
 
-The Bebbo app 
-[UNICEF TEAM TO PROVIDE MORE INFORMATION ABOUT THE APP IF DESIRED]
+The Bebbo app is designed so that parents can begin using the app by creating a "profile" of their baby, entering basic information such as when the baby was born. After this, the parent is shown relevant content, asked to track milestones, and offered suggestions for content reading or games to play with their child.
 
 \subsection*{Impact Evaluation}
 
 We perform a study across two countries, Serbia and Bulgaria, using a randomized encouragement design to compare the impact of encouraging caregivers of young children to use the Bebbo app as compared to a treatment-as-usual (TAU) condition of encouraging them to use a static informational website. By comparing Bebbo to the existing TAU, we are asking the question: “does this new treatment offer something above and beyond the already existing treatments which parents might presumably already be asked to do?”
 
-We measure effects on eight outcomes across three domains: knowledge, attitudes, and practices. A difference-in-difference design is used, with questions asked at both the baseline (before treatment) and the endline (at least 4 weeks after treatment) surveys. Finally, an additional follow-up survey was sent (at least 4 weeks after the endline), to measure impacts of longer-term usage.
+We measure effects on eight outcomes across three domains: knowledge, attitudes, and practices. This study follows a randomized, difference-in-difference design, also known as a prepost design (\cite{Clifford2021}). Survey questions measuring the outcomes are asked at both the baseline (before treatment) and the endline (at least 4 weeks after treatment) surveys. Finally, an additional follow-up survey was sent (at least 4 weeks after the endline), to measure impacts of longer-term usage.
 
 \subsection*{Results}
 
-We do not find evidence that asking this population to use Bebbo has any impact beyond that of asking them to visit a parenting website. Given the study design, the following facts may have contributed to the lack of evidence of impact:
+We do not find evidence that asking this population to use Bebbo has any impact beyond that of asking them to visit a parenting website. Given the study design, however, we can make some additional inferences and policy recommendations:
 
 \begin{enumerate}
-\item The population was already very “good” in regards to the outcomes of interest. We measured the improvement of parents over time, under treatment, but many could not improve from their baseline scores, which were perfect. This implies that either (i) the outcome questions were not the right questions or (ii) the problem being solved only exists in a subset of the population and measuring the impact on the population as a whole might be difficult.
-\item Participants improved from the first questionnaire to the second questionnaire, regardless of treatment arm and regardless of compliance. This seems to imply that the very act of asking the questions improves the way that parents answer them. This implies that reminding parents about the questions, via an informational campaign, may be more important than providing resources to find the answers, which they seem to already have.
-\item Very few people complied with treatment and used Bebbo. Of those who were asked to use the app, 28\% used the app, 12\% used the app more than one day, and only 3\% used the app more than three days. Significant pre-exposure to the app in both countries (55\% knew about the app and 23\% reported having used it before) could have led to the low initial compliance. This implies that the app may only be an effective intervention for a small subset of the population who finds it engaging. [ADD SENTENCE ABOUT APP USAGE ANALYSIS].
+\item The majority of the caregiving population in these countries is already very “good” in regards to the majority of the outcomes of interest. This implies that one does not need a ``general population'' tool that is meant to work on all outcomes across all types of people. It might be more efficient to develop targeted interventions that target desired behaviors directly or target populations or communities directly.
+\item Awareness is in and of itself an effective intervention for some outcomes of interest, including knowledge of vaccine requirements. We see this because participants improved from the first questionnaire to the second questionnaire, regardless of treatment arm and regardless of compliance.  
+\item Bebbo is engaging to a small subset of the population, which we cannot describe effectively or predict from our data, and cannot be expected to have a population-level impact unless it improves its engagement metrics. In our study, only 24\% of respondents who complied with the request to download the app ended up using it beyond the first day, and only 5\% used it more than three days. [TODO: add retention analysis from bigquery for non app users]
 \end{enumerate}
 
-We were reasonably powered (70\%) to find a small effect size on the population or a medium effect size on the treated with a 28\% takeup and no effect on those who don't take up the treatment. Note, this implies that we were not able to detect a smaller effect size or a medium effect size on a smaller takeup group (i.e. the small group of treated users who used the app for multiple days).
+It should be emphasized that, despite the fact that Bebbo 
 
 \section{Evaluation Questions}
 
@@ -125,9 +124,9 @@ There is just one more step to qualify for the Visa gift card of X. Please downl
 
 Clicking on the link led them to the Bebbo app page where they were invited to download the app via the app stores (Google or Apple). App usage in the treatment group was tracked via tracking ids sent with the link to the app download page, allowing us to follow the app usage of each individual treatment participant and measure takeup. If someone decided to ignore the page, and instead went on their own to search for and download Bebbo, we would not have data on their usage. Thus, usage data and takeup should be considered a lower bound.
 
-The Bebbo app is designed so that parents can begin using the app by creating a "profile" of their baby, entering basic information such as when the baby was born. After this, the parent is shown relevant content and asked to track milestones. 
+The Bebbo app is designed so that parents can begin using the app by creating a "profile" of their baby, entering basic information such as when the baby was born. After this, the parent is shown relevant content, asked to track milestones, and offered suggestions for content reading or games to play with their child.
 
-We collected all app usage events. For the sake of our study, we were interested in a subset of events that represented the accessing of content or features that contained information or might impact their behavior. A set of (6) events were determined to fit the bill, namely: advise_details_opened, game_details_opened, child_milestone_tracked, child_measurement_entered, child_vaccine_entered, child_health_checkup_entered.
+We collected all app usage events. For the sake of our study, we were interested in a subset of events that represented the accessing of content or features that contained information or might impact their behavior. A set of (6) events were determined to fit the bill, namely: advise\_details\_opened, game\_details\_opened, child\_milestone\_tracked, child\_measurement\_entered, child\_vaccine\_entered, child\_health\_checkup\_entered.
 
 
 \addcontentsline{toc}{subsection}{Control Condition}
@@ -221,13 +220,13 @@ Descriptive statistics regarding the baseline responses for the outcomes are sho
 
 The outcomes consist of ``constructs,'' some of which combine the answers to multiple questions into one value. The theory is that these questions are measuring the same underlying construct and that the reliability of the construct is increased by combining multiple answers.
 
-We test this assumption, that they are measuring the same underlying construct, by looking for internal consistency using Chronbach's alpha within the variables associated with each construct. Note that all constructs are composed of either Likert scale variables or Binary scale variables and not both. In all cases, each variable is attempting to measure a unidimensional construct on the same scale, implying that Chronbach's alpha is a reasonable measure (\ref{Tavakol2011}).
+We test this assumption, that they are measuring the same underlying construct, by looking for internal consistency using Chronbach's alpha within the variables associated with each construct. Note that all constructs are composed of either Likert scale variables or Binary scale variables and not both. In all cases, each variable is attempting to measure a unidimensional construct on the same scale, implying that Chronbach's alpha is a reasonable measure (\cite{Tavakol2011}).  
 
-This technique was used to finalize the construct/variable mapping after the data collection completed but before the analysis began, as some of the constructs had a lower internal consistency than hoped. Table \ref{tbl:Reliability: Alpha Matrix} summarizes raw and standardized alpha of each construct as used in the final analysis, along with the number of variables in it.
+This technique was used to finalize the construct/variable mapping after the data collection completed but before the analysis began, as some of the constructs had a lower internal consistency than hoped. Table \ref{tbl:Reliability: Pooled Alpha Matrix} summarizes raw and standardized alpha of each construct as used in the final analysis, along with the number of variables in it.
 
-Constructs with a reliability above 0.70 are considered internally consistent. After initial reliability analysis, the evaluation team iteratively dropped variables or modified constructs to ensure high reliability. In all cases, the variables that were dropped were clearly not measuring the same construct or measuring it on the same scale. The construct created from Activities in the Past 24 hours initially had the lowest reliability, possibly because some of the activities might be negatively correlated. Because of this, we decided to use the sum of the variables rather than the mean, removing any concern of internal consistency and rendering the low Chronbach's alpha irrelevant. This was not the original intention of the survey creators, however, it was decided that it was more intentional to measure the construct in this fashion and there was precendence in UNICEF work ().
+Constructs with a reliability above 0.70 are considered internally consistent. After initial reliability analysis, the evaluation team iteratively dropped variables or modified constructs to ensure high reliability. In all cases, the variables that were dropped were clearly not measuring the same construct or measuring it on the same scale. The construct created from Activities in the Past 24 hours initially had the lowest reliability, possibly because some of the activities might be negatively correlated. Because of this, we decided to use the sum of the variables rather than the mean, removing any concern of internal consistency and rendering the low Chronbach's alpha irrelevant. This was not the original intention of the survey creators, however, it was decided that it was more intentional to measure the construct in this fashion and there was precendence in UNICEF work ([TODO: add reference]).  
 
-\input{descriptives/tables/Reliability: Alpha Matrix}
+\input{descriptives/tables/Reliability: Pooled Alpha Matrix}
 
 
 % \clearpage
@@ -272,50 +271,12 @@ The results show that the study is well powered (above 80\%) to detect a medium 
 
 
 
-% \subsubsection*{Methodology}
-% For every respondent that was treated, i.e., asked to download the Bebbo app, we note the time that they were asked to download the app in the survey. We then aggregate their app usage activity by the weeks since they downloaded the app to get weekly app usage activity for each respondent. Note that this includes respondents across both Serbia and Bulgaria and across both baseline and endline periods.
-% We create variables summarizing their activity using events logged in the app.
-
-% \begin{enumerate}
-%     \item Home opens - Number of times the home page was opened in the week
-%     \item Days used - Number of days in the week the respondents used the app
-%     \item Usage count - Number of app events logged for the respondents in the week
-%     \item Opened - Binary variable indicating if any \textit{'\_opened'} event was logged in the week
-%     \item Home opened - Binary variable indicating if any \textit{'Home\_opened'} event was logged in the week
-% \end{enumerate}
-
-% \begin{figure}
-% \subsubsection*{Home opens over lifetime}
-% \includegraphics[scale=0.4]{app usage/plots/individual aggregates - home opens over lifetime.png}
-
-% \subsubsection*{Number of home opens over time}
-% The number of respondents who opened the app drops off steeply after week 1. 744 respondents filled had home open event logged in week 1 since treatment. 129 respondents had home open event logged in week 2.
-% \includegraphics[scale=0.4]{app usage/plots/home opens over time - home opens.png}
-% \end{figure}
-
-% \begin{figure}
-% \subsubsection*{Number of days used}
-% We report the mean number of days of the week the respondent used the app. Respondents have app activity on 1 day in the week for most weeks. The text label annotates the number of respondents who opened any page of the app and contribute to the observations for that week.
-% \includegraphics[scale=0.35]{app usage/plots/app usage over time - days used.png}
-
-% \subsubsection*{Usage counts}
-% We report the mean number of events logged for respondents for each week since treatment. The number of events logged drops steeply after week 1. The text label annotates the number of respondents who opened any page of the app and contributed to the observations for that week.
-% \includegraphics[scale=0.35]{app usage/plots/app usage over time - usage count.png}
-% \end{figure}
-
-% \begin{figure}
-% \subsubsection*{Home opens}
-% We report the mean number of home opens per respondent for each week since treatment. By week 4, the majority of respondents do not open the home page of the app except for some outliers. The text label annotates the number of respondents who opened any page of the app and contributed to the observations for that week.
-% \includegraphics[scale=0.35]{app usage/plots/app usage over time - home opens.png}
-% \end{figure}
-
-
 \addcontentsline{toc}{subsection}{Attrition \& Survey Behavior}
 \subsection*{Attrition \& Survey Behavior}
 
-As an online sudy, attrition was generally high: ~52\% of those who started the survey dropped off before completing it and 54\% never came back from the baseline to complete the endline. Table \ref{tbl:Response Rate by Stage} summarizes attrition by stage and treatment condition. It's worth noting that attrition was consistently higher among the treatment group, possibly related to the increased number of questions in the endline survey for that group (additional questions about app usage were added for the treated).
+About 52\% of those who started the survey dropped off before completing it and 54\% never came back from the baseline to complete the endline. Table \ref{tbl:Response Rate by Stage} summarizes attrition by stage and treatment condition. It's worth noting that attrition was consistently higher among the treatment group, possibly related to the increased number of questions in the endline survey for that group (additional questions about app usage were added for the treated).
 
-Attrition was particularly high between endline and follow-up survey (66\%) but that was primarily driven by a problem in the implementation: due to a mistake in survey coding, the questions asked to the control and treatment group was switched at endline, which informed the control group about the existence of the Bebbo app, potentially contaminating them as a pure control. While high pre-existing awareness was discovered in all groups, even those without this mixup, we have removed all cohorts who experienced the mixup from the follow-up survey analysis to avoid any potential issues.
+Attrition was particularly high between endline and follow-up survey (66\%) but that includes not only participants who chose not to return for the follow-up, but also those that were disqualified due to an error in survey coding for a portion of early respondents: the questions asked to the control and treatment group was switched at endline, which informed the control group about the existence of the Bebbo app, potentially contaminating them as a pure control. While high pre-existing awareness was discovered in all groups, even those without this mixup, we have removed all cohorts who experienced the mixup from the follow-up survey analysis to avoid any potential issues.
 
 \input{descriptives/tables/Attrition: Pooled.tex}
 
@@ -325,6 +286,26 @@ To improve consistency of the study, we removed anyone who took the endline or f
 
 \input{descriptives/tables/Time Gap Descriptives}
 
+\addcontentsline{toc}{subsection}{App Usage Characteristics}
+\subsection*{App Usage Characteristics}
+
+To measure takeup, we pick how many distinct days the participant used the app, as measured by one of the predefined set of ``learning events'' that include looking at material or entering milestones for their child. Note that in order to generate a ``learning event,'' one must get past the ``welcome'' screens and create a profile for their child. 
+
+Figure \ref{fig:treatment-takeup-histogram} shows a histogram of the amount of days that respondents in the treatment group used the Bebbo app. Table \ref{tbl:Treatment Takeup} shows some takeup numbers for different intensities of usage. Very few treated respondents used the app more than three days (less than 3\%) and only about 12\% used it more than once. The maximum group of 8 people, less than 1\% of the population treated, used the app on more than 5 days in the 4-6 week period.
+
+Additionally, table \ref{tbl:App Retention Funnel} shows a retention funnel for those that did download the app. Note that, of those who did download the app (and therefore were complying with the reccomendations of the study) only about 55\% actually finished creating a profile for their child and only 24\% used the app past the first day and 5\% used it for more than 3 days. 
+
+\begin{figure}[H]
+  \centering  
+\includegraphics[width=\textwidth]{plots/Treatment Takeup Baseline - Endline.png} 
+\caption{Days with Learning Event (Baseline - Endline)} 
+\label{fig:treatment-takeup-histogram}  
+\end{figure}
+
+ 
+\input{descriptives/Treatment Takeup}      
+
+\input{descriptives/App Retention Funnel}      
 
 
 \section{Results}
@@ -422,52 +403,29 @@ Finally, low app usage implies that either (i) any app must go through extensive
 \section{User Characteristics Correlated with App Usage}
 
 
-\addcontentsline{toc}{subsection}{Analysis Design}
-\subsection*{Analysis Design}
+Given that so few caregivers used the app, it seems important to ask the question: ``who are the respondents who end up as app users?'' We do so by regressing respondents' app usage activity between baseline and endline against their characteristics at baseline. In particular, we will pick two binary outcomes: those who had at least one learning event, who we will say ``Used the App,'' those who had learning events on at least two days, or ``Used More Than 1 Day,'' and finally, those two used the app more than three days.  
 
+The results can be found in table \ref{tbl: App Usage}. The regression is formulated as a simple linear regression for ease of interperability. The most notable predictor is whether or not the participant is themselves the parent of the child. The other notable epredictor is ``Activities Past 24h'' which is aligned with what we see in the raw data (under Results), it does seem that in our sample, those who reported doing fewer activities together with their child are more likely to download and use the app. One possible interpretation could be that there is a set of people who are not likely to spend time with their children but are likely to download and use apps. Unfortunately, we do not see a positive impact of this app on those people spending more time with their children, but potentially on a narrow subgroup there might be a positive impact that we do not detect. This could indicate that for ``screen parents'' that are not currently spending time with their children, an app is an effective way to get in front of them. The open question is whether or not it improves their behavior. 
 
-In this analysis, we attempt to answer the questions -
-\begin{enumerate}
-    \item Who are the respondents who used the app?
-    \item Do more knowledgeable parents use the app more?
-\end{enumerate}
+There is some additional evidence that those with young children or more likely to use the app, along with those who have less knowledge of child development, speak the dominant language, and are university educated. 
 
-We do so by regressing respondents' app usage activity against their characteristics.
-\vspace{1em}
-
-\textbf{Independent variables :}
-\begin{itemize}
-    \item \textbf{Baseline characteristics} - respondents' scores on the construct variables. We only use the construct variables that have sufficiently high internal consistency. We drop the constructs that are highly correlated with other constructs. We find $parent\_knw$ to be correlated with $caregiver\_well\_being$. We drop the construct with lower reliability $caregiver\_well\_being$.
-    \item Demographics variables - parents' age flag (categorical), university flag (binary), gender (categorical), and number of children (numeric)
-    \item Survey response variables - survey duration, start week, country flag
-\end{itemize}
-
-\textbf{Dependent variables :}
-\begin{itemize}
-    \item Home opened - binary variable indicating whether the respondent had a home opened event logged
-    \item Home opens - continuous count variable indicating the respondents' count of total home opens
-\end{itemize}
-
-\addcontentsline{toc}{subsection}{Download Analysis}
-\subsection*{Download Analysis}
-
-For respondents who were treated, i.e., asked to download the Bebbo app, we fit a logistic regression model to whether the respondent had a home opened event logged using the respondents' baseline characteristics, demographic variables, and their survey response variables (Table \ref{tbl:downloads and baseline characteristics - logistic reg}). The goodness of fit measure used is the percentage improvement in deviance over the null deviance (pseudo $R^{2}$). The pseudo $R^{2}$ for this model is 0.03.
-\input{app usage/tables/home opened and baseline characteristics - logistic reg}
-
-
-\addcontentsline{toc}{subsection}{Continued Usage Analysis}
-\subsection*{Continued Usage Analysis}
-
-
-For respondents who downloaded the app, we regress their number of home opens against their baseline characteristics, demographic variables, and survey response variables. The $R^{2}$ for this model is 0.065. Note that the country flag is not significant which means that app usage does not differ significantly across the two countries after holding constant user characteristics (Table \ref{tbl:app usage and baseline characteristics - linear reg}).
-\input{app usage/tables/app usage and baseline characteristics - linear reg}
-
-
+\input{regressions/App Usage} 
 
 \section{Conclusions and Reccomendations}
 
-% \addcontentsline{toc}{subsection}{Analysis Design}
-% \subsection*{Analysis Design}
+By construction, mobile apps are meant to be used more than once. The promise of a mobile app is that users will continually engage with it. On average, Europeans spent more than two hours each day on apps (Statista - ``Average daily time spent by users in Europe on mobile apps from October 2020 to March 2021''). 
+
+In order for the promotion of an app to be effective as a population-level intervention for parenting, it needs to be engaging enough that a large proportion of the target population will use it and continue to use it. By construction, this implies using it more than one day. Unfortunately, in our study population, 76\% of users who complied with the suggestion to download Bebbo abandoned it after the first day and never returned before the endline survey. Tracking app retention and engagement rates is important and can be done long before an app gets promoted to a broad population. It is not clear, a priori, what kind of app will engage caregivers, but that is a problem that should be solved before investing in promotion and scale, not after. 
+
+We were not able to predict app usage accurately from baseline survey characteristics, although it does seem as though parents who are less likely to do activities with their kids are more likely to use a parenting app. 
+
+We were not able to detect any statistically significant impact of promoting the app Bebbo on a general population of caregivers with children 0-6 years of age. Given the lack of engagement in the Bebbo app, this is not surprising. That being said, there were other factors that might have contributed to the lack of discovery of an impact that are in-and-of-themselves interesting. In particular: 
+
+\begin{enumerate}
+\item There seemed to be a priming effect of the baseline survey, especially for questions related to knowledge, such as ``when is your child's next vaccination due.'' That implies that asking the question has an impact on caregivers and an awareness campaign might be a cheap and effective way of improving routine vaccination rates. People can find the information, they just need to be reminded to look. 
+\item The majority of respondents scored either very good or perfectly on the baseline assessment. If the respondents were representative of the general population, this would imply that most caregivers in these countries are already knowledgeable and following many good practices. As opposed to a ``general parenting'' intervention, it might be best to focus interventions on particular practices which are still lagging (i.e. breastfeeding) or focus on particular groups or communities where all practices are lagging. 
+\end{enumerate}
+
 
 
 \printbibliography

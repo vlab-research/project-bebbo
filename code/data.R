@@ -72,14 +72,14 @@ domains <- list(
 construct_cols <- as.character(flatten(domains))
 
 # grab all variables associated with the constructs in s
-ss <- sapply(construct_cols, function(x) {
+construct_mapping <- sapply(construct_cols, function(x) {
     key %>%
         filter(construct_variable == x) %>%
         pull(variable)
 })
 
 
-variable_cols <- unname(unlist(ss)) # all variables from constructs
+variable_cols <- unname(unlist(construct_mapping)) # all variables from constructs
 binary_cols <- sapply(binarized_vars, function(x) x$col)
 baseline_control_cols <- key %>%
     filter(`Baseline Control` == TRUE) %>%
@@ -131,9 +131,9 @@ add_app_usage_features <- function(dat) {
 
     dat %>%
         left_join(waves, by = c("userid", "wave")) %>%
-        mutate(has_learning_event = if_else(is.na(has_learning_event), FALSE, has_learning_event))
+        mutate(has_learning_event = if_else(is.na(has_learning_event), FALSE, has_learning_event)) %>%
+        add_has_any_bebbo_event(app_events)
 }
-
 
 additional_features <- function(dat) {
     dat %>%
@@ -292,27 +292,27 @@ bulgaria <- read_csv("data/raw/bulgaria/responses.csv") %>% # read Bulgaria resp
     flip_likerts(flipped_cols)
 
 
-for (x in names(ss)) {
+for (x in names(construct_mapping)) {
     serbia <- serbia %>%
         rowwise() %>%
-        mutate("{x}" := mean(c_across(all_of(ss[[x]])), na.rm = TRUE)) %>%
+        mutate("{x}" := mean(c_across(all_of(construct_mapping[[x]])), na.rm = TRUE)) %>%
         ungroup()
 
     bulgaria <- bulgaria %>%
         rowwise() %>%
-        mutate("{x}" := mean(c_across(all_of(ss[[x]])), na.rm = TRUE)) %>%
+        mutate("{x}" := mean(c_across(all_of(construct_mapping[[x]])), na.rm = TRUE)) %>%
         ungroup()
 }
 
 # Quick hack to fix practices_24 to be sum, not mean
 bulgaria <- bulgaria %>%
     rowwise() %>%
-    mutate("practices_24" := sum(c_across(all_of(ss[["practices_24"]])), na.rm = FALSE)) %>%
+    mutate("practices_24" := sum(c_across(all_of(construct_mapping[["practices_24"]])), na.rm = FALSE)) %>%
     ungroup()
 
 serbia <- serbia %>%
     rowwise() %>%
-    mutate("practices_24" := sum(c_across(all_of(ss[["practices_24"]])), na.rm = FALSE)) %>%
+    mutate("practices_24" := sum(c_across(all_of(construct_mapping[["practices_24"]])), na.rm = FALSE)) %>%
     ungroup()
 
 
