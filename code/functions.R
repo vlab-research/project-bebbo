@@ -3,7 +3,7 @@ library(dplyr)
 library(cobalt)
 library(glue)
 library(stargazer)
-
+library(ggplot2)
 
 binarize_col <- function(df, col, targ, new_col = NULL) {
     if (is.null(new_col)) {

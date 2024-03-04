@@ -100,6 +100,15 @@ control_cols <- c(
     "urban"
 )
 
+add_has_any_bebbo_event <- function(dat, app_events) {
+    users <- app_events %>%
+        distinct(userid) %>%
+        mutate(has_any_bebbo_event = TRUE)
+
+    dat %>%
+        left_join(users) %>%
+        replace_na(list(has_any_bebbo_event = FALSE))
+}
 
 add_app_usage_features <- function(dat) {
     start_times <- dat %>%
@@ -118,6 +127,8 @@ add_app_usage_features <- function(dat) {
         rollup_events(c("event_wave")) %>%
         rename(wave = event_wave)
 
+    # Wave 2 events should be the sum of events from both waves, cumulative
+    # except for has_learning_event and has_any_bebbo_event which are not tied to wave...
     wave_2 <- f %>%
         filter(!is.na(wave)) %>%
         group_by(userid) %>%
