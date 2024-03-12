@@ -1,8 +1,3 @@
-library(tidyr)
-source("code/data.R")
-source("code/app_data.R")
-
-
 datasets <- list(
     `Serbia` = serbia,
     `Bulgaria` = bulgaria,

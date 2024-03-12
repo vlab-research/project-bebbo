@@ -1,21 +1,3 @@
-library(readr)
-library(dplyr)
-library(tidyr)
-library(cobalt)
-library(glue)
-library(stargazer)
-library(psych)
-library(stringr)
-library(corrplot)
-library(psych)
-library(lattice)
-library(nFactors)
-library(lavaan)
-library(moments)
-library(RItools)
-source("code/functions.R")
-source("code/data.R")
-
 folder <- "report/balance"
 outcomes <- construct_cols
 fmla <- reformulate(outcomes, "treatment")

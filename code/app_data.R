@@ -88,20 +88,3 @@ started_in_2023 <- all_app %>%
 
 
 all_app <- all_app %>% filter(userid %in% started_in_2023)
-
-
-opens <- all_app %>%
-    filter(event_name == "first_open") %>%
-    mutate(first_open = date(event_timestamp)) %>%
-    select(userid, first_open)
-
-all_app <- all_app %>% inner_join(opens)
-
-
-window <- all_app %>%
-    mutate(days_after = event_day - first_open) %>%
-    filter(days_after < 45)
-
-r <- rollup_events(window, c())
-
-# 44750 > 13208 > 7799 > 3387

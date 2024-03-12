@@ -1,14 +1,3 @@
-library(corrplot)
-library(psych)
-library(lattice)
-library(nFactors)
-library(lavaan)
-library(moments)
-library(psych)
-source("code/functions.R")
-source("code/data.R")
-
-
 #############################################################
 # Reliability Analysis
 #############################################################
@@ -76,39 +65,3 @@ for (dataset in names[datasets]) {
 
     reliability(dat, contruct_mapping, dataset)
 }
-
-
-
-
-
-## key <- key %>% as.data.table()
-## key[!is.na(construct_variable), c("construct_variable", "variable")] %>% write_table("construct variable mapping")
-
-# dat <- serbia%>%filter(endline==0)%>%select(all_of(unname(unlist(ss))))%>%select_if(~ !any(is.na(.)))
-# pca_dat <- prcomp(dat,scale = TRUE,center = TRUE)
-# plot(c(1:length(pca_dat$sdev)),(pca_dat$sdev^2)/sum(pca_dat$sdev^2))
-# loadings <- as.data.frame(pca_dat$rotation[,c(1:7)])%>%round(2)
-# loadings%>%as.matrix()%>%corrplot(method='color',tl.cex = 0.75,cl.cex = 0.75)
-#
-# write_table(loadings,'all_variables_loadings',align=TRUE)
-
-
-# dat <- serbia%>%filter(endline==0)%>%select(all_of(ss[['dev_knw_concern_0_2']]))%>%drop_na()
-# pca_dat <- prcomp(dat,scale = TRUE,center = TRUE)
-# plot(c(1:length(pca_dat$sdev)),(pca_dat$sdev^2)/sum(pca_dat$sdev^2))
-# loadings <- as.data.frame(pca_dat$rotation[,c(1:4)])
-#
-# dat <- serbia%>%filter(endline==0)%>%select(all_of(ss[['dev_knw_concern_3_6']]))%>%drop_na()
-# pca_dat <- prcomp(dat,scale = TRUE,center = TRUE)
-# plot(c(1:length(pca_dat$sdev)),(pca_dat$sdev^2)/sum(pca_dat$sdev^2))
-# loadings <- as.data.frame(pca_dat$rotation[,c(1:4)])
-
-# dat <- serbia%>%filter(endline==0)%>%select(all_of(ss[['practices_24']]))%>%drop_na()
-# pca_dat <- prcomp(dat,scale = TRUE,center = TRUE)
-# plot(c(1:length(pca_dat$sdev)),(pca_dat$sdev^2)/sum(pca_dat$sdev^2))
-# loadings <- as.data.frame(pca_dat$rotation[,c(1:4)])
-
-# dat <- serbia%>%filter(endline==0)%>%select(all_of(ss[['dev_knw_recog']]))%>%drop_na()
-# pca_dat <- prcomp(dat,scale = TRUE,center = TRUE)
-# plot(c(1:length(pca_dat$sdev)),(pca_dat$sdev^2)/sum(pca_dat$sdev^2))
-# loadings <- as.data.frame(pca_dat$rotation[,c(1:4)])

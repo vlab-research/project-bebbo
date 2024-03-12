@@ -1,7 +1,3 @@
-library(ggplot2)
-library(pwr)
-source("code/data.R")
-
 power_per_size <- function(n, d, sig) {
     takeup <- 0.28
     res <- pwr.t.test(n = n, d = d * takeup, sig.level = sig)

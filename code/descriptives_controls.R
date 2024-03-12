@@ -1,22 +1,3 @@
-library(readr)
-library(dplyr)
-library(tidyr)
-library(cobalt)
-library(glue)
-library(stargazer)
-library(psych)
-library(stringr)
-library(corrplot)
-library(psych)
-library(lattice)
-library(nFactors)
-library(lavaan)
-library(moments)
-library(data.table)
-source("code/functions.R")
-source("code/data.R")
-
-
 #############################################################
 # Number of Respondents
 #############################################################
@@ -52,11 +33,9 @@ survey_stage <- dat %>%
 
 
 
-var <- control_cols
-results <- lapply(vars, function(col) create_respondent_counts(dat %>% filter(wave == 0), col))
+vars_ <- control_cols
+results <- lapply(vars_, function(col) create_respondent_counts(dat %>% filter(wave == 0), col))
 
-# Run survey stage analysis at a different place
-## results <- c(list(survey_stage), results)
 final <- rbindlist(results, use.names = FALSE)
 
 final <- final %>%

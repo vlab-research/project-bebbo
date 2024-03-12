@@ -1,7 +1,3 @@
-source("code/functions.R")
-source("code/data.R")
-
-
 at_stage <- function(dat) {
     started <- dat %>%
         filter(wave == 0) %>%
