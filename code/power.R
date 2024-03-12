@@ -1,3 +1,28 @@
+make_outcome_difs <- function(dat, outcomes) {
+    baselines <- dat %>%
+        filter(wave == 0) %>%
+        select(userid, construct_cols)
+
+
+    for (outcome in outcomes) {
+        baselines <- baselines %>%
+            rename("{outcome}_baseline" := {{ outcome }})
+    }
+
+    waves <- dat %>%
+        filter(wave != 0) %>%
+        inner_join(baselines, by = "userid")
+
+    for (outcome in outcomes) {
+        base <- paste0(outcome, "_baseline")
+        waves <- waves %>%
+            mutate("{outcome}" := waves[[outcome]] - waves[[base]])
+    }
+
+    waves
+}
+
+
 power_per_size <- function(n, d, sig) {
     takeup <- 0.28
     res <- pwr.t.test(n = n, d = d * takeup, sig.level = sig)

@@ -1,8 +1,3 @@
-library(ivreg)
-library(purrr)
-source("code/functions.R")
-source("code/data.R")
-
 make_outcome_difs <- function(dat, outcomes) {
     baselines <- dat %>%
         filter(wave == 0) %>%
@@ -130,7 +125,6 @@ waves <- list(
     `Follow Up` = 2
 )
 
-
 adjusted_coefficients <- tibble()
 
 for (wave in names(waves)) {
@@ -140,6 +134,11 @@ for (wave in names(waves)) {
         fun <- models[[model]]
 
         for (dataset in names(datasets)) {
+            #
+            if (all(dataset == "Bulgaria" & wave == "Follow Up")) {
+                next
+            }
+
             dat <- datasets[[dataset]]
 
             dat <- make_outcome_difs(dat, construct_cols)
@@ -210,8 +209,6 @@ for (wave in names(waves)) {
 # PLOT COEFFICIENTS WITH ADJUSTED CI's
 ################################################
 
-library(ggplot2)
-
 variable_order <- adjusted_coefficients %>%
     distinct(variable) %>%
     pull(variable)
@@ -243,3 +240,35 @@ for (group in names(groups)) {
 
     ggsave(glue("report/plots/Adjusted Coefficient Plot {group}.png"), width = 10, height = 5)
 }
+
+
+
+################################################
+# Subgroups
+################################################
+
+vaccine_failers <- pooled %>%
+    filter(wave == 0) %>%
+    filter(health_knw == 0) %>%
+    distinct(userid) %>%
+    pull(userid)
+
+dat <- pooled %>%
+    filter(userid %in% vaccine_failers) %>%
+    make_outcome_difs(construct_cols)
+
+reg <- run_regression(dat, "health_knw", 1)
+li <- list(`Vaccine Knowledge` = reg)
+
+write_regressions(
+    li,
+    "report/regressions",
+    glue("Vaccine Failures Subgroup OLS - Endline"),
+    ## add.lines = lines,
+    ## dep.var.labels = dep_vars,
+    ## covariate.labels = covariate_labels,
+    ## p = local_p_values,
+    star.cutoffs = c(0.10, 0.05, 0.01),
+    omit = c(controls, "Constant", "countrySerbia"),
+    keep.stat = c("n", "rsq")
+)

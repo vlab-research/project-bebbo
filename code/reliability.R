@@ -60,8 +60,8 @@ run_reliability <- function(dat, construct_mapping, dataset) {
 }
 
 
-for (dataset in names[datasets]) {
+for (dataset in names(datasets)) {
     dat <- datasets[[dataset]]
 
-    reliability(dat, contruct_mapping, dataset)
+    run_reliability(dat, construct_mapping, dataset)
 }

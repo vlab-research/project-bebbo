@@ -1,8 +1,4 @@
-library(ggplot2)
-source("code/data.R")
-
 binary_outcomes <- c("health_knw", "was_breastfed", "attitude")
-
 
 standard_dev <- function(dat, outcome) {
     ## if (outcome %in% binary_outcomes) {
@@ -105,7 +101,7 @@ datasets <- list(
     `Pooled` = pooled
 )
 
-for (dataset in datasets) {
+for (dataset in names(datasets)) {
     dat <- datasets[[dataset]]
     plot_pre_post(dat, construct_cols, dataset)
 }

@@ -39,7 +39,7 @@ results <- lapply(vars_, function(col) create_respondent_counts(dat %>% filter(w
 final <- rbindlist(results, use.names = FALSE)
 
 final <- final %>%
-    relocate(variable, .before = wave) %>%
+    relocate(variable, .before = woman) %>%
     relocate(`Bulgaria %`, .before = Serbia)
 
 names(final) <- c("Variable", "Value", "Bulgaria", "Bulgaria %", "Serbia", "Serbia %")

@@ -18,14 +18,15 @@ library(purrr)
 library(data.table)
 library(ggplot2)
 library(pwr)
+library(GPArotation)
 
 source("code/functions.R")
 source("code/data.R")
 
 
 source("code/power.R")
-source("code/descriptive_controls.R")
-source("code/descriptive_constructs.R")
+source("code/descriptives_controls.R")
+source("code/descriptives_constructs.R")
 source("code/pre_post.R")
 source("code/baseline_imbalance.R")
 source("code/attrition.R")

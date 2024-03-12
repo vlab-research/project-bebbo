@@ -46,8 +46,16 @@ rollup_events <- function(events, variables) {
         )
 }
 
+#######################################################
+## QUERY:
+##
+## SELECT user_pseudo_id, event_timestamp, event_name, value.string_value as facebook_id FROM `ecaro-bebbo.analytics_275292753.events_202*`
+## JOIN unnest(user_properties)
+## WHERE key = 'facebook_id'
+##
+#######################################################
 
-raw_app <- read_csv("data/raw/bq-results-20231123.csv")
+raw_app <- read_csv("data/raw/bq-results-20240312.csv")
 
 app_events <- raw_app %>%
     mutate(event_timestamp = parse_bq_date(event_timestamp)) %>%
