@@ -47,6 +47,16 @@ write_table <- function(x, folder, filename, ...) {
         label = glue("tbl:{filename}"),
         ...
     )
+
+    stargazer(
+        as.matrix(x),
+        type = "html",
+        out = glue("{folder}/{filename}.html"),
+        digits = 2,
+        title = filename,
+        label = glue("tbl:{filename}"),
+        ...
+    )
 }
 
 
@@ -54,6 +64,16 @@ write_regressions <- function(models, folder, filename, ...) {
     stargazer(
         models,
         out = glue("{folder}/{filename}.tex"),
+        digits = 2,
+        title = filename,
+        label = glue("tbl:{filename}"),
+        ...
+    )
+
+    stargazer(
+        models,
+        type = "html",
+        out = glue("{folder}/{filename}.html"),
         digits = 2,
         title = filename,
         label = glue("tbl:{filename}"),

@@ -42,9 +42,9 @@ run_reliability <- function(dat, construct_mapping, dataset) {
 
     colnames(alpha_matrix) <- c("construct", "variable count", "raw.alpha", "std.alpha")
 
-    write_table(alpha_matrix, "report/descriptives/tables/", glue("Reliability: {dataset} Alpha Matrix"), align = TRUE)
-
     alpha_matrix <- as.data.frame(alpha_matrix)
+
+    write_table(prettify(alpha_matrix, "construct"), "report/descriptives/tables/", glue("Reliability: {dataset} Alpha Matrix"), align = TRUE)
 
     alpha_drop_df$variable.dropped <- rownames(alpha_drop_df)
     rownames(alpha_drop_df) <- NULL

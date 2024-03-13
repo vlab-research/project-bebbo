@@ -48,7 +48,7 @@ for (dataset in names(datasets)) {
     out <- rbind(out, d)
 }
 
-write_table(out, "report/descriptives", "Treatment Takeup", table.placement = "H")
+write_table(out, "report/descriptives/tables", "Treatment Takeup", table.placement = "H")
 
 
 ##########################################
@@ -120,7 +120,7 @@ for (dataset in names(datasets)) {
     out <- rbind(out, d)
 }
 
-write_table(out, "report/descriptives", "App Engagement (30 days)", table.placement = "H")
+write_table(out, "report/descriptives/tables", "App Engagement (30 days)", table.placement = "H")
 
 ##########################################
 # Days with Learning Events Histogram
@@ -253,4 +253,4 @@ non_study <- all_app %>%
 
 out <- user_retention_funnel(non_study)
 
-write_table(out, "report/descriptives", "App Retention Funnel (Non Study)", table.placement = "H")
+write_table(out, "report/descriptives/tables", "App Retention Funnel (Non Study)", table.placement = "H")

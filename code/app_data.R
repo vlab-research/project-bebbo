@@ -61,7 +61,7 @@ app_events <- raw_app %>%
     mutate(event_timestamp = parse_bq_date(event_timestamp)) %>%
     mutate(
         event_day = date(event_timestamp),
-        userid = facebook_id
+        userid = as.numeric(facebook_id)
     )
 
 

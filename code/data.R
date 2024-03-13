@@ -274,7 +274,7 @@ make_translation_lookup <- function(long) {
 #############################################################
 
 # 1. Serbia Survey Respondents
-serbia <- read_csv("data/raw/serbia/responses.csv") %>% # read Serbia responses file
+serbia <- read_csv("data/processed/serbia/responses.csv") %>% # read Serbia responses file
     pick_serbia_resps() %>% # filter dataframe for Serbia respondents
     ind_treatment_control("1") %>% # create variables to indicate treatment, control
     ind_endline(country = "serbia") %>% # create variables to indicate endline
@@ -294,7 +294,7 @@ flipped_cols <- c(
     "make_fun_of"
 )
 
-bulgaria <- read_csv("data/raw/bulgaria/responses.csv") %>% # read Bulgaria responses file
+bulgaria <- read_csv("data/processed/bulgaria/responses.csv") %>% # read Bulgaria responses file
     pick_bulgaria_resps() %>% # filter dataframe for Bulgarian respondents
     ind_treatment_control("2") %>% # create variables to indicate treatment, control
     ind_endline(country = "bulgaria") %>% # create variables to indicate endline
@@ -327,7 +327,7 @@ serbia <- serbia %>%
     ungroup()
 
 
-serbia$form_test <- NULL
+## serbia$form_test <- NULL
 serbia <- serbia %>% relocate(colnames(bulgaria))
 
 pooled_all_starts <- rbind(serbia, bulgaria)
@@ -358,3 +358,7 @@ pretty_vars <- list(
     parent_age_flag = "Parent Age",
     urban = "Urban Area"
 )
+
+# pooled -> 7348 > 8194
+# serbia -> 6835 > 7641
+# bulgaria -> 5208 > 5215
